@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react'
-import {Router, Route, IndexRedirect, browserHistory} from 'react-router'
-import {render} from 'react-dom'
+import { Router, Route, IndexRedirect, browserHistory } from 'react-router'
+import { render } from 'react-dom'
 
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
@@ -10,6 +10,9 @@ import Home from './components/Home'
 import firebase from 'APP/fire'
 
 import Demos from 'APP/demos'
+
+import { Provider } from 'react-redux'
+import store from './store'
 
 // Get the auth API from Firebase.
 const auth = firebase.auth()
@@ -40,23 +43,25 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 
 // Our root App component just renders a little frame with a nav
 // and whatever children the router gave us.
-const App = ({children}) =>
+const App = ({ children }) =>
   <div>
     <nav>
       {/* WhoAmI takes a firebase auth API and renders either a
           greeting and a logout button, or sign in buttons, depending
           on if anyone's logged in */}
-      <WhoAmI auth={auth}/>
+      <WhoAmI auth={auth} />
     </nav>
     {/* Render our children (whatever the router gives us) */}
     {children}
   </div>
 
 render(
-  <Router history={browserHistory}>
-    <App>
-      <Route path="/" component={Home} />
-    </App>
-  </Router>,
+  <Provider store={store}>
+    <Router history={browserHistory}>
+      <App>
+        <Route path="/" component={Home} />
+      </App>
+    </Router>
+  </Provider>,
   document.getElementById('main')
-  )
+)

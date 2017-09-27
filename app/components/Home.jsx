@@ -1,27 +1,35 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { initializePlayerDeck } from '../store/playerCards.js'
+import { initPlayerDeck } from '../store/playerDeck.js'
 
-export default class Home extends Component {
-	constructor(props) {
-		super(props)
-	}
-	render() {
+export class Home extends Component {
+  constructor(props) {
+    super(props)
+  }
 
-		console.log("REACHED")
-		initializePlayerDeck()()
+  render() {
 
+    // TODO: change num players to be modifiable
+    const NUM_PLAYERS = 4
+	this.props.initializeGame(NUM_PLAYERS)
 
-		return (
-			<div class="title">
-				<h1 id="gametitle">Pandemic</h1>
-			</div>
-		)
-	}
+    return (
+      <div class="title">
+        <h1 id="gametitle">Pandemic</h1>
+      </div>
+    )
+  }
 }
 
-// const mapState = null
-// const mapDispatch = null
+const mapState = null
+const mapDispatchToProps = function(dispatch) {
+  return {
+    initializeGame: function(numPlayers) {
+	  dispatch(initPlayerDeck(numPlayers))
+    }
+  }
+}
 
-// export default connect(mapState, mapDispatch)(Home)
+export default connect(mapState, mapDispatchToProps)(Home)
+// export default connect(mapDispatchToProps)(Home)

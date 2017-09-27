@@ -13,10 +13,12 @@ import { composeWithDevTools } from 'redux-devtools-extension'
  * so that we can cleverly use the shorthand notation in the object we
  * send to combineReducers
  */
-import playerCards from './playerCards'
+import playerDeck from './playerDeck'
+import playerHands from './playerHands'
 
 const reducer = combineReducers({
-  playerCards
+  playerDeck,
+  playerHands
 })
 
 const store = createStore(
@@ -30,4 +32,5 @@ const store = createStore(
 export default store
 
 // export action creators
-export * from './playerCards'
+export * from './playerDeck'
+export * from './playerHands'
