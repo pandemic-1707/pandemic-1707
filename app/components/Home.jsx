@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import {NavLink} from 'react-router-dom'
 
 export default class Home extends Component {
 	constructor(props) {
@@ -7,8 +8,17 @@ export default class Home extends Component {
 	}
 	render() {
 		return(
-			<div class="title">
-				<h1 id="gametitle">Pandemic</h1>
+			<div>
+				<div id="title">
+					<h1 id="gametitle">PANDEMIC</h1><br />
+					<h2> A Game by Emily EastLake, An Le, Mary Yen</h2>
+					<br/>
+					<NavLink to="/room">
+					<button type="button" className="btn btn-outline-primary">New Game</button>
+					</NavLink>
+					<br/>
+					<button type="button" className="btn btn-outline-success">Rules</button>
+				</div>
 			</div>
 		)
 	}

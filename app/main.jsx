@@ -6,10 +6,9 @@ import {render} from 'react-dom'
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
 import Home from './components/Home'
+import Room from './components/Room'
 
-import firebase from 'APP/fire'
-
-import Demos from 'APP/demos'
+import firebase from '../fire/index'
 
 // Get the auth API from Firebase.
 const auth = firebase.auth()
@@ -56,6 +55,7 @@ render(
   <Router history={browserHistory}>
     <App>
       <Route path="/" component={Home} />
+      <Route path="/room" component={Room} />
     </App>
   </Router>,
   document.getElementById('main')
