@@ -32,4 +32,3 @@ const mapDispatchToProps = function(dispatch) {
 }
 
 export default connect(mapState, mapDispatchToProps)(Home)
-// export default connect(mapDispatchToProps)(Home)
