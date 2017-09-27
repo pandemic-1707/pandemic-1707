@@ -10,7 +10,7 @@ export default class Home extends Component {
 		return(
 			<div>
 				<div id="title">
-					<h1 id="gametitle">PANDEMIC</h1><br />
+					<h1 id="gametitle">PLANETAMIC</h1><br />
 					<h2> A Game by Emily EastLake, An Le, Mary Yen</h2>
 					<br/>
 					<NavLink to="/room">

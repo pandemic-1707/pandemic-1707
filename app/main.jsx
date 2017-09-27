@@ -1,10 +1,12 @@
 'use strict'
 import React from 'react'
-import {Router, Route, IndexRedirect, browserHistory} from 'react-router'
+import {Route, IndexRedirect, browserHistory} from 'react-router'
+import {BrowserRouter as Router, Switch} from 'react-router-dom'
 import {render} from 'react-dom'
 
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
+import Main from './components/Main'
 import Home from './components/Home'
 import Room from './components/Room'
 
@@ -41,22 +43,18 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 // and whatever children the router gave us.
 const App = ({children}) =>
   <div>
-    <nav>
-      {/* WhoAmI takes a firebase auth API and renders either a
-          greeting and a logout button, or sign in buttons, depending
-          on if anyone's logged in */}
-      <WhoAmI auth={auth}/>
-    </nav>
-    {/* Render our children (whatever the router gives us) */}
-    {children}
+      <nav>
+        {/* WhoAmI takes a firebase auth API and renders either a
+            greeting and a logout button, or sign in buttons, depending
+            on if anyone's logged in */}
+        <WhoAmI auth={auth}/>
+      </nav>
+      {/* Render our children (whatever the router gives us) */}
+      {children}
   </div>
+export default App
 
 render(
-  <Router history={browserHistory}>
-    <App>
-      <Route path="/" component={Home} />
-      <Route path="/room" component={Room} />
-    </App>
-  </Router>,
+  <Main />,
   document.getElementById('main')
   )
