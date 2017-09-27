@@ -2,12 +2,12 @@ const firebase = require('firebase')
 
 // -- // -- // -- // Firebase Config // -- // -- // -- //
 const config = {
-  apiKey: 'AIzaSyBzz-Wq2dzMgM7E8cdSYnYoX5fbVUT-XQo',
-  authDomain: 'firebones-6bc2a.firebaseapp.com',
-  databaseURL: 'https://firebones-6bc2a.firebaseio.com',
-  projectId: 'firebones-6bc2a',
-  storageBucket: 'firebones-6bc2a.appspot.com',
-  messagingSenderId: '1030378391678'
+ 	apiKey: "AIzaSyAGBkAvlLOydiC7O_BOqV5XxiYuj-MZ1EE",
+    authDomain: "pandemic-1707.firebaseapp.com",
+    databaseURL: "https://pandemic-1707.firebaseio.com",
+    projectId: "pandemic-1707",
+    storageBucket: "pandemic-1707.appspot.com",
+    messagingSenderId: "1029700706030"
 }
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
@@ -21,3 +21,5 @@ const config = {
 firebase.__bonesApp || (firebase.__bonesApp = firebase.initializeApp(config))
 
 module.exports = firebase
+
+
