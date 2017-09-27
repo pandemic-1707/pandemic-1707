@@ -10,6 +10,10 @@ import firebase from 'APP/fire'
 
 import Demos from 'APP/demos'
 
+import { initializePlayerDeck } from '../app/store/playerCards.js'
+
+console.log("IM HERE")
+initializePlayerDeck()
 // Get the auth API from Firebase.
 const auth = firebase.auth()
 
