@@ -31,13 +31,21 @@ export function initializePlayerDeck() {
   return function thunk(dispatch) {
     // get num players
     // randomize deck
-    let playerDeck = shuffle(allCities.concat(allEvents))
-    console.log("PLAYERDECK", playerDeck)
+    // turn objects into arrays
+    const allCitiesArr = Object.keys(allCities).map((cityName) => {
+      return {city: cityName, props: allCities[cityName]}
+    })
+    // const allEventsArr = Object.keys(allEvents).map((eventName) => {
+    //   return {event: eventName, props: allEvents[eventName]}
+    // })
+    // TODO: more efficient way to sort objects array?
+    let playerDeck = allCitiesArr.concat(allEvents)
+    shuffle(playerDeck)
     // pick playerhands
-    let playerHand
-    for (let i = 0; i < NUM_PLAYERS; i++) {
-        playerDeck.pop()
-    }
+    // let playerHand
+    // for (let i = 0; i < NUM_PLAYERS; i++) {
+    //     playerDeck.pop()
+    // }
     // send playerhands to firebase
     // randomize deck
     // send deck to firebase
