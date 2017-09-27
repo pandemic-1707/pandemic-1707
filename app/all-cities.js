@@ -47,4 +47,4 @@ export default {
   'Tehran': { colour: 'black' },
   'Tokyo': { colour: 'red' },
   'Washington': { colour: 'blue' }
-};
+}

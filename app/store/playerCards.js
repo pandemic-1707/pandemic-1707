@@ -24,6 +24,9 @@ const shuffle = (a) => {
   }
 }
 
+// TODO: change num players to be modifiable
+const NUM_PLAYERS = 4
+
 export function initializePlayerDeck() {
   return function thunk(dispatch) {
     // get num players
@@ -31,6 +34,10 @@ export function initializePlayerDeck() {
     let playerDeck = shuffle(allCities.concat(allEvents))
     console.log("PLAYERDECK", playerDeck)
     // pick playerhands
+    let playerHand
+    for (let i = 0; i < NUM_PLAYERS; i++) {
+        playerDeck.pop()
+    }
     // send playerhands to firebase
     // randomize deck
     // send deck to firebase
