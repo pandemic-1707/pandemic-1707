@@ -10,8 +10,10 @@ import { composeWithDevTools } from 'redux-devtools-extension'
  * send to combineReducers
  */
 
+import infectionCardsActive from './infectionCardsActive'
+
 const reducer = combineReducers({
-  
+  infectionCardsActive
 })
 
 const store = createStore(
