@@ -4,7 +4,7 @@ import allCities from '../all-cities.js'
 import allEvents from '../all-events.js'
 import {firebase} from '../../fire/index.js'
 
-import {}
+// import {}
 
 // ACTION TYPES
 
@@ -35,6 +35,7 @@ function initializePlayerDeck(numPlayers) {
   // TODO: more efficient way to sort objects array?
   let playerDeck = allCitiesArr.concat(allEvents)
   shuffle(playerDeck)
+  console.log("before",playerDeck)
   // pick playerhands and remove cards from deck
   let numPlayerDrawnCards = 0
   // game specifies specific num of cards per player depending on
@@ -42,18 +43,20 @@ function initializePlayerDeck(numPlayers) {
   if (numPlayers === 2) numPlayerDrawnCards = 4
   if (numPlayers === 3) numPlayerDrawnCards = 3
   if (numPlayers === 4) numPlayerDrawnCards = 2
-  let playerHands = []
+  let playerHands = [] //all player hands
   for (let i = 0; i < numPlayers; i++) {
+    let playerHand = [] //individual player hand
     for (let j = 0; j < numPlayerDrawnCards; j++) {
       playerHand.push(playerDeck.pop())
     }
-    // send playerhands to store & firebase
-
-    playerHand = []
+    playerHands.push(playerHand)
   }
+  // send playerhands to store & firebase
+  
   // randomize deck
   shuffle(playerDeck)
   // send deck to firebase
+  console.log("after player",playerDeck)  
   return playerDeck
 }
 

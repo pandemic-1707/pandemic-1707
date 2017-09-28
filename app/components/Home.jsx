@@ -8,12 +8,15 @@ export class Home extends Component {
     super(props)
   }
 
-  render() {
-
+  componentWillMount() {
     // TODO: change num players to be modifiable
     const NUM_PLAYERS = 4
-	this.props.initializeGame(NUM_PLAYERS)
+  	this.props.initializeGame(NUM_PLAYERS)
+  }
 
+  render() {
+    const { playerDeck } = this.props
+    console.log("RENDER",playerDeck)
     return (
       <div class="title">
         <h1 id="gametitle">Pandemic</h1>
@@ -22,13 +25,17 @@ export class Home extends Component {
   }
 }
 
-const mapState = null
+const mapStateToProps = function(state) {
+  return {
+    playerDeck: state.playerDeck
+  }
+}
 const mapDispatchToProps = function(dispatch) {
   return {
     initializeGame: function(numPlayers) {
-	  dispatch(initPlayerDeck(numPlayers))
+	    dispatch(initPlayerDeck(numPlayers))
     }
   }
 }
 
-export default connect(mapState, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
