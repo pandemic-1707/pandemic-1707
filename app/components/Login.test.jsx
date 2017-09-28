@@ -8,7 +8,7 @@ chai.use(require('sinon-chai'))
 import Login from './Login'
 
 /* global describe it beforeEach */
-describe('<Login />', () => {
+xdescribe('<Login />', () => {
   let root, fakeAuth
   beforeEach('render the root', () => {
     fakeAuth = {
