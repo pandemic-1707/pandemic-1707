@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom'
 import Welcome from './Welcome'
 import Sidebar from './Sidebar'
 import App from '../main'
+import GameMap from './GameMap'
 
 export default class Main extends Component {
   render() {
@@ -11,6 +12,7 @@ export default class Main extends Component {
       <Router>
         <App>
           <Route exact path="/" component={Welcome} />
+          <Route exact path="/map" component={GameMap} />
           <Route path="/room/:roomName" component={Sidebar} />
         </App>
       </Router>
