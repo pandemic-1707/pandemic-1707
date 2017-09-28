@@ -24,7 +24,6 @@ export function initialShufflePlayerDeck() {
   const shuffledPlayerDeck = utils.initShufflePlayerDeck()
   // send deck to firebase
   return function thunk(dispatch) {
-    debugger
     console.log("thunk")
     try {
       return database.ref('rooms/room1').set({
