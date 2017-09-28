@@ -16,7 +16,7 @@ export function initPlayerHands(playerHands) {
 
 // REDUCER
 
-const initialState = {
+const initialPlayerState = {
   hand: {},
   numRemainingActions: 0,
   location: '',
@@ -24,7 +24,7 @@ const initialState = {
   role: ''
 }
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = {}, action) {
   switch (action.type) {
   case INIT_PLAYER_HAND:
     return Object.assign({}, state, {hand: action.playerHands})
