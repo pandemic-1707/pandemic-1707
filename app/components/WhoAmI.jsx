@@ -1,5 +1,5 @@
 import React from 'react'
-import firebase from 'APP/fire'
+import firebase from '../../fire/index'
 const auth = firebase.auth()
 
 import Login from './Login'
@@ -12,13 +12,13 @@ export const name = user => {
 
 export const WhoAmI = ({user, auth}) =>
   <div className="whoami">
-    <span className="whoami-user-name">Hello, {name(user)}</span>
+    <span className="whoami-user-name">Welcome, {name(user)}!</span>
     { // If nobody is logged in, or the current user is anonymous,
       (!user || user.isAnonymous)?
       // ...then show signin links...
       <Login auth={auth}/>
       /// ...otherwise, show a logout button.
-      : <button className='logout' onClick={() => auth.signOut()}>logout</button> }
+      : <div><button className='btn btn-outline-info btn-sm' onClick={() => auth.signOut()}>logout</button></div> }
   </div>
 
 export default class extends React.Component {

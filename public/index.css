@@ -1,11 +1,52 @@
 body {
-	background: url("background.jpg");
-	display: flex;
+	background: url("background.jpg") no-repeat center center fixed; 
+	-webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
-.title {
-	position: relative;
+#title {
+  height: 600px;  
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 #gametitle {
-	justify-content: center;
 	color: red;
+}
+.whoami-user-name {
+  color: grey;
+}
+
+#player-sidebar {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+}
+.player-box {
+  width: 150px;
+  height: 80px;
+}
+.player-name {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  background-color: orange;
+  height: 32px;
+  font-size: 12px;
+}
+.player-hand {
+  background-color: grey;
+  height: 50px;
 }
