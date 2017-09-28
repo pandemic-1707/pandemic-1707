@@ -14,11 +14,11 @@ import { composeWithDevTools } from 'redux-devtools-extension'
  * send to combineReducers
  */
 import playerDeck from './playerDeck'
-import playerHands from './playerHands'
+import players from './players'
 
 const reducer = combineReducers({
   playerDeck,
-  playerHands
+  players
 })
 
 const store = createStore(
@@ -30,7 +30,3 @@ const store = createStore(
 )
 
 export default store
-
-// export action creators
-export * from './playerDeck'
-export * from './playerHands'

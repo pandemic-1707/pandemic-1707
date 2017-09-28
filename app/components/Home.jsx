@@ -15,8 +15,8 @@ export class Home extends Component {
   }
 
   render() {
-    const { playerDeck } = this.props
-    console.log("RENDER",playerDeck)
+    const { playerDeck, playerHands } = this.props
+    console.log("render hands", playerHands)
     return (
       <div class="title">
         <h1 id="gametitle">Pandemic</h1>
@@ -27,7 +27,8 @@ export class Home extends Component {
 
 const mapStateToProps = function(state) {
   return {
-    playerDeck: state.playerDeck
+    playerDeck: state.playerDeck,
+    playerHands: state.playerHands
   }
 }
 const mapDispatchToProps = function(dispatch) {
