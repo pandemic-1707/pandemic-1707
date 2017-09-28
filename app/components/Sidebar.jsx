@@ -3,14 +3,10 @@ import {connect} from 'react-redux'
 import firebase from '../../fire'
 
 export default class Room extends Component {
-  constructor(props) {
-    super(props)
-  }
   randomizeRole() {
-    
   }
   render() {
-    return(
+    return (
       <div>
         <div id="player-sidebar">
           <div className="player-box">
