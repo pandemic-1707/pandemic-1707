@@ -26,13 +26,27 @@ body {
 }
 
 #player-sidebar {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: column;
-   flex-direction: column;
-   -webkit-align-items: flex-end;
-   align-items: flex-end;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
 }
-#player-name {
-  color: orange;
+.player-box {
+  width: 150px;
+  height: 80px;
+}
+.player-name {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  background-color: orange;
+  height: 32px;
+  font-size: 12px;
+}
+.player-hand {
+  background-color: grey;
+  height: 50px;
 }
