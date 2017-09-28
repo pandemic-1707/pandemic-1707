@@ -24,3 +24,15 @@ body {
 .whoami-user-name {
   color: grey;
 }
+
+#player-sidebar {
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: column;
+   flex-direction: column;
+   -webkit-align-items: flex-end;
+   align-items: flex-end;
+}
+#player-name {
+  color: orange;
+}

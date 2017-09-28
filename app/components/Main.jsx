@@ -10,7 +10,7 @@ export default class Main extends Component {
 			<div>
 			<Router>
 		    <App>
-		      <Route path="/" component={Home} />
+		      <Route exact path="/" component={Home} />
 		      <Route path="/room" component={Room} />
 		    </App>
 		  </Router>
