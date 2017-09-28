@@ -5,6 +5,8 @@ import utils from '../utils/playerDeck-utils.js'
 import {firebase} from '../../fire/index.js'
 import {initPlayerHands} from './players.js'
 
+let database = firebase.database()
+
 // ACTION TYPES
 
 const INIT_PLAYER_DECK = 'INIT_PLAYER_DECK'
@@ -17,6 +19,30 @@ export function initPlayerDeck(numPlayers) {
 }
 
 // THUNK CREATORS
+export function initialShufflePlayerDeck(numPlayers) {
+  // shuffle deck
+  const shuffledPlayerDeck = utils.initShufflePlayerDeck(numPlayers)
+  // send deck to firebase
+  return function thunk(dispatch) {
+    return database.ref('rooms/room1').set({
+      playerDeck: shuffledPlayerDeck
+    })
+  }
+
+  // return function thunk(dispatch) {
+  //   return axios.get('/api/channels')
+  //     .then(res => res.data)
+  //     .then(channels => {
+  //       const action = getChannels(channels);
+  //       dispatch(action);
+  //     });
+  // };
+
+  // send
+  // deal to players
+  // separate & add epidemic cards
+  // shuffle deck
+}
 
 // REDUCER
 
