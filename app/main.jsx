@@ -7,8 +7,8 @@ import {render} from 'react-dom'
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
 import Main from './components/Main'
-import Home from './components/Home'
-import Room from './components/Room'
+import Welcome from './components/Welcome'
+import Sidebar from './components/Sidebar'
 
 import firebase from '../fire/index'
 
