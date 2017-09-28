@@ -1,5 +1,6 @@
 import React from 'react'
 import cities from '../data/all-cities'
+import { Polyline } from 'react-leaflet'
 
 export function drawLines() {
   const connections = []
