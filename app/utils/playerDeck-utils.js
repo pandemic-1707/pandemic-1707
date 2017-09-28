@@ -1,15 +1,8 @@
 import allCities from '../data/all-cities.js'
 import allEvents from '../data/all-events.js'
+import deckUtils from './deck-utils.js'
 
 export default {
-
-  // referenced from https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
-  shuffle: (a) => {
-    for (let i = a.length; i; i--) {
-      let j = Math.floor(Math.random() * i);
-      [a[i - 1], a[j]] = [a[j], a[i - 1]]
-    }
-  },
 
   initializePlayerDeck: (numPlayers) => {
     // randomize deck
@@ -19,7 +12,7 @@ export default {
     })
     // TODO: more efficient way to sort objects array?
     let playerDeck = allCitiesArr.concat(allEvents)
-    this.shuffle(playerDeck)
+    deckUtils.shuffle(playerDeck)
     // pick playerhands and remove cards from deck
     let numPlayerDrawnCards = 0
     // game specifies specific num of cards per player depending on
@@ -40,7 +33,7 @@ export default {
     initPlayerHands(playerHands)
     // randomize deck
     // TODO: add epidemic cards
-    shuffle(playerDeck)
+    deckUtils.shuffle(playerDeck)
     // send deck to firebase
     return playerDeck
   }

@@ -1,9 +1,8 @@
 import axios from 'axios'
-// import socket from '../socket'
 import allCities from '../data/all-cities.js'
 import allEvents from '../data/all-events.js'
+import utils from '../utils/playerDeck-utils.js'
 import {firebase} from '../../fire/index.js'
-
 import {initPlayerHands} from './players.js'
 
 // ACTION TYPES
@@ -24,9 +23,9 @@ export function initPlayerDeck(numPlayers) {
 export default function reducer(state = [], action) {
   switch (action.type) {
   case INIT_PLAYER_DECK:
-    return initializePlayerDeck(action.numPlayers)
+    return utils.initializePlayerDeck(action.numPlayers)
 
   default:
-  return state
+    return state
   }
 }
