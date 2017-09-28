@@ -2,41 +2,43 @@ import axios from 'axios'
 import allCities from '../data/all-cities.js'
 import allEvents from '../data/all-events.js'
 import utils from '../utils/playerDeck-utils.js'
-import {firebase} from '../../fire/index.js'
-import {initPlayerHands} from './players.js'
+import fire from '../../fire'
+import { initPlayerHands } from './players.js'
 
-let database = firebase.database()
+let database = fire.database()
 
 // ACTION TYPES
 
-const INIT_PLAYER_DECK = 'INIT_PLAYER_DECK'
+const SET_PLAYER_DECK = 'SET_PLAYER_DECK'
 
 // ACTION CREATORS
 
-export function initPlayerDeck(numPlayers) {
-  const action = { type: INIT_PLAYER_DECK, numPlayers }
+export function initPlayerDeck(newDeck) {
+  const action = { type: SET_PLAYER_DECK, newDeck }
   return action
 }
 
 // THUNK CREATORS
-export function initialShufflePlayerDeck(numPlayers) {
+export function initialShufflePlayerDeck() {
   // shuffle deck
-  const shuffledPlayerDeck = utils.initShufflePlayerDeck(numPlayers)
+  const shuffledPlayerDeck = utils.initShufflePlayerDeck()
   // send deck to firebase
   return function thunk(dispatch) {
-    return database.ref('rooms/room1').set({
-      playerDeck: shuffledPlayerDeck
-    })
+    debugger
+    console.log("thunk")
+    try {
+      return database.ref('rooms/room1').set({
+        playerDeck: shuffledPlayerDeck
+      })
+        .then(() => {
+          // set playerDeck on store state
+          const action = initPlayerDeck(shuffledPlayerDeck)
+          dispatch(action)
+        }).catch((err) => (console.error(err)))
+    } catch (err) {
+      console.error(err)
+    }
   }
-
-  // return function thunk(dispatch) {
-  //   return axios.get('/api/channels')
-  //     .then(res => res.data)
-  //     .then(channels => {
-  //       const action = getChannels(channels);
-  //       dispatch(action);
-  //     });
-  // };
 
   // send
   // deal to players
@@ -48,10 +50,10 @@ export function initialShufflePlayerDeck(numPlayers) {
 
 export default function reducer(state = [], action) {
   switch (action.type) {
-  case INIT_PLAYER_DECK:
-    return utils.initializePlayerDeck(action.numPlayers)
+    case SET_PLAYER_DECK:
+      return action.newDeck
 
-  default:
-    return state
+    default:
+      return state
   }
 }

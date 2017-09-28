@@ -5,7 +5,7 @@ import deckUtils from './deck-utils.js'
 export default {
 
   // initial shuffle: returns all city & event cards shuffled together
-  initShufflePlayerDeck: (numPlayers) => {
+  initShufflePlayerDeck: () => {
     // turn objects into arrays & shuffle
     const allCitiesArr = Object.keys(allCities).map((cityName) => {
       return { city: cityName, props: allCities[cityName] }
