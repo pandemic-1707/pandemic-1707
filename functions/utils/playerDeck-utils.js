@@ -1,9 +1,9 @@
-import allCities from '../data/all-cities.js'
-import allEvents from '../data/all-events.js'
-import deckUtils from './deck-utils.js'
+const allCities = require('../data/cities.js')
+const allEvents = require('../data/all-events.js')
+const deckUtils = require('./deck-utils.js')
 const playerUtils = require('./player-utils.js')
 
-export default {
+module.exports = {
 
   // initial shuffle: returns all city & event cards shuffled together
   initShufflePlayerDeck: () => {
