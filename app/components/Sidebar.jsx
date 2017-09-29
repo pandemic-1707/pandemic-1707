@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import fire from '../../fire'
 import {shuffleArray} from '../utils/sidebar-utils'
 
-const playerOrder = {'player1': '#F13C15', 'player2': '#008000', 'player3': '#158DF1', 'player4': '#FFFFFF'}
+const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 
 export default class Sidebar extends Component {
   constructor(props) {
