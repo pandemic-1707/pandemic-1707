@@ -14,7 +14,6 @@ export default class Sidebar extends Component {
   }
   componentDidMount() {
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    // const playerOrder = ['player1', 'player2', 'player3', 'player4']
     var shuffled = shuffleArray(roles)
     // randomly assign role and write to firebase
     Object.keys(playerOrder).map(player => {
