@@ -1,11 +1,104 @@
 body {
-	background: url("background.jpg");
-	display: flex;
+  height: 100%;
 }
-.title {
-	position: relative;
+.welcome {
+  background: url("background.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+#title {
+  height: 600px;  
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 #gametitle {
-	justify-content: center;
 	color: red;
+}
+
+/* styling for markers */
+
+.city-marker {
+	width: 25px;
+	height: 25px;
+	border: 1px solid rgba(0, 0, 0, .2);
+	border-radius: 50%;
+}
+
+.blue {
+	background: steelblue;
+	box-shadow: 0 0 5px 5px #26cceb;
+}
+
+.red {
+	background: red;
+	box-shadow: 0 0 5px 5px #f97174;
+}
+
+.yellow {
+	background: yellow;
+	box-shadow: 0 0 5px 5px #f2f000;
+}
+
+.black {
+	background: black;
+	box-shadow: 0 0 5px 5px #b4b4b4;
+}
+
+.research-station-marker {
+	width: 25px;
+	height: 25px;
+	border: 1px solid rgba(0, 0, 0, .2);
+	background: #ffffff;
+}
+
+.whoami-user-name {
+  color: grey;
+}
+
+.player-box {
+  width: 150px;
+  height: 80px;
+}
+.player-name {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  /*background-color: orange;*/
+  height: 32px;
+  font-size: 12px;
+}
+.player-hand {
+  background-color: grey;
+  height: 50px;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (min-width: 600px) {
+  .main {
+    flex-direction: row-reverse;
+  }
+
+  .main-content {
+    flex: 1;
+  }
+
+  .sidebar {
+    width: 150px;
+  }
+}
+.footer {
+  height: 80px;
 }

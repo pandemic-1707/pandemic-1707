@@ -1,15 +1,22 @@
 'use strict'
 import React from 'react'
+<<<<<<< HEAD
 import { Router, Route, IndexRedirect, browserHistory } from 'react-router'
 import { render } from 'react-dom'
+=======
+import {Route, IndexRedirect, browserHistory} from 'react-router'
+import {BrowserRouter as Router, Switch} from 'react-router-dom'
+import {render} from 'react-dom'
+>>>>>>> master
 
 import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
-import Home from './components/Home'
+import Main from './components/Main'
+import Welcome from './components/Welcome'
+import Sidebar from './components/Sidebar'
+import GameMap from './components/GameMap'
 
-import firebase from 'APP/fire'
-
-import Demos from 'APP/demos'
+import firebase from '../fire/index'
 
 import { Provider } from 'react-redux'
 import store from './store'
@@ -45,23 +52,18 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 // and whatever children the router gave us.
 const App = ({ children }) =>
   <div>
-    <nav>
-      {/* WhoAmI takes a firebase auth API and renders either a
-          greeting and a logout button, or sign in buttons, depending
-          on if anyone's logged in */}
-      <WhoAmI auth={auth} />
-    </nav>
-    {/* Render our children (whatever the router gives us) */}
-    {children}
+      <nav>
+        {/* WhoAmI takes a firebase auth API and renders either a
+            greeting and a logout button, or sign in buttons, depending
+            on if anyone's logged in */}
+        <WhoAmI auth={auth}/>
+      </nav>
+      {/* Render our children (whatever the router gives us) */}
+      {children}
   </div>
+export default App
 
 render(
-  <Provider store={store}>
-    <Router history={browserHistory}>
-      <App>
-        <Route path="/" component={Home} />
-      </App>
-    </Router>
-  </Provider>,
+  <Main />,
   document.getElementById('main')
-)
+  )
