@@ -1,6 +1,7 @@
 import allCities from '../data/all-cities.js'
 import allEvents from '../data/all-events.js'
 import deckUtils from './deck-utils.js'
+const playerUtils = require('./player-utils.js')
 
 export default {
 
@@ -16,10 +17,27 @@ export default {
   },
 
   // pick playerhands and remove cards from deck
+  initDealPlayerCards: (numPlayers, playerDeck) => {
+    // pick playerhands and remove cards from deck
+    let numPlayerHandCards = 0
+    // game specifies specific num of cards per player hand depending on
+    // num of players
+    if (numPlayers === 2) numPlayerHandCards = 4
+    if (numPlayers === 3) numPlayerHandCards = 3
+    if (numPlayers === 4) numPlayerHandCards = 2
+    let playerHands = [] // all player hands
+    for (let i = 0; i < numPlayers; i++) {
+      let playerHand = [] // individual player hand
+      for (let j = 0; j < numPlayerHandCards; j++) {
+        playerHand.push(playerDeck.pop())
+      }
+      playerHands.push(playerHand)
+    }
+    // return playedeck and playerhands for firebase update
+    return { playerDeck: playerDeck, playerhands: playerHands }
+  },
 
-  // TODO: add epidemic cards & shuffle
-  // deckUtils.shuffle(playerDeck)
-  // send deck to firebase
+  // add epidemic cards & shuffle
   shuffleInEpidemicsPlayerDeck: (playerDeck, numEpidemics) => {
     // split deck into numEpidemics
     const numPerPiles = Math.floor(playerDeck.length / numEpidemics)
@@ -33,7 +51,7 @@ export default {
       piles.push()
     }
     // put piles back together
-    [].concat.apply([], piles);
+    [].concat.apply([], piles)
     deckUtils.shuffle(playerDeck)
     return playerDeck
   }
