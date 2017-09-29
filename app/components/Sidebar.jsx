@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import fire from '../../fire'
 import {shuffleArray} from '../utils/sidebar-utils'
 
+const playerOrder = {'player1': '#F13C15', 'player2': '#008000', 'player3': '#158DF1', 'player4': '#FFFFFF'}
+
 export default class Sidebar extends Component {
   constructor(props) {
     super(props)
@@ -12,10 +14,10 @@ export default class Sidebar extends Component {
   }
   componentDidMount() {
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    const playerOrder = ['player1', 'player2', 'player3', 'player4']
+    // const playerOrder = ['player1', 'player2', 'player3', 'player4']
     var shuffled = shuffleArray(roles)
     // randomly assign role and write to firebase
-    playerOrder.map(player => {
+    Object.keys(playerOrder).map(player => {
       var playerNum = player.slice(-1)
       fire.database().ref(`/rooms/${this.props.match.params.roomName}/players/${player}`).update({
         role: shuffled[playerNum]
@@ -29,12 +31,13 @@ export default class Sidebar extends Component {
     })
   }
   render() {
-    const players = Object.values(this.state.players).map(player => {
+    const players = Object.values(this.state.players).map((player, idx) => {
+      var color = playerOrder[`player${idx+1}`]
       return (
         <div key={player.name}>
           <div id="player-sidebar">
             <div className="player-box">
-              <div className="player-name">
+              <div className="player-name" style={{backgroundColor: color}}>
                 <img height="32" width="32" src={`/${player.role}.png`} />
                 <div>
                   {player.name}
