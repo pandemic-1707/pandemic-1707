@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import fire from '../../fire'
 import {shuffleArray} from '../utils/sidebar-utils'
 
@@ -18,12 +17,12 @@ export default class Sidebar extends Component {
     // randomly assign role and write to firebase
     Object.keys(playerOrder).map(player => {
       var playerNum = player.slice(-1)
-      fire.database().ref(`/rooms/${this.props.match.params.roomName}/players/${player}`).update({
+      fire.database().ref(`/rooms/${this.props.roomName}/players/${player}`).update({
         role: shuffled[playerNum]
       })
     })
     // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).on('value', snapshot => {
+    fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
       this.setState({
         players: snapshot.val()
       })
@@ -34,7 +33,7 @@ export default class Sidebar extends Component {
       var color = playerOrder[`player${idx+1}`]
       return (
         <div key={player.name}>
-          <div id="player-sidebar">
+          <div>
             <div className="player-box">
               <div className="player-name" style={{backgroundColor: color}}>
                 <img height="32" width="32" src={`/${player.role}.png`} />

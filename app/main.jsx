@@ -9,6 +9,7 @@ import NotFound from './components/NotFound'
 import Main from './components/Main'
 import Welcome from './components/Welcome'
 import Sidebar from './components/Sidebar'
+import GameMap from './components/GameMap'
 
 import firebase from '../fire/index'
 

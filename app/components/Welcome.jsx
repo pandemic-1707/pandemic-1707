@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
 import {NavLink} from 'react-router-dom'
 import Modal from 'react-modal'
 import fire from '../../fire'
@@ -13,6 +12,10 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)'
   }
+}
+
+const background ={
+  backgroundImage: "url('/background.jpg')"
 }
 
 export default class Welcome extends Component {
@@ -71,7 +74,7 @@ export default class Welcome extends Component {
   }
   render() {
     return (
-      <div>
+      <div style={background}>
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
           <h2> A Game by Emily EastLake, An Le, Mary Yen </h2>
