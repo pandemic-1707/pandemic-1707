@@ -15,21 +15,32 @@ const customStyles = {
   }
 }
 
-export default class Home extends Component {
+export default class Welcome extends Component {
   constructor(props) {
     super(props)
     this.state = {
       modalIsOpen: false,
       roomName: 'one',
       playerNumber: 2,
-      player1: '',
-      player2: '',
-      player3: '',
-      player4: ''
+      players: {
+        player1: {
+          name: ''
+        },
+        player2: {
+          name: ''
+        },
+        player3: {
+          name: ''
+        },
+        player4: {
+          name: ''
+        }
+      }
     }
     this.openModal = this.openModal.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.saveRoomData = this.saveRoomData.bind(this)
+    this.savePlayerName = this.savePlayerName.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
   openModal() {
@@ -42,16 +53,17 @@ export default class Home extends Component {
     this.setState(change)
   }
 
+  savePlayerName(field, e) {
+    const players = Object.assign({}, this.state.players)
+    players[field].name = e.target.value
+    this.setState({players})
+  }
+
   handleSubmit(e) {
     e.preventDefault()
-    fire.database().ref('rooms/' + this.state.roomName).set({
-      playerNumber: this.state.playerNumber,
-      player1: this.state.player1,
-      player2: this.state.player2,
-      player3: this.state.player3,
-      player4: this.state.player4
-    })
-    this.props.history.push(`/room/${this.state.roomName}`)
+    const {roomName, playerNumber, players} = this.state
+    fire.database().ref(`rooms/${roomName}`).set({playerNumber, players})
+    this.props.history.push(`/rooms/${this.state.roomName}`)
   }
 
   closeModal() {
@@ -110,7 +122,7 @@ export default class Home extends Component {
                 className="form-control"
                 id="inlineFormInputGroup"
                 placeholder="Name"
-                onChange={this.saveRoomData.bind(this, 'player1')}
+                onChange={this.savePlayerName.bind(this, 'player1')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
@@ -120,7 +132,7 @@ export default class Home extends Component {
                 className="form-control"
                 id="inlineFormInputGroup"
                 placeholder="Name"
-                onChange={this.saveRoomData.bind(this, 'player2')}
+                onChange={this.savePlayerName.bind(this, 'player2')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
@@ -130,7 +142,7 @@ export default class Home extends Component {
                 className="form-control"
                 id="inlineFormInputGroup"
                 placeholder="Name"
-                onChange={this.saveRoomData.bind(this, 'player3')}
+                onChange={this.savePlayerName.bind(this, 'player3')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
@@ -140,7 +152,7 @@ export default class Home extends Component {
                 className="form-control"
                 id="inlineFormInputGroup"
                 placeholder="Name"
-                onChange={this.saveRoomData.bind(this, 'player4')}
+                onChange={this.savePlayerName.bind(this, 'player4')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
@@ -156,8 +168,3 @@ export default class Home extends Component {
     )
   }
 }
-
-// const mapState = null
-// const mapDispatch = null
-
-// export default connect(mapState, mapDispatch)(Home)

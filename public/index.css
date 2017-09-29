@@ -81,7 +81,6 @@ body {
   flex-direction: row;
   background-color: orange;
   height: 32px;
-  font-size: 12px;
 }
 .player-hand {
   background-color: grey;

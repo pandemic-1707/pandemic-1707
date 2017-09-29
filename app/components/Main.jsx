@@ -13,7 +13,7 @@ export default class Main extends Component {
         <App>
           <Route exact path="/" component={Welcome} />
           <Route exact path="/map" component={GameMap} />
-          <Route path="/room/:roomName" component={Sidebar} />
+          <Route path="/rooms/:roomName" component={Sidebar} />
         </App>
       </Router>
       </div>
