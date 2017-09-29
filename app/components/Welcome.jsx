@@ -14,10 +14,6 @@ const customStyles = {
   }
 }
 
-const background ={
-  backgroundImage: "url('/background.jpg')"
-}
-
 export default class Welcome extends Component {
   constructor(props) {
     super(props)
@@ -74,7 +70,7 @@ export default class Welcome extends Component {
   }
   render() {
     return (
-      <div style={background}>
+      <div className="welcome">
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
           <h2> A Game by Emily EastLake, An Le, Mary Yen </h2>
