@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   'Algiers': { color: 'black', location: [32.887209, 13.191338], connections: ['Madrid', 'Paris', 'Istanbul', 'Cairo'] },
   'Atlanta': { color: 'blue', location: [33.748995, -84.387982], connections: ['Chicago', 'Washington', 'Miami'] },
   'Baghdad': { color: 'black', location: [33.312806, 44.361488], connections: ['Istanbul', 'Cairo', 'Tehran', 'Riyadh'] },

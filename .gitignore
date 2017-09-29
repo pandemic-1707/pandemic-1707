@@ -2,6 +2,9 @@
 node_modules/*
 functions/node_modules/*
 
+# Ignore function node_modules
+functions/node_modules/*
+
 # ...except the symlink to ourselves.
 !node_modules/APP
 
