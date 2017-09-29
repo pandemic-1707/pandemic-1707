@@ -10,7 +10,7 @@ import WhoAmIContainer, {WhoAmI} from './WhoAmI'
 import Login from './Login'
 
 /* global describe it beforeEach */
-describe('<WhoAmI/>', () => {
+xdescribe('<WhoAmI/>', () => {
   describe('when nobody is logged in', () => {
     let root
     beforeEach('render the root', () =>
