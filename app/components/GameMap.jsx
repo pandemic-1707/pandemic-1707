@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { divIcon } from 'leaflet'
 import { Map, TileLayer, Marker, Polyline } from 'react-leaflet'
 
-import cities from '../data/all-cities'
+import cities from '../../functions/data/cities'
 import { drawLines } from '../utils/map-utils'
 
 function GameMap(props) {
