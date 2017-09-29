@@ -1,27 +1,56 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import firebase from '../../fire'
+import fire from '../../fire'
+import {shuffleArray} from '../utils/sidebar-utils'
 
-export default class Room extends Component {
-  randomizeRole() {
+const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
+
+export default class Sidebar extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      players: {}
+    }
+  }
+  componentDidMount() {
+    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+    var shuffled = shuffleArray(roles)
+    // randomly assign role and write to firebase
+    Object.keys(playerOrder).map(player => {
+      var playerNum = player.slice(-1)
+      fire.database().ref(`/rooms/${this.props.roomName}/players/${player}`).update({
+        role: shuffled[playerNum]
+      })
+    })
+    // set local state to firebase state
+    fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+      this.setState({
+        players: snapshot.val()
+      })
+    })
   }
   render() {
-    return (
-      <div>
-        <div id="player-sidebar">
-          <div className="player-box">
-            <div className="player-name">
-              <img height="32" width="32" src="/medic.jpeg" />
-              <div>
-                Player1
-                <br/>
-                Medic
+    const players = Object.values(this.state.players).map((player, idx) => {
+      var color = playerOrder[`player${idx+1}`]
+      return (
+        <div key={player.name}>
+          <div>
+            <div className="player-box">
+              <div className="player-name" style={{backgroundColor: color}}>
+                <img height="32" width="32" src={`/${player.role}.png`} />
+                <div>
+                  {player.name}
+                <br />
+                  {player.role}
+                </div>
               </div>
+              <div className="player-hand">Hand</div>
             </div>
-            <div className="player-hand">Hand</div>
           </div>
         </div>
-      </div>
+      )
+    })
+    return (
+      <div className="column">{players}</div>
     )
   }
 }
