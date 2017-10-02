@@ -13,13 +13,6 @@ import GameMap from './components/GameMap'
 
 import firebase from '../fire/index'
 
-// Get the auth API from Firebase.
-const auth = firebase.auth()
-
-// Ensure that we have (almost) always have a user ID, by creating
-// an anonymous user if nobody is signed in.
-auth.onAuthStateChanged(user => user || auth.signInAnonymously())
-
 // Further explanation:
 //
 // Whenever someone signs in or out (that's an "authStateChange"),
@@ -44,14 +37,8 @@ auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 // and whatever children the router gave us.
 const App = ({children}) =>
   <div>
-      <nav>
-        {/* WhoAmI takes a firebase auth API and renders either a
-            greeting and a logout button, or sign in buttons, depending
-            on if anyone's logged in */}
-        <WhoAmI auth={auth}/>
-      </nav>
-      {/* Render our children (whatever the router gives us) */}
-      {children}
+    {/* Render our children (whatever the router gives us) */}
+    {children}
   </div>
 export default App
 

@@ -2,6 +2,15 @@ import React, {Component} from 'react'
 import {NavLink} from 'react-router-dom'
 import Modal from 'react-modal'
 import fire from '../../fire'
+import shuffle from 'shuffle-array'
+import WhoAmI from './WhoAmI'
+
+// Get the auth API from Firebase.
+const auth = fire.auth()
+
+// Ensure that we have (almost) always have a user ID, by creating
+// an anonymous user if nobody is signed in.
+auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 
 const customStyles = {
   content: {
@@ -13,6 +22,8 @@ const customStyles = {
     transform: 'translate(-50%, -50%)'
   }
 }
+
+const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 
 export default class Welcome extends Component {
   constructor(props) {
@@ -62,6 +73,15 @@ export default class Welcome extends Component {
     e.preventDefault()
     const {roomName, playerNumber, players} = this.state
     fire.database().ref(`rooms/${roomName}`).set({playerNumber, players})
+    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+    var shuffled = shuffle(roles)
+    // randomly assign role and write to firebase
+    Object.keys(playerOrder).map(player => {
+      var playerNum = player.slice(-1)
+      fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
+        role: shuffled[playerNum]
+      })
+    })
     this.props.history.push(`/rooms/${this.state.roomName}`)
   }
 
@@ -71,6 +91,7 @@ export default class Welcome extends Component {
   render() {
     return (
       <div className="welcome">
+        <WhoAmI auth={auth}/>
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
           <h2> A Game by Emily EastLake, An Le, Mary Yen </h2>
