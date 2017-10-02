@@ -10,7 +10,7 @@ module.exports = {
   'Chennai': { color: 'black', location: [13.082680, 80.270718], connections: ['Mumbai', 'Delhi', 'Kolkata', 'Jakarta'], infectionRate: 0 },
   'Chicago': { color: 'blue', location: [46.877186, -96.789803], connections: ['Montreal', 'Atlanta', 'Mexico-City', 'Los-Angeles', 'San-Francisco'], infectionRate: 0 },
   'Delhi': { color: 'black', location: [28.704059, 77.102490], connections: ['Kolkata', 'Chennai', 'Mumbai', 'Karachi', 'Tehran'], infectionRate: 0 },
-  'Essen': { color: 'blue', location: [52.229676, 21.012229], connections: ['St.-Petersburg', 'Milan', 'Paris', 'London'], infectionRate: 0 },
+  'Essen': { color: 'blue', location: [52.229676, 21.012229], connections: ['St-Petersburg', 'Milan', 'Paris', 'London'], infectionRate: 0 },
   'Ho-Chi-Minh-City': { color: 'red', location: [10.823099, 106.629664], connections: ['Bangkok', 'Hong-Kong', 'Manila', 'Sydney', 'Jakarta'], infectionRate: 0 },
   'Hong-Kong': { color: 'red', location: [30.572815, 104.066801], connections: ['Shanghai', 'Taipei', 'Manila', 'Ho-Chi-Minh-City', 'Bangkok', 'Kolkata'], infectionRate: 0 },
   'Istanbul': { color: 'black', location: [41.008238, 28.978359], connections: ['Milan', 'St-Petersburg', 'Moscow', 'Baghdad', 'Cairo', 'Algiers'], infectionRate: 0 },
