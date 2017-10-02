@@ -12,15 +12,6 @@ export default class Sidebar extends Component {
     }
   }
   componentDidMount() {
-    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    var shuffled = shuffleArray(roles)
-    // randomly assign role and write to firebase
-    Object.keys(playerOrder).map(player => {
-      var playerNum = player.slice(-1)
-      fire.database().ref(`/rooms/${this.props.roomName}/players/${player}`).update({
-        role: shuffled[playerNum]
-      })
-    })
     // set local state to firebase state
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
       this.setState({
