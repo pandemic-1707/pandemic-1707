@@ -4,6 +4,7 @@ import Modal from 'react-modal'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
+import {filteredObj} from '../utils/welcome-utils'
 
 // Get the auth API from Firebase.
 const auth = fire.auth()
@@ -25,13 +26,20 @@ const customStyles = {
 
 const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 
+function validate(name1, name2) {
+  return {
+    name1: name1.length === 0,
+    name2: name2.length === 0
+  }
+}
+
 export default class Welcome extends Component {
   constructor(props) {
     super(props)
     this.state = {
       modalIsOpen: false,
       roomName: 'one',
-      playerNumber: 2,
+      numPlayers: 2,
       players: {
         player1: {
           name: ''
@@ -45,6 +53,12 @@ export default class Welcome extends Component {
         player4: {
           name: ''
         }
+      },
+      touched: {
+        name1: false,
+        name2: false,
+        name3: false,
+        name4: false
       }
     }
     this.openModal = this.openModal.bind(this)
@@ -69,14 +83,28 @@ export default class Welcome extends Component {
     this.setState({players})
   }
 
+  handleBlur = (field) => (evt) => {
+    this.setState({
+      touched: {...this.state.touched, [field]: true}
+    })
+  }
+  canBeSubmitted() {
+    const errors = validate(this.state.players['player1']['name'], this.state.players['player2']['name'])
+    const isDisabled = Object.keys(errors).some(x => errors[x])
+    return isDisabled
+  }
   handleSubmit(e) {
     e.preventDefault()
-    const {roomName, playerNumber, players} = this.state
-    fire.database().ref(`rooms/${roomName}`).set({playerNumber, players})
+    const {roomName, numPlayers} = this.state
+    let {players} = this.state
+    // only write non-blank player name to DB
+    players = filteredObj(players)
+    // write player name to firebase
+    fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     var shuffled = shuffle(roles)
     // randomly assign role and write to firebase
-    Object.keys(playerOrder).map(player => {
+    Object.keys(players).map(player => {
       var playerNum = player.slice(-1)
       fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
         role: shuffled[playerNum]
@@ -88,7 +116,20 @@ export default class Welcome extends Component {
   closeModal() {
     this.setState({modalIsOpen: false})
   }
+
   render() {
+    const name1 = this.state.players.player1.name
+    const name2 = this.state.players.player2.name
+    const name3 = this.state.players.player3.name
+    const name4 = this.state.players.player4.name
+    const errors = validate(name1, name2)
+    const isDisabled = Object.keys(errors).some(x => errors[x])
+
+    const shouldMarkError = (field) => {
+      const hasError = errors[field]
+      const shouldShow = this.state.touched[field]
+      return hasError ? shouldShow : false
+    }
     return (
       <div className="welcome">
         <WhoAmI auth={auth}/>
@@ -124,11 +165,11 @@ export default class Welcome extends Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="playerNumber">Number of Players</label>
+              <label htmlFor="numPlayers">Number of Players</label>
               <select className="form-control"
               id="exampleSelect1"
-              name="playerNumber"
-              onChange={this.saveRoomData.bind(this, 'playerNumber')}
+              name="numPlayers"
+              onChange={this.saveRoomData.bind(this, 'numPlayers')}
               >
                 <option>2</option>
                 <option>3</option>
@@ -138,30 +179,32 @@ export default class Welcome extends Component {
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Invite your friends!</label>
               <div className="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input name="player1"
-                className="form-control"
+                <input name="name1"
+                className={shouldMarkError('name1') ? 'error form-control' : 'form-control'}
                 id="inlineFormInputGroup"
-                placeholder="Name"
+                placeholder="Player 1 Name"
                 onChange={this.savePlayerName.bind(this, 'player1')}
+                onBlur={this.handleBlur('name1')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
               </div>
               <div className="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input name="player2"
-                className="form-control"
+                <input name="name2"
+                className={shouldMarkError('name2') ? 'error form-control' : 'form-control'}
                 id="inlineFormInputGroup"
-                placeholder="Name"
+                placeholder="Player 2 Name"
                 onChange={this.savePlayerName.bind(this, 'player2')}
+                onBlur={this.handleBlur('name2')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
               </div>
               <div className="input-group mb-2 mr-sm-2 mb-sm-0">
                 <input name="player3"
-                className="form-control"
+                className='form-control'
                 id="inlineFormInputGroup"
-                placeholder="Name"
+                placeholder="Player 3 Name"
                 onChange={this.savePlayerName.bind(this, 'player3')}
                 />
                 <input type="text" className="form-control"
@@ -169,16 +212,21 @@ export default class Welcome extends Component {
               </div>
               <div className="input-group mb-2 mr-sm-2 mb-sm-0">
                 <input name="player4"
-                className="form-control"
+                className='form-control'
                 id="inlineFormInputGroup"
-                placeholder="Name"
+                placeholder="Player 4 Name"
                 onChange={this.savePlayerName.bind(this, 'player4')}
                 />
                 <input type="text" className="form-control"
                 id="inlineFormInputGroup" placeholder="Email" />
               </div>
             </div>
-            <button type="submit" className="btn btn-primary">Submit</button>
+            <button
+            type="submit"
+            className='btn'
+            disabled={isDisabled}
+            >
+            Submit</button>
           </form>
           </Modal>
           <br />

@@ -6,6 +6,12 @@ admin.initializeApp(functions.config().firebase)
 
 const cities = require('./data/cities')
 const infectionDeck = require('./data/infectionDeck')
+const events = require('./data/events')
+// const { shuffle } = require('./utils/deckUtils')
+const utils = require('pandemic-1707-utils')
+const deckUtils = utils.deckUtils
+const playerDeckUtils = utils.playerDeckUtils
+const playerUtils = utils.playerUtils
 
 function shuffle(array) {
   let temp = null
@@ -20,12 +26,33 @@ function shuffle(array) {
   return array
 }
 
+const NUM_PLAYERS_4 = 4
+const NUM_EPIDEMICS = 4
+
 // shuffle the infection deck and add it to the room
 exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     const room = event.data.val()
-    const shuffled = shuffle(infectionDeck)
+    const shuffled = deckUtils.shuffle(infectionDeck)
     return event.data.ref.child('infectionDeck').set(shuffled)
+  })
+
+exports.initializePlayerDecks = functions.database.ref('/rooms/{name}')
+  .onCreate(event => {
+    // TODO : playerNumber will change
+    const numPlayers = event.data.val().playerNumber
+    let updatedData = {}
+    // initPlayerDeck returns
+    // { playerDeck: shuffled deck with epidemics,
+    // playerHands: array of arrays (each array is initial player starting hand) }
+    const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
+    const playerDeck = playerDeckHands.playerDeck
+    const playerHands = playerDeckHands.playerHands
+    updatedData['/playerDeck'] = playerDeck
+    for (let i = 0; i < playerHands.length; i++) {
+      updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
+    }
+    return event.data.ref.update(updatedData)
   })
 
 // load the initial city data and add it to the room
