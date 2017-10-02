@@ -97,8 +97,25 @@ body {
 
   .sidebar {
     width: 150px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
   }
 }
 .footer {
-  height: 80px;
+  height: 70px;
+  background-color: brown;
+}
+form input.error {
+  border-color: red;
+  border-width: thick;
+}
+form button:disabled {
+  background-color: #ADAEAE;
+  color: white;
+}
+form button {
+  background-color: #48B3F0;
+  color: white;
 }

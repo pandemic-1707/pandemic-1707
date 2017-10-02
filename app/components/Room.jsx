@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Map from './GameMap'
 import Sidebar from './Sidebar'
+import Chat from './ChatBox'
 
 export default class Room extends Component {
   render() {
@@ -8,13 +9,14 @@ export default class Room extends Component {
       <div>
         <div className="main">
           <div className="sidebar">
-            <Sidebar roomName={this.props.match.params.roomName}/>
+            <div><Sidebar roomName={this.props.match.params.roomName}/></div>
+            <div><Chat /></div>
           </div>
           <div className="main-content">
             <Map />
+            <footer className="footer">Placeholder</footer>
           </div>
         </div>
-        <footer className="footer">Placeholder</footer>
       </div>
     )
   }

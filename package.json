@@ -76,6 +76,7 @@
     "redux-devtools-extension": "^2.13.0",
     "redux-logger": "^2.7.0",
     "redux-thunk": "^2.1.0",
+    "run-parallel": "^1.1.6",
     "semantic-ui-react": "^0.74.2",
     "sequelize": "^3.24.6",
     "shuffle-array": "^1.0.1",
