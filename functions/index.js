@@ -38,12 +38,18 @@ exports.initializeDecks = functions.database.ref('/rooms/{name}')
 
 exports.initializePlayerDecks = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
-    const numPlayers = event.data.ref.child('playerNumber').val()
+    // TODO : playerNumber will change
+    const numPlayers = event.data.val().playerNumber
+    let updatedData = {}
+    // initPlayerDeck returns
+    // { playerDeck: shuffled deck with epidemics,
+    // playerHands: array of arrays (each array is initial player starting hand) }
     const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
     const playerDeck = playerDeckHands.playerDeck
     const playerHands = playerDeckHands.playerHands
-    for (let i = 1; i <= numPlayers; i++) {
-      event.data.ref.child(`players/player${i}`).child('hand').set(playerHands[i-1])
+    updatedData['/playerDeck'] = playerDeck
+    for (let i = 0; i < playerHands.length; i++) {
+      updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
     }
-    return event.data.ref.child('playerDeck').set(playerDeckHands.playerDeck)
+    return event.data.ref.update(updatedData)
   })
