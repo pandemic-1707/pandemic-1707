@@ -7,7 +7,6 @@ export default class Sidebar extends Component {
     this.state = {
       players: {}
     }
-    console.log(this.state.players)
   }
   componentDidMount() {
     // set local state to firebase state
