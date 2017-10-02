@@ -57,10 +57,8 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
         updatedData['cities/' + nextCity.replace(' ', '-') + '/infectionRate'] = rate
         // remove it from the infection deck
         deck.pop()
-        console.log('new deck ', deck)
         // add it to the discard pile
         discardPile.push(nextCity)
-        console.log('discard pile ', discardPile)
       }
     })
 
