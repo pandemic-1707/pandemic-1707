@@ -7,7 +7,7 @@ import Whiteboard from './whiteboard'
 import Chat from './chat'
 
 const Index = ({children}) => <div>
-  <h1>Demos!</h1>
+  <h1>Demos changed!</h1>
   <h2><Link to='/demos/scratchpad/welcome'>Scratchpad</Link></h2>
   <p>
     The scratchpad is the very simplest React/Firebase demo—a text area

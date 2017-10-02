@@ -1,5 +1,6 @@
 # Ignore all node_modules
 node_modules/*
+functions/node_modules/*
 
 # Ignore function node_modules
 functions/node_modules/*
@@ -16,3 +17,6 @@ npm-debug.log
 
 # Firebase debug log
 firebase-debug.log
+
+# Ignore all node_modules
+functions/node_modules/*
