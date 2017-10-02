@@ -4,6 +4,7 @@ import Welcome from './Welcome'
 import Sidebar from './Sidebar'
 import App from '../main'
 import Room from './Room'
+import Chat from './ChatBox'
 
 export default class Main extends Component {
   render() {
@@ -13,6 +14,7 @@ export default class Main extends Component {
         <App>
           <Route exact path="/" component={Welcome} />
           <Route path="/rooms/:roomName" component={Room} />
+          <Route path="/chat" component={Chat} />
         </App>
       </Router>
       </div>

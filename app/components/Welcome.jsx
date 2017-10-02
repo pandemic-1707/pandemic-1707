@@ -4,6 +4,7 @@ import Modal from 'react-modal'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
+import {filteredObj} from '../utils/welcome-utils'
 
 // Get the auth API from Firebase.
 const auth = fire.auth()
@@ -71,12 +72,16 @@ export default class Welcome extends Component {
 
   handleSubmit(e) {
     e.preventDefault()
-    const {roomName, playerNumber, players} = this.state
+    const {roomName, playerNumber} = this.state
+    let {players} = this.state
+    // only write non-blank player name to DB
+    players = filteredObj(players)
+    // write player name to firebase
     fire.database().ref(`rooms/${roomName}`).set({playerNumber, players})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     var shuffled = shuffle(roles)
     // randomly assign role and write to firebase
-    Object.keys(playerOrder).map(player => {
+    Object.keys(players).map(player => {
       var playerNum = player.slice(-1)
       fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
         role: shuffled[playerNum]

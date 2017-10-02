@@ -97,8 +97,13 @@ body {
 
   .sidebar {
     width: 150px;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
   }
 }
 .footer {
-  height: 80px;
+  height: 70px;
+  background-color: brown;
 }
