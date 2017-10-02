@@ -99,7 +99,6 @@ export default class Welcome extends Component {
     let {players} = this.state
     // only write non-blank player name to DB
     players = filteredObj(players)
-    console.log('players in submit', players)
     // write player name to firebase
     fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
