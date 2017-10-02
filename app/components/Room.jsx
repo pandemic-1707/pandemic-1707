@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Map from './GameMap'
 import Sidebar from './Sidebar'
 import Chat from './ChatBox'
+import PlayerActions from './PlayerActions'
 
 export default class Room extends Component {
   render() {
@@ -14,7 +15,9 @@ export default class Room extends Component {
           </div>
           <div className="main-content">
             <Map />
-            <footer className="footer">Placeholder</footer>
+            <footer className="footer">
+              <div><PlayerActions /></div>
+            </footer>
           </div>
         </div>
       </div>
