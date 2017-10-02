@@ -4,8 +4,8 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
+const cities = require('./data/cities')
 const infectionDeck = require('./data/infectionDeck')
-// const { shuffle } = require('./utils/deckUtils')
 
 function shuffle(array) {
   let temp = null
@@ -20,9 +20,40 @@ function shuffle(array) {
   return array
 }
 
-exports.initializeDecks = functions.database.ref('/rooms/{name}')
+// shuffle the infection deck and add it to the room
+exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     const room = event.data.val()
     const shuffled = shuffle(infectionDeck)
     return event.data.ref.child('infectionDeck').set(shuffled)
+  })
+
+// load the initial city data and add it to the room
+exports.initializeCities = functions.database.ref('/rooms/{name}')
+  .onCreate(event => {
+    const room = event.data.val()
+    return event.data.ref.child('cities').set(cities)
+  })
+
+// // use the first nine cities on the infection deck to set infection rates for start cities
+exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDeck')
+  .onCreate(event => {
+    const deck = event.data.val()
+    const updatedCityData = {}
+    const infectionRate = [3, 2, 1]
+    const citiesToInfect = 3
+
+    // go through each infection rate [3, 2, 1]
+    infectionRate.forEach((rate, idx) => {
+      // and infect three cities at each rate
+      for (let i = 0; i < citiesToInfect; i++) {
+        // some tricky math will give you the distance from the end of the array
+        // i.e. the 2nd city (i = 2) to infect with a rate of 2 (idx = 1) is 3 * 1 + 2 = 5 from the end
+        const distFromEnd = 3 * idx + i
+        const nextCity = deck[deck.length - 1 - distFromEnd]
+        updatedCityData['cities/' + nextCity + '/infectionRate'] = rate
+      }
+    })
+
+    return event.data.ref.parent.update(updatedCityData)
   })
