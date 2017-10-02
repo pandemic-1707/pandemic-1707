@@ -109,6 +109,7 @@ body {
 }
 form input.error {
   border-color: red;
+  border-width: thick;
 }
 form button:disabled {
   background-color: #ADAEAE;
