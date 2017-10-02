@@ -13,7 +13,7 @@ export default class Room extends Component {
             <div><Chat /></div>
           </div>
           <div className="main-content">
-            <Map />
+            <Map roomName={this.props.match.params.roomName} />
             <footer className="footer">Placeholder</footer>
           </div>
         </div>

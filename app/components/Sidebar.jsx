@@ -1,5 +1,7 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import fire from '../../fire'
+
+const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 
 export default class Sidebar extends Component {
   constructor(props) {

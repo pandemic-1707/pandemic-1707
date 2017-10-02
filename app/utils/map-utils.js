@@ -1,6 +1,22 @@
 import React from 'react'
 import cities from '../../functions/data/cities'
-import { Polyline } from 'react-leaflet'
+import { divIcon } from 'leaflet'
+import { Marker, Polyline } from 'react-leaflet'
+
+export function mapDataToMarkers(cities) {
+  return Object.keys(cities).map(key => {
+    const city = cities[key]
+    console.log('city', city)
+    console.log('infectionRate', city.infectionRate)
+    // only render a number of the infection rate is non-zero
+    const html = city.infectionRate ? city.infectionRate : ''
+    console.log('html', html)
+    // assign the color stored on city object as a class name
+    const cityMarker = divIcon({className: `city-marker ${city.color}`, html: html})
+    // return a marker with position and custom icon
+    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker} />
+  })
+}
 
 export function drawLines() {
   const connections = []
