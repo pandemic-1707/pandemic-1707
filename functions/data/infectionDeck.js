@@ -41,7 +41,7 @@ module.exports = [
   'Sao Paulo',
   'Seoul',
   'Shanghai',
-  'St. Petersburg',
+  'St Petersburg',
   'Sydney',
   'Taipei',
   'Tehran',

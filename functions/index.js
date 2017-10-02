@@ -39,7 +39,8 @@ exports.initializeCities = functions.database.ref('/rooms/{name}')
 exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDeck')
   .onCreate(event => {
     const deck = event.data.val()
-    const updatedCityData = {}
+    const updatedData = {}
+    const discardPile = [] // start the discard pile here
     const infectionRate = [3, 2, 1]
     const citiesToInfect = 3
 
@@ -51,9 +52,20 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
         // i.e. the 2nd city (i = 2) to infect with a rate of 2 (idx = 1) is 3 * 1 + 2 = 5 from the end
         const distFromEnd = 3 * idx + i
         const nextCity = deck[deck.length - 1 - distFromEnd]
-        updatedCityData['cities/' + nextCity + '/infectionRate'] = rate
+        // modify the infection rate for the given city
+        // N.B. keys in cities object cannot include spaces, so must use hyphens
+        updatedData['cities/' + nextCity.replace(' ', '-') + '/infectionRate'] = rate
+        // remove it from the infection deck
+        deck.pop()
+        console.log('new deck ', deck)
+        // add it to the discard pile
+        discardPile.push(nextCity)
+        console.log('discard pile ', discardPile)
       }
     })
 
-    return event.data.ref.parent.update(updatedCityData)
+    updatedData['/infectionDeck'] = deck
+    updatedData['/infectionDiscard'] = discardPile
+
+    return event.data.ref.parent.update(updatedData)
   })
