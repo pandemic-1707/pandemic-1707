@@ -5,7 +5,7 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import {filteredObj} from '../utils/welcome-utils'
-import {ruleRunner, required, run} from '../utils/errorMessages'
+
 // Get the auth API from Firebase.
 const auth = fire.auth()
 
