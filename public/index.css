@@ -107,3 +107,14 @@ body {
   height: 70px;
   background-color: brown;
 }
+form input.error {
+  border-color: red;
+}
+form button:disabled {
+  background-color: #ADAEAE;
+  color: white;
+}
+form button {
+  background-color: #48B3F0;
+  color: white;
+}
