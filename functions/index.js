@@ -37,13 +37,15 @@ exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
     return event.data.ref.child('infectionDeck').set(shuffled)
   })
 
-exports.initializePlayerDecks = functions.database.ref('/rooms/{name}')
+// updated to initialize player locations at the same time
+exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     // TODO : playerNumber will change
-    const numPlayers = event.data.val().playerNumber
-    let updatedData = {}
-    // initPlayerDeck returns
-    // { playerDeck: shuffled deck with epidemics,
+    const numPlayers = event.data.val().numPlayers
+    console.log('numPlayers ', numPlayers)
+    const cdcLocation = [33.748995, -84.387982]
+    const updatedData = {}
+    // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
     // playerHands: array of arrays (each array is initial player starting hand) }
     const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
     const playerDeck = playerDeckHands.playerDeck
@@ -51,6 +53,7 @@ exports.initializePlayerDecks = functions.database.ref('/rooms/{name}')
     updatedData['/playerDeck'] = playerDeck
     for (let i = 0; i < playerHands.length; i++) {
       updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
+      updatedData['/players/player' + (i + 1) + '/location'] = cdcLocation
     }
     return event.data.ref.update(updatedData)
   })

@@ -12,7 +12,8 @@ export default class GameMap extends Component {
     super(props)
     this.state = {
       cityMarkers: [],
-      lines: []
+      lines: [],
+      peopleMarkers: []
     }
   }
 
@@ -27,13 +28,20 @@ export default class GameMap extends Component {
 
     // update the markers every time there's a change to the cities in firebase
     fire.database().ref(`/rooms/${this.props.roomName}/cities`).on('value', snapshot => {
-      this.setState({cityMarkers: mapDataToMarkers(snapshot.val())})
+      const data = snapshot.val()
+      if (data) this.setState({cityMarkers: mapDataToMarkers(data)})
     })
   }
 
   render() {
     const upperLeft = [64.837778, -147.716389]
     const bottomRight = [-41.286460, 174.776236]
+
+    const pinkPawn = L.icon({
+      iconUrl: '/pinkPawn.png',
+      iconSize: [20, 30],
+      iconAnchor: [10, 0]
+    })
 
     return (
       <Map style={{height: '100vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
@@ -43,6 +51,7 @@ export default class GameMap extends Component {
           />
           { this.state.cityMarkers }
           { this.state.lines }
+          <Marker key='pinkPawn' position={[40, 74]} icon={pinkPawn} />
       </Map>
     )
   }
