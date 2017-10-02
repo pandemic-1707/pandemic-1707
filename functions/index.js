@@ -9,6 +9,7 @@ const cities = require('./data/cities')
 const events = require('./data/events')
 // const { shuffle } = require('./utils/deckUtils')
 const utils = require('pandemic-1707-utils')
+const deckUtils = utils.deckUtils
 const playerDeckUtils = utils.playerDeckUtils
 const playerUtils = utils.playerUtils
 
@@ -31,9 +32,18 @@ const NUM_EPIDEMICS = 4
 exports.initializeDecks = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     const room = event.data.val()
-    const shuffled = utils.shuffle(infectionDeck)
-    const playerDeckHands = playerDeckUtils.initPlayerDeck(NUM_PLAYERS_4, NUM_EPIDEMICS)
-    event.data.ref.child('playerDeck').set(playerDeckHands.playerDeck)
-    // event.data.ref.child('player').set(playerDeckHands.playerHands)
+    const shuffled = deckUtils.shuffle(infectionDeck)
     return event.data.ref.child('infectionDeck').set(shuffled)
+  })
+
+exports.initializePlayerDecks = functions.database.ref('/rooms/{name}')
+  .onCreate(event => {
+    const numPlayers = event.data.ref.child('playerNumber').val()
+    const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
+    const playerDeck = playerDeckHands.playerDeck
+    const playerHands = playerDeckHands.playerHands
+    for (let i = 1; i <= numPlayers; i++) {
+      event.data.ref.child(`players/player${i}`).child('hand').set(playerHands[i-1])
+    }
+    return event.data.ref.child('playerDeck').set(playerDeckHands.playerDeck)
   })
