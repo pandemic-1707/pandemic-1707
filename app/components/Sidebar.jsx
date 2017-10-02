@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import fire from '../../fire'
-import {shuffleArray} from '../utils/sidebar-utils'
+import { shuffleArray } from '../utils/sidebar-utils'
 
 const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 

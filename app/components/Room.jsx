@@ -8,10 +8,10 @@ export default class Room extends Component {
       <div>
         <div className="main">
           <div className="sidebar">
-            <Sidebar roomName={this.props.match.params.roomName}/>
+            <Sidebar roomName={this.props.match.params.roomName} />
           </div>
           <div className="main-content">
-            <Map />
+            <Map roomName={this.props.match.params.roomName} />
           </div>
         </div>
         <footer className="footer">Placeholder</footer>
