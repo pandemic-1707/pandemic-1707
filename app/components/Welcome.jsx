@@ -24,8 +24,6 @@ const customStyles = {
   }
 }
 
-// const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
-
 function validate(name1, name2) {
   return {
     name1: name1.length === 0,
@@ -109,9 +107,6 @@ export default class Welcome extends Component {
       { name: 'yellow', 'hexVal': '#DEEA00' } ]
     // assign each player's a constant offset from the city depending on numPlayers
     // guarantees that markers won't render on top of each other
-    console.log('num players')
-    console.log(numPlayers)
-    console.log('typeof ', typeof numPlayers)
     const offsets = (function(nPlayers) {
       switch (nPlayers) {
       case 2: return [[-1, -1], [-1, 1]]
@@ -119,8 +114,6 @@ export default class Welcome extends Component {
       case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
       }
     })(numPlayers)
-    console.log('offsets should be')
-    console.log(offsets)
     const shuffledRoles = shuffle(roles)
     const shuffledColors = shuffle(colors)
     // randomly assign role and write to firebase
