@@ -106,14 +106,29 @@ export default class Welcome extends Component {
       { name: 'blue', 'hexVal': '#00BDD8' },
       { name: 'green', 'hexVal': '#74DE00' },
       { name: 'yellow', 'hexVal': '#DEEA00' } ]
-    var shuffledRoles = shuffle(roles)
-    var shuffledColors = shuffle(colors)
+    // assign each player's a constant offset from the city depending on numPlayers
+    // guarantees that markers won't render on top of each other
+    console.log('num players')
+    console.log(numPlayers)
+    console.log('typeof ', typeof numPlayers)
+    const offsets = (function(nPlayers) {
+      switch (nPlayers) {
+      case '2': return [[-1, -1], [-1, 1]]
+      case '3': return [[0, -1], [-1, 0], [0, 1]]
+      case '4': return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
+      }
+    })(numPlayers)
+    console.log('offsets should be')
+    console.log(offsets)
+    const shuffledRoles = shuffle(roles)
+    const shuffledColors = shuffle(colors)
     // randomly assign role and write to firebase
     Object.keys(players).map(player => {
       var playerNum = player.slice(-1)
       fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
-        role: shuffledRoles[playerNum],
-        color: shuffledColors[playerNum]
+        role: shuffledRoles[playerNum - 1],
+        color: shuffledColors[playerNum - 1],
+        offset: offsets[playerNum - 1]
       })
     })
     this.props.history.push(`/rooms/${this.state.roomName}`)
