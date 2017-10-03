@@ -7,7 +7,6 @@ export default class PlayerActions extends Component {
     super(props)
     this.state = {
       players: {},
-      modalIsOpen: false
     }
   }
 
@@ -22,33 +21,12 @@ export default class PlayerActions extends Component {
 
   handleMoveAction = () => {
     // create popup
-    if (this.state.modalIsOpen) this.setState({modalIsOpen: false})
-    else this.setState({modalIsOpen: true})
+
   }
 
   render() {
-    const customStyles = {
-      content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-      }
-    }
-
     return (
       <div>
-        {/* move action modal */}
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-        <h1>HERES A MODAL</h1>
-        </Modal>
         <div className="container-fluid player-actions-panel">
           <div className="row">
             <div className="col-sm-2 player-action text-center" onClick={this.handleMoveAction}>
