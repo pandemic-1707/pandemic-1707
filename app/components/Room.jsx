@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Map from './GameMap'
 import Sidebar from './Sidebar'
+import PlayerActions from './PlayerActions'
 import Chat from './Chat/ChatBox'
 import NavBar from './NavBar'
 
@@ -16,7 +17,9 @@ export default class Room extends Component {
           <div className="main-content">
             <NavBar roomName={this.props.match.params.roomName} />
             <Map roomName={this.props.match.params.roomName} />
-            <footer className="footer">Placeholder</footer>
+            <footer className="footer">
+              <div><PlayerActions roomName={this.props.match.params.roomName}/></div>
+            </footer>
           </div>
         </div>
       </div>

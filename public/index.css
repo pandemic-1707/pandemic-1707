@@ -122,6 +122,7 @@ form button {
   background-color: #48B3F0;
   color: white;
 }
-.navbar {
-  color: white;
+.player-action {
+  text-align: center;
 }
+
