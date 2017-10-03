@@ -9,7 +9,7 @@ export default class NavBar extends Component {
       yellow: 24,
       black: 24,
       blue: 24,
-      infection: 2,
+      infectionIdx: 0,
       outbreaks: 0,
       researchCenter: 1
     }

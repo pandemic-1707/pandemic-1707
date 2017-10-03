@@ -38,7 +38,7 @@ export default class Sidebar extends Component {
               {
                 this.state.players[`player${idx+1}`].hand.map((obj, i) => {
                   return (
-                      <li key={i}>{obj.city}</li>
+                      <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
                   )
                 })
               }
