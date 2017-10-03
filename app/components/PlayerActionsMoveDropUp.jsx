@@ -39,8 +39,7 @@ export default class PlayerActionMoveDropUp extends Component {
   }
 
   showConfirm = () => {
-    if (this.state.selectedCityCondition && this.props.numActions > 0) return <button onClick={this.handleConfirm} >Confirm</button>
-    else return ''
+    return this.state.selectedCityCondition && this.props.numActions > 0
   }
 
   getNearbyCities = (cityName) => {
