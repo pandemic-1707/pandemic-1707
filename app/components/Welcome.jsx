@@ -100,7 +100,7 @@ export default class Welcome extends Component {
     // only write non-blank player name to DB
     players = filteredObj(players)
     // write player name to firebase
-    fire.database().ref(`rooms/${roomName}`).update({numPlayers, players})
+    fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     var shuffled = shuffle(roles)
     // randomly assign role and write to firebase

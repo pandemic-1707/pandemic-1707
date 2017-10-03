@@ -71,7 +71,6 @@ body {
 
 .player-box {
   width: 150px;
-  height: 80px;
 }
 .player-name {
   display: -webkit-flex;
@@ -84,7 +83,7 @@ body {
 }
 .player-hand {
   background-color: grey;
-  height: 50px;
+  font-size: 10px;
 }
 .main {
   display: flex;
