@@ -8,6 +8,7 @@ import { filteredObj } from '../utils/welcome-utils'
 
 // Get the auth API from Firebase.
 const auth = fire.auth()
+const NUM_STARTING_ACTIONS = 4
 
 // Ensure that we have (almost) always have a user ID, by creating
 // an anonymous user if nobody is signed in.
@@ -122,7 +123,8 @@ export default class Welcome extends Component {
       fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
         role: shuffledRoles[playerNum - 1],
         color: shuffledColors[playerNum - 1],
-        offset: offsets[playerNum - 1]
+        offset: offsets[playerNum - 1],
+        numActions: NUM_STARTING_ACTIONS
       })
     })
     this.props.history.push(`/rooms/${this.state.roomName}`)
