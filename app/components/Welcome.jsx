@@ -9,6 +9,7 @@ import utils from '../../functions/node_modules/pandemic-1707-utils'
 const playerDeckUtils = utils.playerDeckUtils
 // Get the auth API from Firebase.
 const auth = fire.auth()
+const NUM_STARTING_ACTIONS = 4
 
 // Ensure that we have (almost) always have a user ID, by creating
 // an anonymous user if nobody is signed in.
@@ -117,15 +118,6 @@ export default class Welcome extends Component {
     })(numPlayers)
     const shuffledRoles = shuffle(roles)
     const shuffledColors = shuffle(colors)
-    // randomly assign role and write to firebase
-    // Object.keys(players).map(player => {
-    //   var playerNum = player.slice(-1)
-    //   fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
-    //     role: shuffledRoles[playerNum - 1],
-    //     color: shuffledColors[playerNum - 1],
-    //     offset: offsets[playerNum - 1]
-    //   })
-    // })
     const NUM_EPIDEMICS = 4
     // generate key instead of hardcoded player
     for (let i = 0; i < numPlayers; i++) {
