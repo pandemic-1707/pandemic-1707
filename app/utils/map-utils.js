@@ -4,7 +4,6 @@ import L, { divIcon } from 'leaflet'
 import { Marker, Polyline } from 'react-leaflet'
 
 export function mapDataToMarkers(cities) {
-  console.log('cities', Object.values(cities))
   return Object.keys(cities).map(key => {
     const city = cities[key]
     // only render a number of the infection rate is non-zero
