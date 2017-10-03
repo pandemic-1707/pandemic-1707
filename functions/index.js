@@ -84,7 +84,8 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
         const nextCity = deck[deck.length - 1 - distFromEnd]
         // modify the infection rate for the given city
         // N.B. keys in cities object cannot include spaces, so must use hyphens
-        updatedData['cities/' + nextCity.replace(' ', '-') + '/infectionRate'] = rate
+        // N.B. replace() only corrects first instance
+        updatedData['cities/' + nextCity.split(' ').join('-') + '/infectionRate'] = rate
         // remove it from the infection deck
         deck.pop()
         // add it to the discard pile
