@@ -26,12 +26,14 @@ export default class PlayerActions extends Component {
   }
 
   render() {
+    // const activePlayer = Object.keys(this.state.players)
+    const activePlayer = this.state.players
     return (
       <div>
         <div className="container-fluid player-actions-panel">
           <div className="row">
             <div className="col-sm-2 player-action text-center">
-              <PlayerActionsMoveDropUp />
+              <PlayerActionsMoveDropUp activePlayer={this.state.players && this.state.players} />
             </div>
             <div className="col-sm-2 player-action text-center">
               <span>Treat</span>

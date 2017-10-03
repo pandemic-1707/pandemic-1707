@@ -16,7 +16,7 @@ export default class Room extends Component {
           <div className="main-content">
             <Map />
             <footer className="footer">
-              <div><PlayerActions /></div>
+              <div><PlayerActions roomName={this.props.match.params.roomName}/></div>
             </footer>
           </div>
         </div>
