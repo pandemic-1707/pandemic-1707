@@ -99,3 +99,10 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
 
     return event.data.ref.parent.update(updatedData)
   })
+  
+  //set initial current player on state
+// exports.initCurrPlayer = functions.database.ref('/rooms/{name}/state')
+//   .onCreate(event => {
+//     const currPlayer = [p1, p2, p3, p4]
+//     return event.data.ref.set()
+//   })
