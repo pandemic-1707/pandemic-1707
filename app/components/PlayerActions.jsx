@@ -14,6 +14,7 @@ export default class PlayerActions extends Component {
   componentDidMount() {
     // set local state to firebase state
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+      console.log("CDM", snapshot.val())
       this.setState({
         players: snapshot.val()
       })
@@ -25,9 +26,11 @@ export default class PlayerActions extends Component {
 
   }
 
+  // TODO: get the active player
   getActivePlayer = (players) => {
-    const playerKeys = Object.keys(players)
-    return players[playerKeys[0]]
+    // console.log("ACTIVE", players)
+    // const playerKeys = Object.keys(players)
+    // return players[playerKeys[0]]
   }
 
   render() {
@@ -36,7 +39,7 @@ export default class PlayerActions extends Component {
         <div className="container-fluid player-actions-panel">
           <div className="row">
             <div className="col-sm-2 player-action text-center">
-              <PlayerActionsMoveDropUp activePlayer={this.state.players && this.getActivePlayer(this.state.players)} />
+              <PlayerActionsMoveDropUp activePlayer={this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)} />
             </div>
             <div className="col-sm-2 player-action text-center">
               <span>Treat</span>
