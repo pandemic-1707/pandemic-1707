@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Dropdown } from 'semantic-ui-react'
+import fire from '../../fire'
 
 export default class PlayerActions extends Component {
   constructor(props) {
@@ -18,11 +19,15 @@ export default class PlayerActions extends Component {
   handleChange = (e) => {
     this.setState({ selectedCity: e.target.value })
     this.setState({ selectedCityCondition: true })
-    console.log('Dropdown changed', e.target.value)
   }
 
-  handleConfirm = () => {
-    console.log('Dropdown confirmed', this.state.selectedCity)
+  handleConfirm = (e) => {
+    e.preventDefault()
+    console.log('TODO: move player to ', this.state.selectedCity)
+    fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerName}`).update({
+      numActions: this.props.numActions - 1
+    })
+    this.setState({ selectedCityCondition: false })
   }
 
   showConfirm = () => {
