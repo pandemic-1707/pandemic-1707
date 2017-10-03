@@ -27,43 +27,43 @@ export default class NavBar extends Component {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <img src={'/redIcon.png'} width="30" height="30" alt="" />
+              <img src={'/images/redIcon.png'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.red}</div>
             </li>
             <li className="nav-item">
-              <img src={'/blackIcon.png'} width="30" height="30" alt="" />
+              <img src={'/images/blackIcon.png'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.black}</div>
             </li>
             <li className="nav-item">
-              <img src={'/blueIcon.png'} width="30" height="30" alt="" />
+              <img src={'/images/blueIcon.png'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.blue}</div>
             </li>
             <li className="nav-item">
-              <img src={'/yellowIcon.png'} width="30" height="30" alt="" />
+              <img src={'/images/yellowIcon.png'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.yellow}</div>
             </li>
             <li className="nav-item">
-              <img src={'/infectionMarker.jpg'} width="30" height="30" alt="" />
+              <img src={'/images/infectionMarker.jpg'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.infection}</div>
             </li>
             <li className="nav-item">
-              <img src={'/OutbreakMarker.png'} width="30" height="30" alt="" />
+              <img src={'/images/OutbreakMarker.png'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.outbreaks}</div>
             </li>
             <li className="nav-item">
-              <img src={'/researchCenter.png'} width="30" height="30" alt="" />
+              <img src={'/images/researchCenter.png'} width="30" height="30" alt="" />
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.researchCenter}</div>

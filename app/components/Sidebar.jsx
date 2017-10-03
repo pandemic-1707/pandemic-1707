@@ -27,7 +27,7 @@ export default class Sidebar extends Component {
           <div>
             <div className="player-box">
               <div className="player-name" style={{backgroundColor: color}}>
-                <img height="32" width="32" src={`/${player.role}.png`} />
+                <img height="32" width="32" src={`/images/${player.role}.png`} />
                 <div>
                   {player.name}
                 <br />

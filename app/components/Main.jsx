@@ -4,7 +4,7 @@ import Welcome from './Welcome'
 import Sidebar from './Sidebar'
 import App from '../main'
 import Room from './Room'
-import Chat from './ChatBox'
+import Chat from './Chat/ChatBox'
 
 export default class Main extends Component {
   render() {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Map from './GameMap'
 import Sidebar from './Sidebar'
-import Chat from './ChatBox'
+import Chat from './Chat/ChatBox'
 import NavBar from './NavBar'
 
 export default class Room extends Component {
