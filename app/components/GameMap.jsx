@@ -34,7 +34,7 @@ export default class GameMap extends Component {
 
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
       const data = snapshot.val()
-      if (data && data.player1.location) this.setState({ peopleMarkers: mapDataToPieces(data) })
+      if (data.player1.position) this.setState({ peopleMarkers: mapDataToPieces(data) })
     })
   }
 
