@@ -114,9 +114,9 @@ export default class Welcome extends Component {
     console.log('typeof ', typeof numPlayers)
     const offsets = (function(nPlayers) {
       switch (nPlayers) {
-      case '2': return [[-1, -1], [-1, 1]]
-      case '3': return [[0, -1], [-1, 0], [0, 1]]
-      case '4': return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
+      case 2: return [[-1, -1], [-1, 1]]
+      case 3: return [[0, -1], [-1, 0], [0, 1]]
+      case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
       }
     })(numPlayers)
     console.log('offsets should be')
