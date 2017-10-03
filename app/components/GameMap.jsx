@@ -29,12 +29,12 @@ export default class GameMap extends Component {
     // update the markers every time there's a change to the cities in firebase
     fire.database().ref(`/rooms/${this.props.roomName}/cities`).on('value', snapshot => {
       const data = snapshot.val()
-      if (data) this.setState({ cityMarkers: mapDataToMarkers(data) })
+      if (data && data['Atlanta'].location) this.setState({ cityMarkers: mapDataToMarkers(data) })
     })
 
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
       const data = snapshot.val()
-      if (data) this.setState({ peopleMarkers: mapDataToPieces(data) })
+      if (data && data.player1.location) this.setState({ peopleMarkers: mapDataToPieces(data) })
     })
   }
 
