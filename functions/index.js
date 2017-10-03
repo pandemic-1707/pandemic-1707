@@ -45,7 +45,6 @@ exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
     const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
     const updatedData = {}
     // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
-    // { playerDeck: shuffled deck with epidemics,
     // playerHands: array of arrays (each array is initial player starting hand) }
     const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
     const playerDeck = playerDeckHands.playerDeck
