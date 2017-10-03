@@ -4,7 +4,6 @@ import L, { divIcon } from 'leaflet'
 import { Marker, Polyline } from 'react-leaflet'
 
 export function mapDataToMarkers(cities) {
-  console.log('cities', Object.values(cities))
   return Object.keys(cities).map(key => {
     const city = cities[key]
     // only render a number of the infection rate is non-zero
@@ -26,7 +25,9 @@ export function mapDataToPieces(players) {
   return Object.keys(players).map(key => {
     const player = players[key]
     const pawn = `${player.color.name}Pawn`
-    return <Marker key={pawn} position={[player.location[0], player.location[1]]} icon={icons[pawn]} />
+    const pieceLat = player.position.location[0] - player.offset[0]
+    const pieceLng = player.position.location[1] - player.offset[1]
+    return <Marker key={pawn} position={[pieceLat, pieceLng]} icon={icons[pawn]} zIndexOffset={1000} />
   })
 }
 
