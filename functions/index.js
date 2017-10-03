@@ -40,7 +40,7 @@ exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
 exports.initializePlayerDecks = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     // TODO : playerNumber will change
-    const numPlayers = event.data.val().playerNumber
+    const numPlayers = event.data.val().numPlayers
     let updatedData = {}
     // initPlayerDeck returns
     // { playerDeck: shuffled deck with epidemics,
