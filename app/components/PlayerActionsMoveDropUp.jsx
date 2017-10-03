@@ -39,7 +39,7 @@ export default class PlayerActionMoveDropUp extends Component {
   }
 
   showConfirm = () => {
-    if (this.state.selectedCityCondition) return <button onClick={this.handleConfirm} >Confirm</button>
+    if (this.state.selectedCityCondition && this.props.numActions > 0) return <button onClick={this.handleConfirm} >Confirm</button>
   }
 
   getNearbyCities = (cityName) => {
@@ -49,7 +49,7 @@ export default class PlayerActionMoveDropUp extends Component {
   }
 
   render() {
-    let confirmButton = this.showConfirm()
+    let confirmButton = this.props.numActions && this.showConfirm()
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
     return (
       <div className="ui form" onSubmit={this.handleConfirm}>
