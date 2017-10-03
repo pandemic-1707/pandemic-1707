@@ -1,6 +1,6 @@
 import React from 'react'
 import cities from '../../functions/data/cities'
-import { divIcon } from 'leaflet'
+import L, { divIcon } from 'leaflet'
 import { Marker, Polyline } from 'react-leaflet'
 
 export function mapDataToMarkers(cities) {
@@ -12,6 +12,20 @@ export function mapDataToMarkers(cities) {
     const cityMarker = divIcon({className: `city-marker ${city.color}`, html: html})
     // return a marker with position and custom icon
     return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker} />
+  })
+}
+
+export function mapDataToPieces(players) {
+  const icons = { pinkPawn: L.icon({ iconUrl: '/pinkPawn.png', iconSize: [20, 30], iconAnchor: [10, 0] }),
+    bluePawn: L.icon({ iconUrl: '/bluePawn.png', iconSize: [20, 30], iconAnchor: [10, 0] }),
+    yellowPawn: L.icon({ iconUrl: '/yellowPawn.png', iconSize: [20, 30], iconAnchor: [10, 0] }),
+    greenPawn: L.icon({ iconUrl: '/greenPawn.png', iconSize: [20, 30], iconAnchor: [10, 0] })
+  }
+
+  return Object.keys(players).map(key => {
+    const player = players[key]
+    const pawn = `${player.color.name}Pawn`
+    return <Marker key={pawn} position={[player.location[0], player.location[1]]} icon={icons[pawn]} />
   })
 }
 

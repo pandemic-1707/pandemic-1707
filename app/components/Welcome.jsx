@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
-import {NavLink} from 'react-router-dom'
+import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 import Modal from 'react-modal'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
-import {filteredObj} from '../utils/welcome-utils'
+import { filteredObj } from '../utils/welcome-utils'
 
 // Get the auth API from Firebase.
 const auth = fire.auth()
@@ -24,7 +24,7 @@ const customStyles = {
   }
 }
 
-const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
+// const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 
 function validate(name1, name2) {
   return {
@@ -102,12 +102,18 @@ export default class Welcome extends Component {
     // write player name to firebase
     fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    var shuffled = shuffle(roles)
+    const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
+      { name: 'blue', 'hexVal': '#00BDD8' },
+      { name: 'green', 'hexVal': '#74DE00' },
+      { name: 'yellow', 'hexVal': '#DEEA00' } ]
+    var shuffledRoles = shuffle(roles)
+    var shuffledColors = shuffle(colors)
     // randomly assign role and write to firebase
     Object.keys(players).map(player => {
       var playerNum = player.slice(-1)
       fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
-        role: shuffled[playerNum]
+        role: shuffledRoles[playerNum],
+        color: shuffledColors[playerNum]
       })
     })
     this.props.history.push(`/rooms/${this.state.roomName}`)
@@ -135,7 +141,7 @@ export default class Welcome extends Component {
         <WhoAmI auth={auth}/>
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
-          <h2> A Game by Emily EastLake, An Le, Mary Yen </h2>
+          <h2> A Game by Emily Eastlake, An Le and Mary Yen </h2>
           <br />
           <button type="button"
           className="btn btn-outline-primary"

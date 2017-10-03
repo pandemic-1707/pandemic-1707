@@ -5,7 +5,7 @@ import { Map, TileLayer, Marker, Polyline } from 'react-leaflet'
 
 import fire from '../../fire'
 import cities from '../../functions/data/cities'
-import { mapDataToMarkers, drawLines } from '../utils/map-utils'
+import { mapDataToPieces, mapDataToMarkers, drawLines } from '../utils/map-utils'
 
 export default class GameMap extends Component {
   constructor(props) {
@@ -29,19 +29,18 @@ export default class GameMap extends Component {
     // update the markers every time there's a change to the cities in firebase
     fire.database().ref(`/rooms/${this.props.roomName}/cities`).on('value', snapshot => {
       const data = snapshot.val()
-      if (data) this.setState({cityMarkers: mapDataToMarkers(data)})
+      if (data) this.setState({ cityMarkers: mapDataToMarkers(data) })
+    })
+
+    fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+      const data = snapshot.val()
+      if (data) this.setState({ peopleMarkers: mapDataToPieces(data) })
     })
   }
 
   render() {
     const upperLeft = [64.837778, -147.716389]
     const bottomRight = [-41.286460, 174.776236]
-
-    const pinkPawn = L.icon({
-      iconUrl: '/pinkPawn.png',
-      iconSize: [20, 30],
-      iconAnchor: [10, 0]
-    })
 
     return (
       <Map style={{height: '100vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
@@ -51,7 +50,7 @@ export default class GameMap extends Component {
           />
           { this.state.cityMarkers }
           { this.state.lines }
-          <Marker key='pinkPawn' position={[40, 74]} icon={pinkPawn} />
+          { this.state.peopleMarkers }
       </Map>
     )
   }
