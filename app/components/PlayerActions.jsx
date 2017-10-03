@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
 import Modal from 'react-modal'
+import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 
 export default class PlayerActions extends Component {
   constructor(props) {
@@ -29,8 +30,8 @@ export default class PlayerActions extends Component {
       <div>
         <div className="container-fluid player-actions-panel">
           <div className="row">
-            <div className="col-sm-2 player-action text-center" onClick={this.handleMoveAction}>
-              <span>Move</span>
+            <div className="col-sm-2 player-action text-center">
+              <PlayerActionsMoveDropUp />
             </div>
             <div className="col-sm-2 player-action text-center">
               <span>Treat</span>
