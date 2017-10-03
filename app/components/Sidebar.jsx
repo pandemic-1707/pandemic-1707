@@ -20,6 +20,7 @@ export default class Sidebar extends Component {
   }
   render() {
     const players = Object.values(this.state.players).map((player, idx) => {
+      console.log("player hand", this.state.players['player1']['hand'])
       const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
       var color = playerOrder[`player${idx+1}`]
       return (
@@ -34,7 +35,11 @@ export default class Sidebar extends Component {
                   {player.role}
                 </div>
               </div>
-              <div className="player-hand">Hand</div>
+              {
+                (player.hand).map(obj => {
+                  <li>{obj['city']}</li>
+                })
+              }
             </div>
           </div>
         </div>
