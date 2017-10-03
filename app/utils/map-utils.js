@@ -25,7 +25,7 @@ export function mapDataToPieces(players) {
   return Object.keys(players).map(key => {
     const player = players[key]
     const pawn = `${player.color.name}Pawn`
-    return <Marker key={pawn} position={[player.location[0], player.location[1]]} icon={icons[pawn]} />
+    return <Marker key={pawn} position={[player.position.location[0], player.position.location[1]]} icon={icons[pawn]} />
   })
 }
 
