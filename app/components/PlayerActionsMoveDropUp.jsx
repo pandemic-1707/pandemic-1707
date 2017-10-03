@@ -31,8 +31,8 @@ export default class PlayerActionMoveDropUp extends Component {
 
   handleConfirm = (e) => {
     e.preventDefault()
-    console.log('TODO: move player to ', this.state.selectedCity)
     fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerName}`).update({
+      position: {city: this.state.selectedCity, location: [33.748995, -84.387982]}, // TODO: update location coordinates
       numActions: this.props.numActions - 1
     })
     this.setState({ selectedCityCondition: false })
