@@ -81,7 +81,6 @@ export default class Welcome extends Component {
     const players = Object.assign({}, this.state.players)
     players[field].name = e.target.value
     this.setState({players})
-    console.log('this.state.players', this.state.players)
   }
 
   handleBlur = (field) => (evt) => {
@@ -100,7 +99,6 @@ export default class Welcome extends Component {
     let {players} = this.state
     // only write non-blank player name to DB
     players = filteredObj(players)
-    console.log('players', players)
     // write player name to firebase
     fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
