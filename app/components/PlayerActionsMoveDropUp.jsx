@@ -37,14 +37,14 @@ export default class PlayerActions extends Component {
           <select className="ui upward dropdown" onChange={this.handleChange} value={this.state.value}>
             <option value="" disabled selected hidden>Move</option>
             {
-              {/* this.props.activePlayer && this.props.activePlayer.hand.map((card) => {
+              this.props.activePlayer && this.props.activePlayer.hand.map((card) => {
                 if (card.city) {
                   return <option value={card.city}>{card.city}</option>
                 }
-              }) */}
+              })
             }
           </select>
-        {confirmButton}
+          {confirmButton}
         </div>
       </div>
     )

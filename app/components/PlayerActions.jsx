@@ -28,9 +28,9 @@ export default class PlayerActions extends Component {
 
   // TODO: get the active player
   getActivePlayer = (players) => {
-    // console.log("ACTIVE", players)
-    // const playerKeys = Object.keys(players)
-    // return players[playerKeys[0]]
+    console.log("ACTIVE", players)
+    const playerKeys = Object.keys(players)
+    return players[playerKeys[0]]
   }
 
   render() {
