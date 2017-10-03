@@ -21,15 +21,20 @@ export default class PlayerActions extends Component {
     console.log('Dropdown changed', e.target.value)
   }
 
+  handleConfirm = (e) => {
+    e.preventDefault()
+    console.log('Dropdown confirmed', this.state.selectedCity)
+  }
+
   showConfirm = () => {
-    if (this.state.selectedCityCondition) return <button >Confirm</button>
+    if (this.state.selectedCityCondition) return <button type="submit" >Confirm</button>
   }
 
   render() {
     console.log("PLAYERS", this.props.activePlayer)
     let confirmButton = this.showConfirm()
     return (
-      <div className="ui form">
+      <div className="ui form" onSubmit={this.handleConfirm}>
         <div className="field">
           <select className="ui upward dropdown" onChange={this.handleChange} value={this.state.value} placehol>
             <option value="" disabled selected hidden>Move</option>
@@ -41,8 +46,8 @@ export default class PlayerActions extends Component {
               })
             }
           </select>
-        </div>
         {confirmButton}
+        </div>
       </div>
     )
   }
