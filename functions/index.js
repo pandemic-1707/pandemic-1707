@@ -42,11 +42,9 @@ exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     // TODO : playerNumber will change
     const numPlayers = event.data.val().numPlayers
-    console.log('numPlayers ', numPlayers)
     const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-    let updatedData = {}
-    // initPlayerDeck returns
-    // { playerDeck: shuffled deck with epidemics,
+    const updatedData = {}
+    // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
     // playerHands: array of arrays (each array is initial player starting hand) }
     const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
     const playerDeck = playerDeckHands.playerDeck
