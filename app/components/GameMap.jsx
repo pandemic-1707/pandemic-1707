@@ -5,14 +5,15 @@ import { Map, TileLayer, Marker, Polyline } from 'react-leaflet'
 
 import fire from '../../fire'
 import cities from '../../functions/data/cities'
-import { mapDataToMarkers, drawLines } from '../utils/map-utils'
+import { mapDataToPieces, mapDataToMarkers, drawLines } from '../utils/map-utils'
 
 export default class GameMap extends Component {
   constructor(props) {
     super(props)
     this.state = {
       cityMarkers: [],
-      lines: []
+      lines: [],
+      peopleMarkers: []
     }
   }
 
@@ -27,7 +28,13 @@ export default class GameMap extends Component {
 
     // update the markers every time there's a change to the cities in firebase
     fire.database().ref(`/rooms/${this.props.roomName}/cities`).on('value', snapshot => {
-      this.setState({cityMarkers: mapDataToMarkers(snapshot.val())})
+      const data = snapshot.val()
+      if (data) this.setState({ cityMarkers: mapDataToMarkers(data) })
+    })
+
+    fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+      const data = snapshot.val()
+      if (data) this.setState({ peopleMarkers: mapDataToPieces(data) })
     })
   }
 
@@ -43,6 +50,7 @@ export default class GameMap extends Component {
           />
           { this.state.cityMarkers }
           { this.state.lines }
+          { this.state.peopleMarkers }
       </Map>
     )
   }
