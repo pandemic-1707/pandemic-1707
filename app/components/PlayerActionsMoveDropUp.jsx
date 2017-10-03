@@ -5,7 +5,9 @@ export default class PlayerActions extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      players: {}
+      players: {},
+      selectedCityCondition: false,
+      selectedCity: ''
     }
   }
 
@@ -14,25 +16,33 @@ export default class PlayerActions extends Component {
   }
 
   handleChange = (e) => {
-    this.setState({ value: e.target.value })
+    this.setState({ selectedCity: e.target.value })
+    this.setState({ selectedCityCondition: true })
     console.log('Dropdown changed', e.target.value)
   }
 
+  showConfirm = () => {
+    if (this.state.selectedCityCondition) return <button >Confirm</button>
+  }
+
   render() {
-    console.log("PLAYERS",this.props.players)
+    console.log("PLAYERS", this.props.activePlayer)
+    let confirmButton = this.showConfirm()
     return (
       <div className="ui form">
         <div className="field">
-          <select className="ui upward dropdown" onChange={this.handleChange} value={this.state.value}>
-            <option value="">Move</option>
+          <select className="ui upward dropdown" onChange={this.handleChange} value={this.state.value} placehol>
+            <option value="" disabled selected hidden>Move</option>
             {
-              
+              this.props.activePlayer && this.props.activePlayer.hand.map((card) => {
+                if (card.city) {
+                  return <option value={card.city}>{card.city}</option>
+                }
+              })
             }
-            <option value="1">Dictionary 1</option>
-            <option value="2">Dictionary 2</option>
           </select>
         </div>
-      <button >Confirm</button>
+        {confirmButton}
       </div>
     )
   }

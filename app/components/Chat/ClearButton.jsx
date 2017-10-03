@@ -10,7 +10,7 @@ class ClearButton extends React.Component {
     this.props.clearMessages()
   }
   render() {
-    let button = <button onClick={this.handleClearMessages} >Clear</button>
+    let button = <button className="btn btn-sm btn-warning" onClick={this.handleClearMessages} >Clear</button>
     if (this.props.isDisabled) {
       button = <button disabled="disabled">Clear</button>
     }

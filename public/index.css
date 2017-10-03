@@ -2,7 +2,7 @@ body {
   height: 100%;
 }
 .welcome {
-  background: url("background.jpg") no-repeat center center fixed; 
+  background: url("/images/background.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -28,10 +28,14 @@ body {
 /* styling for markers */
 
 .city-marker {
-	width: 25px;
-	height: 25px;
+	width: 20px !important;
+	height: 20px !important;
 	border: 1px solid rgba(0, 0, 0, .2);
 	border-radius: 50%;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0 1px 0 black;
+  color: white;
 }
 
 .blue {
@@ -67,7 +71,6 @@ body {
 
 .player-box {
   width: 150px;
-  height: 80px;
 }
 .player-name {
   display: -webkit-flex;
@@ -80,7 +83,7 @@ body {
 }
 .player-hand {
   background-color: grey;
-  height: 50px;
+  font-size: 10px;
 }
 .main {
   display: flex;
@@ -125,4 +128,7 @@ form button {
 
 .player-action {
   text-align: center;
+}
+.navbar-light .navbar-nav .nav-link {
+  color: white;
 }
