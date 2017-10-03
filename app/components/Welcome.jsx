@@ -4,8 +4,9 @@ import Modal from 'react-modal'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
-import { filteredObj } from '../utils/welcome-utils'
-
+import { filteredObj, times } from '../utils/welcome-utils'
+import utils from '../../functions/node_modules/pandemic-1707-utils'
+const playerDeckUtils = utils.playerDeckUtils
 // Get the auth API from Firebase.
 const auth = fire.auth()
 
@@ -99,7 +100,7 @@ export default class Welcome extends Component {
     players = filteredObj(players)
     numPlayers = parseInt(numPlayers)
     // write player name to firebase
-    fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
+    fire.database().ref(`rooms/${roomName}`).set({numPlayers})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
       { name: 'blue', 'hexVal': '#00BDD8' },
@@ -117,14 +118,34 @@ export default class Welcome extends Component {
     const shuffledRoles = shuffle(roles)
     const shuffledColors = shuffle(colors)
     // randomly assign role and write to firebase
-    Object.keys(players).map(player => {
-      var playerNum = player.slice(-1)
-      fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
-        role: shuffledRoles[playerNum - 1],
-        color: shuffledColors[playerNum - 1],
-        offset: offsets[playerNum - 1]
-      })
-    })
+    // Object.keys(players).map(player => {
+    //   var playerNum = player.slice(-1)
+    //   fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
+    //     role: shuffledRoles[playerNum - 1],
+    //     color: shuffledColors[playerNum - 1],
+    //     offset: offsets[playerNum - 1]
+    //   })
+    // })
+    const NUM_EPIDEMICS = 4
+    // generate key instead of hardcoded player
+    for (let i = 0; i < numPlayers; i++) {
+      const newPostKey = fire.database().ref(`/rooms/${roomName}/players`).push().key
+      const updates = {}
+      const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
+      const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
+      const playerDeck = playerDeckHands.playerDeck
+      const playerHands = playerDeckHands.playerHands
+      const postData = {
+        name: players[`player${i+1}`].name,
+        role: shuffledRoles[i],
+        color: shuffledColors[i],
+        offset: offsets[i],
+        hand: playerHands[i],
+        position: cdcLocation
+      }
+      updates[`/rooms/${roomName}/players/` + newPostKey] = postData
+      fire.database().ref().update(updates)
+    }
     this.props.history.push(`/rooms/${this.state.roomName}`)
   }
 

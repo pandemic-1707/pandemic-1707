@@ -13,18 +13,18 @@ const deckUtils = utils.deckUtils
 const playerDeckUtils = utils.playerDeckUtils
 const playerUtils = utils.playerUtils
 
-function shuffle(array) {
-  let temp = null
+// function shuffle(array) {
+//   let temp = null
 
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
+//   for (let i = array.length - 1; i > 0; i -= 1) {
+//     const j = Math.floor(Math.random() * (i + 1))
+//     temp = array[i]
+//     array[i] = array[j]
+//     array[j] = temp
+//   }
 
-  return array
-}
+//   return array
+// }
 
 const NUM_PLAYERS_4 = 4
 const NUM_EPIDEMICS = 4
@@ -38,24 +38,27 @@ exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   })
 
 // updated to initialize player locations at the same time
-exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    // TODO : playerNumber will change
-    const numPlayers = event.data.val().numPlayers
-    const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-    const updatedData = {}
-    // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
-    // playerHands: array of arrays (each array is initial player starting hand) }
-    const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
-    const playerDeck = playerDeckHands.playerDeck
-    const playerHands = playerDeckHands.playerHands
-    updatedData['/playerDeck'] = playerDeck
-    for (let i = 0; i < playerHands.length; i++) {
-      updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
-      updatedData['/players/player' + (i + 1) + '/position'] = cdcLocation
-    }
-    return event.data.ref.update(updatedData)
-  })
+// exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
+//   .onCreate(event => {
+//     const numPlayers = event.data.val().numPlayers
+//     const players = event.data.val().players
+//     console.log('players', players)
+//     const playersKeyArr = Object.keys(players)
+//     console.log('playersKeyArr', playersKeyArr)
+//     const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
+//     const updatedData = {}
+//     // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
+//     // playerHands: array of arrays (each array is initial player starting hand) }
+//     const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
+//     const playerDeck = playerDeckHands.playerDeck
+//     const playerHands = playerDeckHands.playerHands
+//     updatedData['/playerDeck'] = playerDeck
+//     for (let i = 0; i < playerHands.length; i++) {
+//       updatedData['/players/' + playersKeyArr[i] + '/hand'] = playerHands[i]
+//       updatedData['/players/' + playersKeyArr[i] + '/position'] = cdcLocation
+//     }
+//     return event.data.ref.update(updatedData)
+//   })
 
 // load the initial city data and add it to the room
 exports.initializeCities = functions.database.ref('/rooms/{name}')
@@ -97,10 +100,12 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
 
     return event.data.ref.parent.update(updatedData)
   })
-  
-  //set initial current player on state
-// exports.initCurrPlayer = functions.database.ref('/rooms/{name}/state')
-//   .onCreate(event => {
-//     const currPlayer = [p1, p2, p3, p4]
-//     return event.data.ref.set()
-//   })
+
+// set initial current player on state
+exports.rotateCurrPlayer = functions.database.ref('/rooms/{name}/state')
+  .onCreate(event => {
+    const currPlayer = ['player1', 'player2', 'player3', 'player4']
+    const currPlayerArr = deckUtils.shuffle(currPlayer)
+    const updatedCurrPlayer = {}
+    return event.data.ref.set(currPlayerArr)
+  })

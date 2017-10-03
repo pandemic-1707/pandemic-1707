@@ -34,9 +34,9 @@ export default class Sidebar extends Component {
               </div>
               <div className="player-hand">
               {
-                this.state.players['player1'].hand && this.state.players[`player${idx+1}`].hand.map((obj, i) => {
+                player.hand && player.hand.map((obj, i) => {
                   return (
-                      <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
+                    <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
                   )
                 })
               }
