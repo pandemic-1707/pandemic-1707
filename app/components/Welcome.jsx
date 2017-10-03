@@ -93,8 +93,8 @@ export default class Welcome extends Component {
   }
   handleSubmit(e) {
     e.preventDefault()
-    let {roomName, numPlayers} = this.state
-    let {players} = this.state
+    const { roomName } = this.state
+    let { players, numPlayers } = this.state
     // only write non-blank player name to DB
     players = filteredObj(players)
     numPlayers = parseInt(numPlayers)
@@ -145,6 +145,24 @@ export default class Welcome extends Component {
       const shouldShow = this.state.touched[field]
       return hasError ? shouldShow : false
     }
+
+    const inputFields = []
+    for (let i = 1; i <= this.state.numPlayers; i++) {
+      inputFields.push(
+        <div key={`inputField${i}`}className="input-group mb-2 mr-sm-2 mb-sm-0">
+          <input name={`name${i}`}
+          className={shouldMarkError(`name${i}`) ? 'error form-control' : 'form-control'}
+          id="inlineFormInputGroup"
+          placeholder={`Player ${i} Name`}
+          onChange={this.savePlayerName.bind(this, `player${i}`)}
+          onBlur={this.handleBlur(`name${i}`)}
+          />
+          <input type="text" className="form-control"
+          id="inlineFormInputGroup" placeholder="Email" />
+        </div>
+      )
+    }
+
     return (
       <div className="welcome">
         <WhoAmI auth={auth}/>
@@ -193,48 +211,7 @@ export default class Welcome extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="exampleInputEmail1">Invite your friends!</label>
-              <div className="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input name="name1"
-                className={shouldMarkError('name1') ? 'error form-control' : 'form-control'}
-                id="inlineFormInputGroup"
-                placeholder="Player 1 Name"
-                onChange={this.savePlayerName.bind(this, 'player1')}
-                onBlur={this.handleBlur('name1')}
-                />
-                <input type="text" className="form-control"
-                id="inlineFormInputGroup" placeholder="Email" />
-              </div>
-              <div className="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input name="name2"
-                className={shouldMarkError('name2') ? 'error form-control' : 'form-control'}
-                id="inlineFormInputGroup"
-                placeholder="Player 2 Name"
-                onChange={this.savePlayerName.bind(this, 'player2')}
-                onBlur={this.handleBlur('name2')}
-                />
-                <input type="text" className="form-control"
-                id="inlineFormInputGroup" placeholder="Email" />
-              </div>
-              <div className="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input name="player3"
-                className='form-control'
-                id="inlineFormInputGroup"
-                placeholder="Player 3 Name"
-                onChange={this.savePlayerName.bind(this, 'player3')}
-                />
-                <input type="text" className="form-control"
-                id="inlineFormInputGroup" placeholder="Email" />
-              </div>
-              <div className="input-group mb-2 mr-sm-2 mb-sm-0">
-                <input name="player4"
-                className='form-control'
-                id="inlineFormInputGroup"
-                placeholder="Player 4 Name"
-                onChange={this.savePlayerName.bind(this, 'player4')}
-                />
-                <input type="text" className="form-control"
-                id="inlineFormInputGroup" placeholder="Email" />
-              </div>
+              { inputFields }
             </div>
             <button
             type="submit"
