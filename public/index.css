@@ -2,7 +2,7 @@ body {
   height: 100%;
 }
 .welcome {
-  background: url("background.jpg") no-repeat center center fixed; 
+  background: url("/images/background.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -71,7 +71,6 @@ body {
 
 .player-box {
   width: 150px;
-  height: 80px;
 }
 .player-name {
   display: -webkit-flex;
@@ -84,7 +83,7 @@ body {
 }
 .player-hand {
   background-color: grey;
-  height: 50px;
+  font-size: 10px;
 }
 .main {
   display: flex;
@@ -121,5 +120,8 @@ form button:disabled {
 }
 form button {
   background-color: #48B3F0;
+  color: white;
+}
+.navbar-light .navbar-nav .nav-link {
   color: white;
 }

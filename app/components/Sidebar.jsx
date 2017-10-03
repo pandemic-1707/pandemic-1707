@@ -25,14 +25,22 @@ export default class Sidebar extends Component {
           <div>
             <div className="player-box">
               <div className="player-name" style={{ backgroundColor: player.color.hexVal }}>
-                <img height="32" width="32" src={`/${player.role}.png`} />
+                <img height="32" width="32" src={`/images/${player.role}.png`} />
                 <div>
                   {player.name}
                 <br />
                   {player.role}
                 </div>
               </div>
-              <div className="player-hand">Hand</div>
+              <div className="player-hand">
+              {
+                this.state.players[`player${idx+1}`].hand.map((obj, i) => {
+                  return (
+                      <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
+                  )
+                })
+              }
+              </div>
             </div>
           </div>
         </div>

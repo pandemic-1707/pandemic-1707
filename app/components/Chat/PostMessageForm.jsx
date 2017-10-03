@@ -15,13 +15,13 @@ class PostMessageForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <input type="text"
+        <input type="text" className="form-control"
            ref={name => this.nameInput = name}
            placeholder="Name" />
-        <input type="text"
+        <input type="text" className="form-control"
            ref={message => this.messageInput = message}
            placeholder="Message" />
-        <input type="submit" value="Send" />
+        <input className="btn btn-sm btn-primary" type="submit" value="Send" />
       </form>
     )
   }
