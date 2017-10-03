@@ -13,7 +13,6 @@ export default class Sidebar extends Component {
   componentDidMount() {
     // set local state to firebase state
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
-      console.log('snapshot', snapshot)
       this.setState({
         players: snapshot.val()
       })

@@ -16,7 +16,7 @@ export default class NavBar extends Component {
   }
   componentWillMount() {
     // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.roomName}`).set({state: this.state})
+    fire.database().ref(`/rooms/${this.props.roomName}`).update({state: this.state})
   }
   render() {
     return (
