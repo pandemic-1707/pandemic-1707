@@ -43,7 +43,7 @@ exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
     // TODO : playerNumber will change
     const numPlayers = event.data.val().numPlayers
     console.log('numPlayers ', numPlayers)
-    const cdcLocation = [33.748995, -84.387982]
+    const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
     let updatedData = {}
     // initPlayerDeck returns
     // { playerDeck: shuffled deck with epidemics,
@@ -54,7 +54,7 @@ exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
     updatedData['/playerDeck'] = playerDeck
     for (let i = 0; i < playerHands.length; i++) {
       updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
-      updatedData['/players/player' + (i + 1) + '/location'] = cdcLocation
+      updatedData['/players/player' + (i + 1) + '/position'] = cdcLocation
     }
     return event.data.ref.update(updatedData)
   })
