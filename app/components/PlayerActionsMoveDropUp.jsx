@@ -59,7 +59,7 @@ export default class PlayerActionMoveDropUp extends Component {
     if (charterCity) {
       return (
         <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
-          {allCities && allCities.length && allCities.map(function (city) {
+          {allCities && allCities.length && allCities.map(function(city) {
             return <option key={city} value={city + ':charter'}>{city}</option>
           })
           }
@@ -95,16 +95,12 @@ export default class PlayerActionMoveDropUp extends Component {
     // update hand without any used city cards
     let newHand = []
     if (this.state.selectedType === 'hand') {
-      newHand = this.props.activePlayer.hand.filter(function (card) {
-        if (card.city) {
-          return moveToCity !== card.city.replace('.', '')
-        } else {
-          return card
-        }
+      newHand = this.props.activePlayer.hand.filter(function(card) {
+        return moveToCity !== card.city
       })
     } else if (this.state.selectedType === 'charter') {
       const charterCity = this.state.charterCity
-      newHand = this.props.activePlayer.hand.filter(function (card) {
+      newHand = this.props.activePlayer.hand.filter(function(card) {
         return charterCity !== card.city
       })
     } else {
