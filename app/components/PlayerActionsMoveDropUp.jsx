@@ -90,7 +90,6 @@ export default class PlayerActionMoveDropUp extends Component {
   handleConfirm = (e) => {
     e.preventDefault()
     let moveToCity = this.state.selectedCity.replace('.', '')
-    console.log("MOVETO", moveToCity)
     // TODO: refactor so that St.-Petersbug doesn't have a period in backend playerhand!!
     // update hand without any used city cards
     let newHand = []
