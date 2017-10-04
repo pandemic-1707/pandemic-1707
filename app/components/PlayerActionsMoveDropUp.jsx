@@ -3,7 +3,6 @@ import { Dropdown } from 'semantic-ui-react'
 import fire from '../../fire'
 
 // TODO: remove - hyphens from city names display
-// TODO: charter flight: if player has city they're located in hand, allow them to pick any city on the PLANET
 // TODO: shuttle: travel to research stations
 
 export default class PlayerActionMoveDropUp extends Component {
@@ -14,6 +13,7 @@ export default class PlayerActionMoveDropUp extends Component {
       selectedCityCondition: false,
       selectedCity: '',
       selectedType: '',
+      charterCity: '',
       cities: []
     }
     this.activePlayerCity = this.props.activePlayer && this.props.activePlayer.position
@@ -38,10 +38,46 @@ export default class PlayerActionMoveDropUp extends Component {
     }
   }
 
+  // check if you have a charter city in hand (if you have a city in hand that matches the city you're in )
+  checkCharterCity = (cityName) => {
+    if (this.props.activePlayer && this.props.activePlayer.position) {
+      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function (card) {
+        return cityName === card.city
+      })
+      if (charterCity) return charterCity
+      else return null
+    }
+  }
+
+  // returns list of all cities if charter is possible
+  getCharterCity = () => {
+    const allCities = this.state.cities && Object.keys(this.state.cities)
+    const charterCity = this.checkCharterCity(this.props.activePlayer && this.props.activePlayer.position && this.props.activePlayer.position.city)
+    if (charterCity) {
+      return (
+        <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
+          {allCities && allCities.length && allCities.map(function (city) {
+            return <option key={city} value={city + ':charter'}>{city}</option>
+          })
+          }
+        </optgroup>
+      )
+    }
+  }
+
   // changes to the dropdown selection
   handleChange = (e) => {
     // e.target.value comes in format city:type_of_move (ie Milan:nearby, Paris:hand)
     const selectedCityStr = e.target.value.split(':')
+    // check if we have a charter city selected
+    const charterCity = this.checkCharterCity(this.props.activePlayer && this.props.activePlayer.position && this.props.activePlayer.position.city)
+    // if so, keep track of which card is the charter
+    // todo: i think i have 2 checks on charter cities? redundancy?
+    if (selectedCityStr[1] === 'charter') {
+      this.setState({ charterCity: charterCity.city })
+    } else {
+      this.setState({ charterCity: '' })
+    }
     this.setState({ selectedCity: selectedCityStr[0] })
     this.setState({ selectedType: selectedCityStr[1] })
     this.setState({ selectedCityCondition: true })
@@ -53,9 +89,14 @@ export default class PlayerActionMoveDropUp extends Component {
     const moveToCity = this.state.selectedCity
     // update hand without any used city cards
     let newHand = []
-    if (this.state.selectedType === 'hand' || this.state.selectedType === 'charter') {
-      newHand = this.props.activePlayer.hand.filter(function(card) {
+    if (this.state.selectedType === 'hand') {
+      newHand = this.props.activePlayer.hand.filter(function (card) {
         return moveToCity !== card.city
+      })
+    } else if (this.state.selectedType === 'charter') {
+      const charterCity = this.state.charterCity
+      newHand = this.props.activePlayer.hand.filter(function (card) {
+        return charterCity !== card.city
       })
     } else {
       newHand = this.props.activePlayer.hand
@@ -73,23 +114,7 @@ export default class PlayerActionMoveDropUp extends Component {
     let confirmButton = this.props.numActions && this.showConfirm()
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
     // check if charter available
-    let charter = null
-    const allCities = this.state.cities && Object.keys(this.state.cities)
-    if (this.props.activePlayer && this.props.activePlayer.position) {
-      const activePlayerCity = this.props.activePlayer && this.props.activePlayer.position
-      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function(card) {
-        return activePlayerCity.city === card.city
-      })
-      if (charterCity) {
-        charter =
-          <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
-            {allCities && allCities.length && allCities.map(function(city) {
-              return <option key={city} value={city + ':charter'}>{city}</option>
-            })
-            }
-          </optgroup>
-      }
-    }
+    const charter = this.getCharterCity()
 
     return (
       <div className="ui form" onSubmit={this.handleConfirm}>
@@ -108,15 +133,13 @@ export default class PlayerActionMoveDropUp extends Component {
               {
                 this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.map((card) => {
                   if (card.city) {
-                    return <option key={card.city} value={card.city + ':hand' }>{card.city}</option>
+                    return <option key={card.city} value={card.city + ':hand'}>{card.city}</option>
                   }
                 })
               }
             </optgroup>
             {/* display only if you have a card matching your current city */}
-            {
-              charter
-            }
+            {charter}
           </select>
           {confirmButton && <button onClick={this.handleConfirm} >Confirm</button>}
         </div>
