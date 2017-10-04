@@ -11,14 +11,31 @@ export default class NavBar extends Component {
       blue: 24,
       infectionIdx: 0,
       outbreaks: 0,
-      researchCenter: 1
+      researchCenter: 1,
+      currPlayers: [],
+      players: {}
     }
+    this.startGame = this.startGame.bind(this)
   }
   componentWillMount() {
     // set local state to firebase state
     fire.database().ref(`/rooms/${this.props.roomName}`).update({state: this.state})
   }
+  startGame() {
+    fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
+      this.setState({
+        players: snapshot.val().players,
+        currPlayers: Object.keys(snapshot.val().players)
+      })
+      // fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
+      //   currPlayers: Object.keys(players)
+      // })
+    })
+  }
   render() {
+    const { players, currPlayers } = this.state
+    let currPlayer = ''
+    if (players && currPlayers.length > 0) currPlayer = players[currPlayers[0]].name
     return (
       <nav className="navbar navbar-inverse bg-inverse navbar-toggleable-md">
         <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,6 +84,12 @@ export default class NavBar extends Component {
             </li>
             <li className="nav-item">
               <div className="nav-link">{this.state.researchCenter}</div>
+            </li>
+            <li className="nav-item">
+              <button onClick={this.startGame} className="btn btn-success">Start Game</button>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link">Current Turn: {currPlayer}</div>
             </li>
           </ul>
         </div>

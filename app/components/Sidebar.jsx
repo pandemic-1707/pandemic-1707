@@ -7,14 +7,16 @@ export default class Sidebar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      players: {}
+      players: {},
+      currPlayers: []
     }
   }
   componentDidMount() {
     // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+    fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       this.setState({
-        players: snapshot.val()
+        players: snapshot.val().players,
+        currPlayers: snapshot.val().state.currPlayers
       })
     })
   }
@@ -24,7 +26,8 @@ export default class Sidebar extends Component {
         <div key={idx}>
           <div>
             <div className="player-box">
-              <div className="player-name" style={{ backgroundColor: player.color.hexVal }}>
+              <div className={'player-name'}
+                style={{ backgroundColor: player.color.hexVal }}>
                 <img height="32" width="32" src={`/images/${player.role}.png`} />
                 <div>
                   {player.name}

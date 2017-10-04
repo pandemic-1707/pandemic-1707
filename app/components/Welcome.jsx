@@ -4,7 +4,7 @@ import Modal from 'react-modal'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
-import { filteredObj, times } from '../utils/welcome-utils'
+import { filteredObj, setCurrPlayers } from '../utils/welcome-utils'
 import utils from '../../functions/node_modules/pandemic-1707-utils'
 const playerDeckUtils = utils.playerDeckUtils
 // Get the auth API from Firebase.
@@ -100,7 +100,7 @@ export default class Welcome extends Component {
     // only write non-blank player name to DB
     players = filteredObj(players)
     numPlayers = parseInt(numPlayers)
-    // write player name to firebase
+    // write numbers of players to firebase
     fire.database().ref(`rooms/${roomName}`).set({numPlayers})
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
