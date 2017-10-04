@@ -62,6 +62,9 @@ export default class PlayerActionMoveDropUp extends Component {
   render() {
     let confirmButton = this.props.numActions && this.showConfirm()
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
+    // console.log("STATE", Object.keys(this.state.cities).map(function(city) { return city}))
+    const allCities = this.state.cities && Object.keys(this.state.cities)
+    console.log("ALLCITIES", allCities)
     return (
       <div className="ui form" onSubmit={this.handleConfirm}>
         <div className="field">
@@ -86,19 +89,11 @@ export default class PlayerActionMoveDropUp extends Component {
             </optgroup>
             <optgroup label="All Locations">
 
-              <option className="ui left pointing dropdown link item">
-                <i className="dropdown icon"></i>
-                Messages
-    <option className="menu">
-                  <option className="item">Inbox</option>
-                  <option className="item">Starred</option>
-                  <option className="item">Sent Mail</option>
-                  <option className="item">Drafts (143)</option>
-                  <option className="divider"></option>
-                  <option className="item">Spam (1009)</option>
-                  <option className="item">Trash</option>
-                </option>
-              </option>
+              {
+                allCities.length && allCities.map(function(city) {
+                  return <option key={city} value={city}>{city}</option>
+                })
+              }
 
             </optgroup>
           </select>
