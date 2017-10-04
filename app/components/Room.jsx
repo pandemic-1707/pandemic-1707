@@ -36,15 +36,27 @@ export default class Room extends Component {
           case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
           }
         })(numPlayers)
-        const shuffledRoles = shuffle(roles)
-        const shuffledColors = shuffle(colors)
-        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).set({
+        // const shuffledRoles = shuffle(roles)
+        // const shuffledColors = shuffle(colors)
+        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).update({
+          shuffledRoles: shuffle(roles),
+          shuffledColors: shuffle(colors)
+        })
+        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).update({
           [user.uid]: {
-            name: user.displayName,
-            role: shuffledRoles[0],
-            color: shuffledColors[0],
-            offset: offsets[0]
+            name: user.displayName
           }
+        })
+        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).on('value', snapshot => {
+          const myOrder = Object.keys(snapshot.val()).indexOf(user.uid)
+          console.log('myOrder', myOrder)
+          const myRole = snapshot.val().shuffledRoles[myOrder]
+          const myColor = snapshot.val().shuffledColors[myOrder]
+          fire.database().ref(`/rooms/${this.props.match.params.roomName}/players/${user.uid}`).update({
+            role: myRole,
+            color: myColor,
+            offset: offsets[myOrder]
+          })
         })
         this.setState({
           LoggedIn: true
