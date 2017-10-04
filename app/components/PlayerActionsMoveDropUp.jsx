@@ -40,8 +40,10 @@ export default class PlayerActionMoveDropUp extends Component {
 
   // changes to the dropdown selection
   handleChange = (e) => {
-    this.setState({ selectedCity: e.target.value.name })
-    this.setState({ selectedType: e.target.value.type })
+    // e.target.value comes in format city:type_of_move (ie Milan:nearby, Paris:hand)
+    const selectedCityStr = e.target.value.split(':')
+    this.setState({ selectedCity: selectedCityStr[0] })
+    this.setState({ selectedType: selectedCityStr[1] })
     this.setState({ selectedCityCondition: true })
   }
 
@@ -67,8 +69,6 @@ export default class PlayerActionMoveDropUp extends Component {
     this.setState({ selectedCityCondition: false })
   }
 
-  // TODO: error where if you travel to nearby city, if it's in your hand, it will remove it!!
-  // need to check which submenu player chose
   render() {
     let confirmButton = this.props.numActions && this.showConfirm()
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
@@ -76,14 +76,15 @@ export default class PlayerActionMoveDropUp extends Component {
     let charter = null
     const allCities = this.state.cities && Object.keys(this.state.cities)
     if (this.props.activePlayer && this.props.activePlayer.position) {
-      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find((card) => {
-        return this.activePlayerCity === card.city
+      const activePlayerCity = this.props.activePlayer && this.props.activePlayer.position
+      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function(card) {
+        return activePlayerCity.city === card.city
       })
       if (charterCity) {
         charter =
           <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
             {allCities && allCities.length && allCities.map(function(city) {
-              return <option key={city} value={{ name: city, type: 'charter' }}>{city}</option>
+              return <option key={city} value={city + ':charter'}>{city}</option>
             })
             }
           </optgroup>
@@ -97,8 +98,8 @@ export default class PlayerActionMoveDropUp extends Component {
             <option value="" disabled selected hidden>Move</option>
             <optgroup label="Nearby (drive/ferry)">
               {
-                nearbyCities && nearbyCities.map((city) => {
-                  return <option key={city} value={{ name: city, type: 'nearby' }}>{city}</option>
+                nearbyCities && nearbyCities.map((cityName) => {
+                  return <option key={cityName} value={cityName + ':nearby'}>{cityName}</option>
                 })
               })
               }
@@ -107,7 +108,7 @@ export default class PlayerActionMoveDropUp extends Component {
               {
                 this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.map((card) => {
                   if (card.city) {
-                    return <option key={card.city} value={{ name: card.city, type: 'hand' }}>{card.city}</option>
+                    return <option key={card.city} value={card.city + ':hand' }>{card.city}</option>
                   }
                 })
               }
