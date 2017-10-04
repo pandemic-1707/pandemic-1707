@@ -43,7 +43,7 @@ export default class PlayerActionMoveDropUp extends Component {
   checkCharterCity = () => {
     if (this.props.activePlayer && this.props.activePlayer.position) {
       const cityName = this.props.activePlayer && this.props.activePlayer.position && this.props.activePlayer.position.city
-      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function(card) {
+      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function (card) {
         return cityName === card.city
       })
       if (charterCity) return charterCity
@@ -59,7 +59,7 @@ export default class PlayerActionMoveDropUp extends Component {
     if (charterCity) {
       return (
         <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
-          {allCities && allCities.length && allCities.map(function(city) {
+          {allCities && allCities.length && allCities.map(function (city) {
             return <option key={city} value={city + ':charter'}>{city}</option>
           })
           }
@@ -89,16 +89,22 @@ export default class PlayerActionMoveDropUp extends Component {
   // todo: will there be a bug if the players somehow hit confirm before getting db callbacks?
   handleConfirm = (e) => {
     e.preventDefault()
-    const moveToCity = this.state.selectedCity
+    let moveToCity = this.state.selectedCity.replace('.', '')
+    console.log("MOVETO", moveToCity)
+    // TODO: refactor so that St.-Petersbug doesn't have a period in backend playerhand!!
     // update hand without any used city cards
     let newHand = []
     if (this.state.selectedType === 'hand') {
-      newHand = this.props.activePlayer.hand.filter(function(card) {
-        return moveToCity !== card.city
+      newHand = this.props.activePlayer.hand.filter(function (card) {
+        if (card.city) {
+          return moveToCity !== card.city.replace('.', '')
+        } else {
+          return card
+        }
       })
     } else if (this.state.selectedType === 'charter') {
       const charterCity = this.state.charterCity
-      newHand = this.props.activePlayer.hand.filter(function(card) {
+      newHand = this.props.activePlayer.hand.filter(function (card) {
         return charterCity !== card.city
       })
     } else {
