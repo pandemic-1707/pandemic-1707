@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
+import shuffle from 'shuffle-array'
+import WhoAmI from './WhoAmI'
+
+// Get the auth API from Firebase.
+const auth = fire.auth()
+
 
 export default class NavBar extends Component {
   constructor(props) {
@@ -12,8 +18,9 @@ export default class NavBar extends Component {
       infectionIdx: 0,
       outbreaks: 0,
       researchCenter: 1,
-      currPlayers: [],
-      players: {}
+      currPlayer: '',
+      players: {},
+      playerDeck: []
     }
     this.startGame = this.startGame.bind(this)
   }
@@ -25,17 +32,28 @@ export default class NavBar extends Component {
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       this.setState({
         players: snapshot.val().players,
-        currPlayers: Object.keys(snapshot.val().players)
+        playerDeck: snapshot.val().playerDeck
       })
+    })
+    let i = 0
+    const shuffledCurrPlayers = shuffle(Object.keys(this.state.players))
+    while (this.state.playerDeck >= 0) {
+      this.setState({
+        currPlayer: shuffledCurrPlayers[i % shuffledCurrPlayers.length]
+      })
+      for (let j = 0; j < 2; j++) {
+        this.state.currPlayer.hand.append(this.state.playerDeck.pop())
+      }
+      i++
+    }
       // fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
       //   currPlayers: Object.keys(players)
       // })
-    })
   }
   render() {
     const { players, currPlayers } = this.state
     let currPlayer = ''
-    if (players && currPlayers.length > 0) currPlayer = players[currPlayers[0]].name
+    if (players && currPlayers) currPlayer = players[currPlayers[0]].name
     return (
       <nav className="navbar navbar-inverse bg-inverse navbar-toggleable-md">
         <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,6 +103,7 @@ export default class NavBar extends Component {
             <li className="nav-item">
               <div className="nav-link">{this.state.researchCenter}</div>
             </li>
+            <li><WhoAmI auth={auth}/></li>
             <li className="nav-item">
               <button onClick={this.startGame} className="btn btn-success">Start Game</button>
             </li>

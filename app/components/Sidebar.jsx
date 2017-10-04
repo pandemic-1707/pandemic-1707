@@ -21,23 +21,25 @@ export default class Sidebar extends Component {
     })
   }
   render() {
-    const players = Object.values(this.state.players).map((player, idx) => {
+    const playersItemsArr = Object.values(this.state.players)
+    console.log('playersItemArr', playersItemsArr)
+    const players = playersItemsArr.map((idx) => {
       return (
         <div key={idx}>
           <div>
             <div className="player-box">
               <div className={'player-name'}
-                style={{ backgroundColor: player.color.hexVal }}>
-                <img height="32" width="32" src={`/images/${player.role}.png`} />
+                style={{ backgroundColor: playersItemsArr[0].color.hexVal }}>
+                <img height="32" width="32" src={`/images/${playersItemsArr[0].role}.png`} />
                 <div>
-                  {player.name}
+                  {playersItemsArr[0].name}
                 <br />
-                  {player.role}
+                  {playersItemsArr[0].role}
                 </div>
               </div>
               <div className="player-hand">
               {
-                player.hand && player.hand.map((obj, i) => {
+                playersItemsArr[0].hand && playersItemsArr[0].hand.map((obj, i) => {
                   return (
                     <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
                   )

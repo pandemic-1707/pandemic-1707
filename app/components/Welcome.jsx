@@ -7,13 +7,8 @@ import WhoAmI from './WhoAmI'
 import { filteredObj, setCurrPlayers } from '../utils/welcome-utils'
 import utils from '../../functions/node_modules/pandemic-1707-utils'
 const playerDeckUtils = utils.playerDeckUtils
-// Get the auth API from Firebase.
 const auth = fire.auth()
 const NUM_STARTING_ACTIONS = 4
-
-// Ensure that we have (almost) always have a user ID, by creating
-// an anonymous user if nobody is signed in.
-auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 
 const customStyles = {
   content: {
@@ -101,43 +96,31 @@ export default class Welcome extends Component {
     players = filteredObj(players)
     numPlayers = parseInt(numPlayers)
     // write numbers of players to firebase
-    fire.database().ref(`rooms/${roomName}`).set({numPlayers})
-    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
-      { name: 'blue', 'hexVal': '#00BDD8' },
-      { name: 'green', 'hexVal': '#74DE00' },
-      { name: 'yellow', 'hexVal': '#DEEA00' } ]
-    // assign each player's a constant offset from the city depending on numPlayers
-    // guarantees that markers won't render on top of each other
-    const offsets = (function(nPlayers) {
-      switch (nPlayers) {
-      case 2: return [[-1, -1], [-1, 1]]
-      case 3: return [[0, -1], [-1, 0], [0, 1]]
-      case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
-      }
-    })(numPlayers)
-    const shuffledRoles = shuffle(roles)
-    const shuffledColors = shuffle(colors)
-    const NUM_EPIDEMICS = 4
-    // generate key instead of hardcoded player
-    for (let i = 0; i < numPlayers; i++) {
-      const newPostKey = fire.database().ref(`/rooms/${roomName}/players`).push().key
-      const updates = {}
-      const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-      const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
-      const playerDeck = playerDeckHands.playerDeck
-      const playerHands = playerDeckHands.playerHands
-      const postData = {
-        name: players[`player${i+1}`].name,
-        role: shuffledRoles[i],
-        color: shuffledColors[i],
-        offset: offsets[i],
-        hand: playerHands[i],
-        position: cdcLocation
-      }
-      updates[`/rooms/${roomName}/players/` + newPostKey] = postData
-      fire.database().ref().update(updates)
-    }
+    fire.database().ref(`rooms/${roomName}`).set({
+      numPlayers: numPlayers
+    })
+    // auth.onAuthStateChanged(user => {
+    //   if (user) {
+    //     console.log('user', user)
+    //     fire.database().ref(`/rooms/${roomName}/players`).set({
+    //       numPlayers: numPlayers,
+    //       [user.uid]: {
+    //         name: user.displayName
+    //       }
+    //     })
+    //   }
+    // })
+    // for (let i = 0; i < numPlayers; i++) {
+    //   const updates = {}
+    //   const postData = {
+    //     name: players[`player${i+1}`].name,
+    //     role: shuffledRoles[i],
+    //     color: shuffledColors[i],
+    //     offset: offsets[i]
+    //   }
+    //   updates[`/rooms/${roomName}/players/` + user.uid] = postData
+    //   fire.database().ref().update(updates)
+    // }
     this.props.history.push(`/rooms/${this.state.roomName}`)
   }
 
