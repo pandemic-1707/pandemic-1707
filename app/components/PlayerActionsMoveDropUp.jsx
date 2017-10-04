@@ -47,12 +47,12 @@ export default class PlayerActionMoveDropUp extends Component {
     e.preventDefault()
     const moveToCity = this.state.selectedCity
     // update hand without any used city cards
-    const newHand = this.props.activePlayer.hand.filter(function(card) {
+    const newHand = this.props.activePlayer.hand.filter(function (card) {
       return moveToCity !== card.city
     })
     // update position and num actions left
     fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerName}`).update({
-      position: {city: moveToCity, location: this.state.cities[moveToCity].location}, // TODO: update location coordinates
+      position: { city: moveToCity, location: this.state.cities[moveToCity].location }, // TODO: update location coordinates
       numActions: this.props.numActions - 1,
       hand: newHand
     })
@@ -84,8 +84,25 @@ export default class PlayerActionMoveDropUp extends Component {
                 })
               }
             </optgroup>
+            <optgroup label="All Locations">
+
+              <option className="ui left pointing dropdown link item">
+                <i className="dropdown icon"></i>
+                Messages
+    <option className="menu">
+                  <option className="item">Inbox</option>
+                  <option className="item">Starred</option>
+                  <option className="item">Sent Mail</option>
+                  <option className="item">Drafts (143)</option>
+                  <option className="divider"></option>
+                  <option className="item">Spam (1009)</option>
+                  <option className="item">Trash</option>
+                </option>
+              </option>
+
+            </optgroup>
           </select>
-          { confirmButton && <button onClick={this.handleConfirm} >Confirm</button>}
+          {confirmButton && <button onClick={this.handleConfirm} >Confirm</button>}
         </div>
       </div>
     )
