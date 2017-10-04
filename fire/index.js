@@ -1,6 +1,15 @@
 const firebase = require('firebase')
 
 // -- // -- // -- // Firebase Config // -- // -- // -- //
+// const config = {
+//   apiKey: "AIzaSyDEXSwSvp-dKXB8wJPgHD_HUNyvMS7DmU8",
+//   authDomain: "my-pandemic-dev.firebaseapp.com",
+//   databaseURL: "https://my-pandemic-dev.firebaseio.com",
+//   projectId: "my-pandemic-dev",
+//   storageBucket: "",
+//   messagingSenderId: "728951653926"
+// }
+
 const config = {
  	apiKey: "AIzaSyAGBkAvlLOydiC7O_BOqV5XxiYuj-MZ1EE",
     authDomain: "pandemic-1707.firebaseapp.com",
@@ -9,6 +18,7 @@ const config = {
     storageBucket: "pandemic-1707.appspot.com",
     messagingSenderId: "1029700706030"
 }
+
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
 // Initialize the app, but make sure to do it only once.
