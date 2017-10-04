@@ -95,12 +95,12 @@ export default class PlayerActionMoveDropUp extends Component {
     let newHand = []
     if (this.state.selectedType === 'hand') {
       newHand = this.props.activePlayer.hand.filter(function(card) {
-        return moveToCity !== card.city
+        return moveToCity !== card.city.replace('.', '')
       })
     } else if (this.state.selectedType === 'charter') {
       const charterCity = this.state.charterCity
       newHand = this.props.activePlayer.hand.filter(function(card) {
-        return charterCity !== card.city
+        return charterCity !== card.city.replace('.', '')
       })
     } else {
       newHand = this.props.activePlayer.hand
