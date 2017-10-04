@@ -61,10 +61,17 @@ export default class PlayerActionMoveDropUp extends Component {
 
   render() {
     let confirmButton = this.props.numActions && this.showConfirm()
+    const activePlayerCity = this.props.activePlayer && this.props.activePlayer.position
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
-    // console.log("STATE", Object.keys(this.state.cities).map(function(city) { return city}))
+    if (this.props.activePlayer && this.props.activePlayer.position) {
+      const activePlayerCity = this.props.activePlayer && this.props.activePlayer.position.city
+      const canCharter = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.some((card) => {
+        return activePlayerCity === card.city
+      })
+      console.log("CHARTER", canCharter)
+    }
+    
     const allCities = this.state.cities && Object.keys(this.state.cities)
-    console.log("ALLCITIES", allCities)
     return (
       <div className="ui form" onSubmit={this.handleConfirm}>
         <div className="field">
@@ -87,10 +94,11 @@ export default class PlayerActionMoveDropUp extends Component {
                 })
               }
             </optgroup>
+            {/* display only if you have a card matching your current city */}
             <optgroup label="All Locations">
 
               {
-                allCities.length && allCities.map(function(city) {
+                allCities.length && allCities.map(function (city) {
                   return <option key={city} value={city}>{city}</option>
                 })
               }
