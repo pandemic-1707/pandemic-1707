@@ -1,4 +1,4 @@
-module.export = function shuffle(array) {
+module.exports = function shuffle(array) {
   let temp = null
 
   for (let i = array.length - 1; i > 0; i -= 1) {

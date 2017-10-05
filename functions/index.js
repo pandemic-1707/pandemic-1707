@@ -12,6 +12,7 @@ const utils = require('pandemic-1707-utils')
 const deckUtils = utils.deckUtils
 const playerDeckUtils = utils.playerDeckUtils
 const playerUtils = utils.playerUtils
+const handleOutbreak = require('./utils/handleOutbreak')
 
 function shuffle(array) {
   let temp = null
@@ -132,55 +133,16 @@ exports.propagateInfection = functions.database.ref('/rooms/{name}/players/{play
         const outbreakCard = infectionDeck.shift()
         infectionDiscard.push(outbreakCard)
         const outbreakSite = outbreakCard.split(' ').join('-')
-        updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
+
+        const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
+        console.log(updatedOutbreakData)
+
+        // updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
 
         // step 2.5: handle the outbreak
         // check connections: if an affected city already has an infection rate of 3
         // it causes another outbreak and its neighboring cities need to be infected too
         // otherwise the neighbors just get their infection rates incremented by 1
-
-        // NEED TO UPDATE FOR MORE THAN TWO OUTBREAKS
-        const outbreakQueue = [outbreakSite]
-        const seen = new Set()
-
-        // keep track of sites of cascading outbreaks using a queue
-        // handle them one-by-one
-        while (outbreakQueue.length) {
-          const nextOutbreakSite = outbreakQueue.shift()
-          console.log('there was an outbreak in ', nextOutbreakSite)
-          const connections = cities[nextOutbreakSite].connections
-          console.log('its connections are ', connections)
-
-          connections.forEach(connection => {
-            console.log(connection, ' might be affected')
-            const path = 'cities/' + connection + '/infectionRate'
-
-            // outbreaks have a cumulative effect on affected cities
-            // so if you've already affected that city, you need to use its
-            // updatedValue the next time
-            const updatedInfectionRate = updatedData[path]
-            const oldInfectionRate = cities[connection].infectionRate
-            // is that how the ternary works?
-            const infectionRate = updatedInfectionRate || oldInfectionRate
-            console.log('its updated IR is ', updatedInfectionRate, ' and its old one is ', oldInfectionRate)
-            console.log('so its working infection rate is ', infectionRate)
-
-            // each new outbreak site is one with an infectionRate of 3
-            // that you haven't already visited before
-            if (infectionRate === 3 && !seen.has(connection)) {
-              console.log('it causes another outbreak and gets added to the queue')
-              outbreakQueue.push(connection)
-              seen.add(connection)
-            }
-            // any connection that has an infection rate of 0, 1 or 2
-            // just needs to have its value incremented
-            if (infectionRate < 3) {
-              const newInfectionRate = infectionRate + 1
-              console.log('its new infection rate should be ', newInfectionRate)
-              updatedData[path] = newInfectionRate
-            }
-          })
-        }
 
         // step 3: reshuffle infection discard and add it to pile
         const newInfectionDeck = infectionDeck.concat(deckUtils.shuffle(infectionDiscard))
