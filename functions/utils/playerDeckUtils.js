@@ -7,9 +7,6 @@ admin.initializeApp(functions.config().firebase)
 const { cities, infectionDeck, events } = require('./data')
 const { shuffle } = require('./utils/shuffle')
 const { playerDeckUtils } = require('./utils/playerDeckUtils')
-const { playerUtils } = require('./utils/playerUtils')
-const playerDeckUtils = utils.playerDeckUtils
-const playerUtils = utils.playerUtils
 
 const NUM_EPIDEMICS = 4
 
