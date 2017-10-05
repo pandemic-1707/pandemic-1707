@@ -3,7 +3,6 @@ import { Dropdown } from 'semantic-ui-react'
 import fire from '../../fire'
 
 // TODO: remove - hyphens from city names display
-// TODO: shuttle: travel to research stations
 
 export default class PlayerActionMoveDropUp extends Component {
   constructor(props) {
@@ -115,7 +114,7 @@ export default class PlayerActionMoveDropUp extends Component {
       newHand = this.props.activePlayer.hand
     }
     // update position and num actions left
-    fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerName}`).update({
+    fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerKey}`).update({
       position: { city: moveToCity, location: this.state.cities[moveToCity].location },
       numActions: this.props.numActions - 1,
       hand: newHand

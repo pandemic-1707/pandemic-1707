@@ -4,6 +4,8 @@ import shuffle from 'shuffle-array'
 const auth = fire.auth()
 import WhoAmI from './WhoAmI'
 
+const NUM_STARTING_ACTIONS = 4
+
 export default class Wait extends Component {
   constructor(props) {
     super(props)
@@ -66,7 +68,8 @@ export default class Wait extends Component {
             color: myColor,
             offset: offsets[myOrder],
             hand: myHand,
-            position: cdcLocation
+            position: cdcLocation,
+            numActions: NUM_STARTING_ACTIONS
           })
           .then(() =>
             this.props.history.push(`/rooms/${this.props.match.params.roomName}`)

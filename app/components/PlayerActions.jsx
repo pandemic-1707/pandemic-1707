@@ -10,13 +10,16 @@ export default class PlayerActions extends Component {
     super(props)
     this.state = {
       players: {},
-      cities: []
+      cities: [],
+      currPlayer: ''
     }
   }
 
   componentDidMount() {
     // set local state to firebase state
+    console.log("COMP DID MOUNT", this.props.roomName)
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+      console.log("SNAPSHOT", snapshot.val())
       this.setState({
         players: snapshot.val(),
       })
@@ -26,6 +29,11 @@ export default class PlayerActions extends Component {
         cities: snapshot.val()
       })
     })
+    fire.database().ref(`/rooms/${this.props.roomName}/state/currPlayer`).on('value', snapshot => {
+      this.setState({
+        currPlayer: snapshot.val(),
+      })
+    })
   }
 
   handleMoveAction = () => {
@@ -33,10 +41,12 @@ export default class PlayerActions extends Component {
 
   }
 
-  // TODO: get the active player
+  // returns active player uid key
   getActivePlayer = (players) => {
+    console.log("WHOS MY ACTIVE PLAYER", this.state.currPlayer)
+    console.log("PLAYERS", players)
     const playerKeys = Object.keys(players)
-    return Object.assign({ playerName: playerKeys[0] }, players[playerKeys[0]])
+    return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
   }
 
   treatDisease = () => {
@@ -46,16 +56,17 @@ export default class PlayerActions extends Component {
       fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
         infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
       })
-      fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerName}`).update({
+      fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
         numActions: activePlayer.numActions - 1,
       })
     } else {
-      // let player know this city isn't treatable, maybe fade button
+      // TODO: let player know this city isn't treatable, maybe fade button
     }
   }
 
   render() {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
+    console.log("ACTIVE PLAYER", activePlayer)
     return (
       <div>
         <div className="container-fluid player-actions-panel">
@@ -81,7 +92,7 @@ export default class PlayerActions extends Component {
           </div>
           <div className="row text-center">
             <div className="col-sm-12 text-center">
-              Actions Left: {activePlayer.numActions}
+              Actions Left: {activePlayer.numActions && activePlayer.numActions}
             </div>
           </div>
         </div>
