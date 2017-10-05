@@ -112,6 +112,7 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
         // step 2: infect -- draw the bottom card from the infection deck & add to discard
         // TO-DO: UNLESS IT'S BEEN ERADICATED
         const outbreakCard = infectionDeck.shift()
+        console.log('theres an outbreak in ', outbreakCard)
         infectionDiscard.push(outbreakCard)
 
         // step 2.5: handle the outbreak there
@@ -123,7 +124,9 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
         updatedDecks['/infectionDeck'] = newInfectionDeck
         updatedDecks['/infectionDiscard'] = []
 
-        return room.update({...updatedDecks, ...updatedOutbreakData})
+        const all = Object.assign({}, updatedDecks, updatedOutbreakData)
+        console.log('need to update ', all)
+        return room.update(all)
       })
     }
   })
