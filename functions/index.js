@@ -11,7 +11,6 @@ const deckUtils = utils.deckUtils
 const playerDeckUtils = utils.playerDeckUtils
 const playerUtils = utils.playerUtils
 
-const NUM_PLAYERS_4 = 4
 const NUM_EPIDEMICS = 4
 
 // shuffle the infection deck and add it to the room
