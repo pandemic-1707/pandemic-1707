@@ -101,27 +101,49 @@ export default class Welcome extends Component {
     })
     // auth.onAuthStateChanged(user => {
     //   if (user) {
-    //     console.log('user', user)
-    //     fire.database().ref(`/rooms/${roomName}/players`).set({
-    //       numPlayers: numPlayers,
-    //       [user.uid]: {
-    //         name: user.displayName
+    //     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+    //     const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
+    //       { name: 'blue', 'hexVal': '#00BDD8' },
+    //       { name: 'green', 'hexVal': '#74DE00' },
+    //       { name: 'yellow', 'hexVal': '#DEEA00' } ]
+    //     // assign each player's a constant offset from the city depending on numPlayers
+    //     // guarantees that markers won't render on top of each other
+    //     const offsets = (function(nPlayers) {
+    //       switch (nPlayers) {
+    //       case 2: return [[-1, -1], [-1, 1]]
+    //       case 3: return [[0, -1], [-1, 0], [0, 1]]
+    //       case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
     //       }
+    //     })(numPlayers)
+    //     fire.database().ref(`/rooms/${this.state.roomName}`).update({
+    //       shuffledRoles: shuffle(roles),
+    //       shuffledColors: shuffle(colors),
+    //     })
+    //     fire.database().ref(`/rooms/${this.state.roomName}`).on('value', snapshot => {
+    //       this.setState({
+    //         numPlayers: snapshot.val().numPlayers
+    //       })
+    //       return fire.database().ref(`/rooms/${this.state.roomName}/players`).set({
+    //         [user.uid]: {
+    //           name: user.displayName,
+    //         },
+    //         numPlayers: numPlayers
+    //       })
+    //       .then(() => {
+    //         const myOrder = Object.keys(snapshot.child('players').val()).indexOf(user.uid)
+    //         console.log('myOrder', myOrder)
+    //         const myRole = snapshot.val().shuffledRoles[myOrder]
+    //         const myColor = snapshot.val().shuffledColors[myOrder]
+    //         fire.database().ref(`/rooms/${this.state.roomName}/players/${user.uid}`).update({
+    //           role: myRole,
+    //           color: myColor,
+    //           offset: offsets[myOrder]
+    //         })
+    //       })
     //     })
     //   }
     // })
-    // for (let i = 0; i < numPlayers; i++) {
-    //   const updates = {}
-    //   const postData = {
-    //     name: players[`player${i+1}`].name,
-    //     role: shuffledRoles[i],
-    //     color: shuffledColors[i],
-    //     offset: offsets[i]
-    //   }
-    //   updates[`/rooms/${roomName}/players/` + user.uid] = postData
-    //   fire.database().ref().update(updates)
-    // }
-    this.props.history.push(`/rooms/${this.state.roomName}`)
+    this.props.history.push(`/rooms/wait/${this.state.roomName}`)
   }
 
   closeModal() {

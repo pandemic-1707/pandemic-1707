@@ -22,45 +22,47 @@ export default class Room extends Component {
     const { numPlayers } = this.state
     this.unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-        const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
-          { name: 'blue', 'hexVal': '#00BDD8' },
-          { name: 'green', 'hexVal': '#74DE00' },
-          { name: 'yellow', 'hexVal': '#DEEA00' } ]
-        // assign each player's a constant offset from the city depending on numPlayers
-        // guarantees that markers won't render on top of each other
-        const offsets = (function(nPlayers) {
-          switch (nPlayers) {
-          case 2: return [[-1, -1], [-1, 1]]
-          case 3: return [[0, -1], [-1, 0], [0, 1]]
-          case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
-          }
-        })(numPlayers)
-        // const shuffledRoles = shuffle(roles)
-        // const shuffledColors = shuffle(colors)
-        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).update({
-          shuffledRoles: shuffle(roles),
-          shuffledColors: shuffle(colors)
-        })
-        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).update({
-          [user.uid]: {
-            name: user.displayName
-          }
-        })
-        fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).on('value', snapshot => {
-          const myOrder = Object.keys(snapshot.val()).indexOf(user.uid)
-          console.log('myOrder', myOrder)
-          const myRole = snapshot.val().shuffledRoles[myOrder]
-          const myColor = snapshot.val().shuffledColors[myOrder]
-          fire.database().ref(`/rooms/${this.props.match.params.roomName}/players/${user.uid}`).update({
-            role: myRole,
-            color: myColor,
-            offset: offsets[myOrder]
-          })
-        })
         this.setState({
           LoggedIn: true
         })
+        // const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+        // const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
+        //   { name: 'blue', 'hexVal': '#00BDD8' },
+        //   { name: 'green', 'hexVal': '#74DE00' },
+        //   { name: 'yellow', 'hexVal': '#DEEA00' } ]
+        // // assign each player's a constant offset from the city depending on numPlayers
+        // // guarantees that markers won't render on top of each other
+        // fire.database().ref(`/rooms/${this.props.match.params.roomName}`).update({
+        //   shuffledRoles: shuffle(roles),
+        //   shuffledColors: shuffle(colors),
+        // })
+        // fire.database().ref(`/rooms/${this.props.match.params.roomName}`).once('value').then(snapshot => {
+        //   const offsets = (function(nPlayers) {
+        //     switch (nPlayers) {
+        //     case 2: return [[-1, -1], [-1, 1]]
+        //     case 3: return [[0, -1], [-1, 0], [0, 1]]
+        //     case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
+        //     }
+        //   })(snapshot.val().numPlayers)
+        //   fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).set({
+        //     [user.uid]: {
+        //       name: user.displayName,
+        //     },
+        //     numPlayers: snapshot.val().numPlayers
+        //   })
+        //   .then(() => {
+        //     fire.database().ref(`/rooms/${this.props.match.params.roomName}`).once('value').then(newSnapshot => {
+        //       const myOrder = Object.keys(newSnapshot.child('players').val()).indexOf(user.uid)
+        //       const myRole = newSnapshot.val().shuffledRoles[myOrder]
+        //       const myColor = newSnapshot.val().shuffledColors[myOrder]
+        //       return fire.database().ref(`/rooms/${this.props.match.params.roomName}/players/${user.uid}`).update({
+        //         role: myRole,
+        //         color: myColor,
+        //         offset: offsets[myOrder]
+        //       })
+        //     })
+        //   })
+        // })
       }
     })
   }
