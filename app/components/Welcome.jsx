@@ -99,50 +99,6 @@ export default class Welcome extends Component {
     fire.database().ref(`rooms/${roomName}`).set({
       numPlayers: numPlayers
     })
-    // auth.onAuthStateChanged(user => {
-    //   if (user) {
-    //     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    //     const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
-    //       { name: 'blue', 'hexVal': '#00BDD8' },
-    //       { name: 'green', 'hexVal': '#74DE00' },
-    //       { name: 'yellow', 'hexVal': '#DEEA00' } ]
-    //     // assign each player's a constant offset from the city depending on numPlayers
-    //     // guarantees that markers won't render on top of each other
-    //     const offsets = (function(nPlayers) {
-    //       switch (nPlayers) {
-    //       case 2: return [[-1, -1], [-1, 1]]
-    //       case 3: return [[0, -1], [-1, 0], [0, 1]]
-    //       case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
-    //       }
-    //     })(numPlayers)
-    //     fire.database().ref(`/rooms/${this.state.roomName}`).update({
-    //       shuffledRoles: shuffle(roles),
-    //       shuffledColors: shuffle(colors),
-    //     })
-    //     fire.database().ref(`/rooms/${this.state.roomName}`).on('value', snapshot => {
-    //       this.setState({
-    //         numPlayers: snapshot.val().numPlayers
-    //       })
-    //       return fire.database().ref(`/rooms/${this.state.roomName}/players`).set({
-    //         [user.uid]: {
-    //           name: user.displayName,
-    //         },
-    //         numPlayers: numPlayers
-    //       })
-    //       .then(() => {
-    //         const myOrder = Object.keys(snapshot.child('players').val()).indexOf(user.uid)
-    //         console.log('myOrder', myOrder)
-    //         const myRole = snapshot.val().shuffledRoles[myOrder]
-    //         const myColor = snapshot.val().shuffledColors[myOrder]
-    //         fire.database().ref(`/rooms/${this.state.roomName}/players/${user.uid}`).update({
-    //           role: myRole,
-    //           color: myColor,
-    //           offset: offsets[myOrder]
-    //         })
-    //       })
-    //     })
-    //   }
-    // })
     this.props.history.push(`/rooms/wait/${this.state.roomName}`)
   }
 
@@ -183,7 +139,7 @@ export default class Welcome extends Component {
 
     return (
       <div className="welcome">
-        <WhoAmI auth={auth}/>
+        <WhoAmI auth={auth} history={this.props.history} />
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
           <h2> A Game by Emily Eastlake, An Le and Mary Yen </h2>

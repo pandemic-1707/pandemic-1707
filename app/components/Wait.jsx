@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import fire from '../../fire/index'
 import shuffle from 'shuffle-array'
 const auth = fire.auth()
+import utils from '../../functions/node_modules/pandemic-1707-utils/index'
+const playerDeckUtils = utils.playerDeckUtils
 
 export default class Wait extends Component {
   constructor(props) {
@@ -28,6 +30,7 @@ export default class Wait extends Component {
   startGame(e) {
     e.preventDefault()
     const { user } = this.state
+    console.log('user.email', user.email)
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
       { name: 'blue', 'hexVal': '#00BDD8' },
@@ -48,21 +51,34 @@ export default class Wait extends Component {
         case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
         }
       })(snapshot.val().numPlayers)
-      fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).set({
-        [user.uid]: {
-          name: user.displayName,
-        },
-        numPlayers: snapshot.val().numPlayers
-      })
-      .then(() => {
+      let promise = null
+      if (snapshot.val().players) {
+        promise = fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).update({
+          [user.uid]: {
+            name: user.displayName || user.email
+          }
+        })
+      } else {
+        promise = fire.database().ref(`/rooms/${this.props.match.params.roomName}/players`).set({
+          [user.uid]: {
+            name: user.displayName || user.email
+          }
+        })
+      }
+      promise.then(() => {
         fire.database().ref(`/rooms/${this.props.match.params.roomName}`).once('value').then(newSnapshot => {
           const myOrder = Object.keys(newSnapshot.child('players').val()).indexOf(user.uid)
           const myRole = newSnapshot.val().shuffledRoles[myOrder]
           const myColor = newSnapshot.val().shuffledColors[myOrder]
+          const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
+          const playerDeckHands = playerDeckUtils.initPlayerDeck(newSnapshot.val().numPlayers, 4)
+          const playerHands = playerDeckHands.playerHands
           return fire.database().ref(`/rooms/${this.props.match.params.roomName}/players/${user.uid}`).update({
             role: myRole,
             color: myColor,
-            offset: offsets[myOrder]
+            offset: offsets[myOrder],
+            hand: playerHands[myOrder],
+            position: cdcLocation
           })
           .then(() => 
             this.props.history.push(`/rooms/${this.props.match.params.roomName}`)
@@ -73,7 +89,7 @@ export default class Wait extends Component {
   }
   render() {
     return (
-      <div><button onClick={this.startGame} className="btn btn-success">Start Game</button></div>
+      <div><button onClick={this.startGame} className="btn btn-success">Enter Room</button></div>
     )
   }
 }

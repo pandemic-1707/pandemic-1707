@@ -143,6 +143,7 @@ export default class PlayerActionMoveDropUp extends Component {
 
   render() {
     let confirmButton = this.props.numActions && this.showConfirm()
+    console.log('this.props.activePlayer.position', this.props.activePlayer)
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
     // check if charter available
     const charter = this.getCharterCityList()

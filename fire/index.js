@@ -31,5 +31,3 @@ const config = {
 firebase.__bonesApp || (firebase.__bonesApp = firebase.initializeApp(config))
 
 module.exports = firebase
-
-

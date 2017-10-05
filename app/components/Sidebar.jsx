@@ -32,9 +32,7 @@ export default class Sidebar extends Component {
     } else {
     // filter out numPlayers on players object
       const playersItemsArr = Object.values(this.state.players).filter(x => typeof x === 'object')
-      console.log('playersItemArr', playersItemsArr)
       const players = playersItemsArr.map((playerItems, idx) => {
-        console.log('playersItemArr', playersItemsArr[idx], 'idx', idx)
         return (
           <div key={idx}>
             <div>
