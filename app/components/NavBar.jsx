@@ -29,26 +29,26 @@ export default class NavBar extends Component {
     fire.database().ref(`/rooms/${this.props.roomName}`).update({state: this.state})
   }
   startGame() {
-    fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
+    return fire.database().ref(`/rooms/${this.props.roomName}`).once('value').then(snapshot => {
       this.setState({
         players: snapshot.val().players,
         playerDeck: snapshot.val().playerDeck
       })
     })
-    let i = 0
-    const shuffledCurrPlayers = shuffle(Object.keys(this.state.players))
-    while (this.state.playerDeck >= 0) {
-      this.setState({
-        currPlayer: shuffledCurrPlayers[i % shuffledCurrPlayers.length]
-      })
-      for (let j = 0; j < 2; j++) {
-        this.state.currPlayer.hand.append(this.state.playerDeck.pop())
+    .then(() => {
+      let i = 0
+      const shuffledCurrPlayers = shuffle(Object.keys(this.state.players))
+      while (this.state.playerDeck.length >= 0) {
+        this.setState({
+          currPlayer: shuffledCurrPlayers[i % shuffledCurrPlayers.length]
+        })
+        fire.database().ref(`/rooms/${this.props.roomName}/state`).update({currPlayer: this.state.currPlayer})
+        console.log('this.state.currPlayer', this.state.currPlayer)
+        console.log('this.state.players[this.state.currPlayer].hand', this.state.players[this.state.currPlayer].hand)
+        this.state.players[this.state.currPlayer].hand.push(this.state.playerDeck.pop())
+        i++
       }
-      i++
-    }
-      // fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-      //   currPlayers: Object.keys(players)
-      // })
+    })
   }
   render() {
     const { players, currPlayers } = this.state
