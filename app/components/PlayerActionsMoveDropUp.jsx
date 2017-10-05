@@ -121,7 +121,7 @@ export default class PlayerActionMoveDropUp extends Component {
       hand: newHand
     })
     // TODO: check if new location is charter, save charter stuff on state
-    // check if new location is research station
+    // check if new location is research station - the research station list only pops up after the first move
     this.setState({ researchStationList: this.getResearchStationList(moveToCity) })
     this.setState({ selectedCityCondition: false })
   }
