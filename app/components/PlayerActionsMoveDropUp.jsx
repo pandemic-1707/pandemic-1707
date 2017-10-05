@@ -14,6 +14,7 @@ export default class PlayerActionMoveDropUp extends Component {
       selectedCity: '',
       selectedType: '',
       charterCity: '',
+      researchStationList: '',
       cities: []
     }
     this.activePlayerCity = this.props.activePlayer && this.props.activePlayer.position
@@ -115,38 +116,40 @@ export default class PlayerActionMoveDropUp extends Component {
     }
     // update position and num actions left
     fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerName}`).update({
-      position: { city: moveToCity, location: this.state.cities[moveToCity].location }, // TODO: update location coordinates
+      position: { city: moveToCity, location: this.state.cities[moveToCity].location },
       numActions: this.props.numActions - 1,
       hand: newHand
     })
     // TODO: check if new location is charter, save charter stuff on state
-    // check if new location is research station
-
+    // check if new location is research station - the research station list only pops up after the first move
+    this.setState({ researchStationList: this.getResearchStationList(moveToCity) })
     this.setState({ selectedCityCondition: false })
   }
 
   // if active player location has research station return list to other research stations
-  // getResearchStationList = () => {
-  //   const allCities = this.state.cities && this.state.cities
-  //   const charterCity = this.checkCharterCity()
-  //   if (charterCity) {
-  //     return (
-  //       <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
-  //         {allCities && allCities.length && allCities.map(function(city) {
-  //           return <option key={city} value={city + ':charter'}>{city}</option>
-  //         })
-  //         }
-  //       </optgroup>
-  //     )
-  //   }
-  // }
+  getResearchStationList = (moveToCity) => {
+    const allCities = this.state.cities && this.state.cities
+    if (allCities[moveToCity].research) {
+      const cityNames = Object.keys(allCities)
+      return (
+        <optgroup label={`Research Station Shuttle Flight`}>
+          {cityNames.map(function(city) {
+            if (allCities[city].research) {
+              return <option key={city} value={city + ':research'}>{city}</option>
+            }
+          })
+          }
+        </optgroup>
+      )
+    }
+  }
 
   render() {
     let confirmButton = this.props.numActions && this.showConfirm()
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
     // check if charter available
     const charter = this.getCharterCityList()
-
+    const researchStationList = this.state.researchStationList
     return (
       <div className="ui form">
         <div className="field">
@@ -169,6 +172,7 @@ export default class PlayerActionMoveDropUp extends Component {
                 })
               }
             </optgroup>
+            {researchStationList}
             {/* display only if you have a card matching your current city */}
             {charter}
           </select>
