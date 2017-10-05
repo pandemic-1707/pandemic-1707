@@ -1,3 +1,4 @@
+import fire from '../../fire'
 export function filteredObj(players) {
   var convertPlayersToArr = Object.keys(players).map(function(key) {
     return [(key), players[key]]

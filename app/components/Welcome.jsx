@@ -4,15 +4,11 @@ import Modal from 'react-modal'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
-import { filteredObj } from '../utils/welcome-utils'
-
-// Get the auth API from Firebase.
+import { filteredObj, setCurrPlayers } from '../utils/welcome-utils'
+import utils from '../../functions/node_modules/pandemic-1707-utils'
+const playerDeckUtils = utils.playerDeckUtils
 const auth = fire.auth()
 const NUM_STARTING_ACTIONS = 4
-
-// Ensure that we have (almost) always have a user ID, by creating
-// an anonymous user if nobody is signed in.
-auth.onAuthStateChanged(user => user || auth.signInAnonymously())
 
 const customStyles = {
   content: {
@@ -99,35 +95,11 @@ export default class Welcome extends Component {
     // only write non-blank player name to DB
     players = filteredObj(players)
     numPlayers = parseInt(numPlayers)
-    // write player name to firebase
-    fire.database().ref(`rooms/${roomName}`).set({numPlayers, players})
-    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
-    const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
-      { name: 'blue', 'hexVal': '#00BDD8' },
-      { name: 'green', 'hexVal': '#74DE00' },
-      { name: 'yellow', 'hexVal': '#DEEA00' } ]
-    // assign each player's a constant offset from the city depending on numPlayers
-    // guarantees that markers won't render on top of each other
-    const offsets = (function(nPlayers) {
-      switch (nPlayers) {
-      case 2: return [[-1, -1], [-1, 1]]
-      case 3: return [[0, -1], [-1, 0], [0, 1]]
-      case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
-      }
-    })(numPlayers)
-    const shuffledRoles = shuffle(roles)
-    const shuffledColors = shuffle(colors)
-    // randomly assign role and write to firebase
-    Object.keys(players).map(player => {
-      var playerNum = player.slice(-1)
-      fire.database().ref(`/rooms/${roomName}/players/${player}`).update({
-        role: shuffledRoles[playerNum - 1],
-        color: shuffledColors[playerNum - 1],
-        offset: offsets[playerNum - 1],
-        numActions: NUM_STARTING_ACTIONS
-      })
+    // write numbers of players to firebase
+    fire.database().ref(`rooms/${roomName}`).set({
+      numPlayers: numPlayers
     })
-    this.props.history.push(`/rooms/${this.state.roomName}`)
+    this.props.history.push(`/rooms/wait/${this.state.roomName}`)
   }
 
   closeModal() {
@@ -167,7 +139,7 @@ export default class Welcome extends Component {
 
     return (
       <div className="welcome">
-        <WhoAmI auth={auth}/>
+        <WhoAmI auth={auth} history={this.props.history} />
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
           <h2> A Game by Emily Eastlake, An Le and Mary Yen </h2>

@@ -11,12 +11,12 @@ const firebase = require('firebase')
 // }
 
 const config = {
- 	apiKey: "AIzaSyAGBkAvlLOydiC7O_BOqV5XxiYuj-MZ1EE",
-    authDomain: "pandemic-1707.firebaseapp.com",
-    databaseURL: "https://pandemic-1707.firebaseio.com",
-    projectId: "pandemic-1707",
-    storageBucket: "pandemic-1707.appspot.com",
-    messagingSenderId: "1029700706030"
+  apiKey: "AIzaSyBgX0wfqj3WMG7BN9aRiXDhPpNfqhgcvho",
+  authDomain: "pandemic-dev.firebaseapp.com",
+  databaseURL: "https://pandemic-dev.firebaseio.com",
+  projectId: "pandemic-dev",
+  storageBucket: "pandemic-dev.appspot.com",
+  messagingSenderId: "76885611649"
 }
 
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
@@ -31,5 +31,3 @@ const config = {
 firebase.__bonesApp || (firebase.__bonesApp = firebase.initializeApp(config))
 
 module.exports = firebase
-
-

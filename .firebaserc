@@ -1,5 +1,6 @@
 {
   "projects": {
-    "firebones": "pandemic-1707"
+    "firebones": "pandemic-dev",
+    "default": "pandemic-dev"
   }
 }
