@@ -13,19 +13,7 @@ const deckUtils = utils.deckUtils
 const playerDeckUtils = utils.playerDeckUtils
 const playerUtils = utils.playerUtils
 const handleOutbreak = require('./utils/handleOutbreak')
-
-function shuffle(array) {
-  let temp = null
-
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
-
-  return array
-}
+const shuffle = require('./utils/shuffle')
 
 const NUM_PLAYERS_4 = 4
 const NUM_EPIDEMICS = 4
@@ -34,7 +22,7 @@ const NUM_EPIDEMICS = 4
 exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
     const room = event.data.val()
-    const shuffled = deckUtils.shuffle(infectionDeck)
+    const shuffled = shuffle(infectionDeck)
     return event.data.ref.child('infectionDeck').set(shuffled)
   })
 
@@ -99,60 +87,43 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
     return event.data.ref.parent.update(updatedData)
   })
 
-// listen for changes to player's hands
-exports.propagateInfection = functions.database.ref('/rooms/{name}/players/{playerId}/hand')
+// listen for changes to player's hands; if there's an epidemic card, handle it
+exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId}/hand')
   .onUpdate(event => {
     const hand = event.data.val()
     const room = event.data.ref.parent.parent.parent
-    // if there's an epidemic card, propagate the epidemic
+
     // TO-DO: HANDLE EACH EPIDEMIC CARD
     if (hand.hasOwnProperty('Epidemic')) {
-      // need to also fetch infection rate marker
-
       const fetchCities = room.child('cities').once('value').then(snapshot => snapshot.val())
       const fetchInfectionDeck = room.child('infectionDeck').once('value').then(snapshot => snapshot.val())
       const fetchInfectionDiscard = room.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
 
-      // TO-DO: update to include infection level
       return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
       .then(data => {
         const cities = data[0]
         const infectionDeck = data[1]
         const infectionDiscard = data[2]
-        const updatedData = {}
+        const updatedDecks = {}
 
-        console.log('old infection deck')
-        console.log(infectionDeck)
         // TO-DO
-        // step 1: move the infection level forward
+        // step 1: increase -- move the infection level forward
 
-        // step 2: draw the bottom card from the infection deck,
-        // give it an infection rate of 3 and add it to the discard pile
-        // N.B. need to remove spaces when moving from decks (array) to cities (object)
+        // step 2: infect -- draw the bottom card from the infection deck & add to discard
         // TO-DO: UNLESS IT'S BEEN ERADICATED
         const outbreakCard = infectionDeck.shift()
         infectionDiscard.push(outbreakCard)
+
+        // step 2.5: handle the outbreak there
         const outbreakSite = outbreakCard.split(' ').join('-')
-
         const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
-        console.log(updatedOutbreakData)
 
-        // updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
+        // step 3: intensify -- reshuffle infection discard and add it to pile
+        const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
+        updatedDecks['/infectionDeck'] = newInfectionDeck
+        updatedDecks['/infectionDiscard'] = []
 
-        // step 2.5: handle the outbreak
-        // check connections: if an affected city already has an infection rate of 3
-        // it causes another outbreak and its neighboring cities need to be infected too
-        // otherwise the neighbors just get their infection rates incremented by 1
-
-        // step 3: reshuffle infection discard and add it to pile
-        const newInfectionDeck = infectionDeck.concat(deckUtils.shuffle(infectionDiscard))
-        console.log('new infection deck')
-        console.log(newInfectionDeck)
-        updatedData['/infectionDeck'] = newInfectionDeck
-        updatedData['/infectionDiscard'] = []
-
-        console.log('updated Data')
-        console.log(updatedData)
+        return room.update({...updatedDecks, ...updatedOutbreakData})
       })
     }
   })
