@@ -1,0 +1,103 @@
+{
+    "players": {
+        "player1": {
+            "color": {
+                "hexVal": "#DEEA00",
+                "name": "yellow"
+            },
+            "name": "n",
+            "numActions": 98,
+            "offset": [
+                0,
+                -1
+            ],
+            "position": {
+                "city": "Buenos-Aires",
+                "location": [
+                    -34.603684,
+                    -58.381559
+                ]
+            },
+            "role": "Researcher"
+        },
+        "player2": {
+            "color": {
+                "hexVal": "#EB0069",
+                "name": "pink"
+            },
+            "hand": [
+                {
+                    "city": "Cairo",
+                    "props": {
+                        "color": "black"
+                    }
+                },
+                {
+                    "city": "Chennai",
+                    "props": {
+                        "color": "black"
+                    }
+                },
+                {
+                    "city": "Shanghai",
+                    "props": {
+                        "color": "red"
+                    }
+                }
+            ],
+            "name": ",",
+            "numActions": 4,
+            "offset": [
+                -1,
+                0
+            ],
+            "position": {
+                "city": "Atlanta",
+                "location": [
+                    33.748995,
+                    -84.387982
+                ]
+            },
+            "role": "Scientist"
+        },
+        "player3": {
+            "color": {
+                "hexVal": "#00BDD8",
+                "name": "blue"
+            },
+            "hand": [
+                {
+                    "city": "Baghdad",
+                    "props": {
+                        "color": "black"
+                    }
+                },
+                {
+                    "city": "Washington",
+                    "props": {
+                        "color": "blue"
+                    }
+                },
+                {
+                    "One-Quiet-Night": {
+                        "description": "Skip the next Infect Cities step. (Do not flip over any Infection cards)"
+                    }
+                }
+            ],
+            "name": "n",
+            "numActions": 4,
+            "offset": [
+                0,
+                1
+            ],
+            "position": {
+                "city": "Atlanta",
+                "location": [
+                    33.748995,
+                    -84.387982
+                ]
+            },
+            "role": "Medic"
+        }
+    }
+}
