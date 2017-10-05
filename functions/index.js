@@ -5,8 +5,7 @@ const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
 const { cities, infectionDeck, events } = require('./data')
-const { shuffle } = require('./utils/shuffle')
-const { playerDeckUtils } = require('./utils/playerDeckUtils')
+const { shuffle, finalizePlayerDeck } = require('./utils')
 
 const NUM_EPIDEMICS = 4
 
@@ -25,14 +24,11 @@ exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
     const numPlayers = event.data.val().numPlayers
     const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
     const updatedData = {}
-    // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
-    // playerHands: array of arrays (each array is initial player starting hand) }
-    const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
-    const playerDeck = playerDeckHands.playerDeck
-    const playerHands = playerDeckHands.playerHands
+    // finalizePlayerDeck returns deck minus the hands for each player & starting hands
+    const { playerDeck, hands } = finalizePlayerDeck(numPlayers, NUM_EPIDEMICS)
     updatedData['/playerDeck'] = playerDeck
-    for (let i = 0; i < playerHands.length; i++) {
-      updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
+    for (let i = 0; i < hands.length; i++) {
+      updatedData['/players/player' + (i + 1) + '/hand'] = hands[i]
       updatedData['/players/player' + (i + 1) + '/position'] = cdcLocation
     }
     return event.data.ref.update(updatedData)
