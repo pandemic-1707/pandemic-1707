@@ -4,9 +4,7 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
-const cities = require('./data/cities')
-const infectionDeck = require('./data/infectionDeck')
-const events = require('./data/events')
+const { cities, infectionDeck, events } = require('./data/')
 // const { shuffle } = require('./utils/deckUtils')
 const utils = require('pandemic-1707-utils')
 const deckUtils = utils.deckUtils
