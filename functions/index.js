@@ -96,3 +96,22 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
 
     return event.data.ref.parent.update(updatedData)
   })
+exports.initializePlayerHandArr = functions.database.ref('/rooms/{name}')
+  .onCreate(event => {
+    const numPlayers = event.data.val().numPlayers
+    const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
+    const playerHands = playerDeckHands.playerHands
+    console.log('playerHands', playerHands)
+    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+    const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
+      { name: 'blue', 'hexVal': '#00BDD8' },
+      { name: 'green', 'hexVal': '#74DE00' },
+      { name: 'yellow', 'hexVal': '#DEEA00' } ]
+    const shuffledRoles = deckUtils.shuffle(roles)
+    const shuffledColors = deckUtils.shuffle(colors)
+    const updatedData = {}
+    updatedData['/playerHandsArr'] = playerHands
+    updatedData['/shuffledRoles'] = shuffledRoles
+    updatedData['/shuffledColors'] = shuffledColors
+    return event.data.ref.update(updatedData)
+  })

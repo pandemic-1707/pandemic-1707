@@ -20,7 +20,7 @@ export default class Sidebar extends Component {
     })
     setTimeout(() => {
       this.setState({loading: false})
-    }, 2000)
+    }, 1000)
   }
   render() {
     if (this.state.loading) {

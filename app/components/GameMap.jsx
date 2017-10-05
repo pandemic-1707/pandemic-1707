@@ -13,7 +13,8 @@ export default class GameMap extends Component {
     this.state = {
       cityMarkers: [],
       lines: [],
-      peopleMarkers: []
+      peopleMarkers: [],
+      loading: true
     }
   }
 
@@ -36,22 +37,32 @@ export default class GameMap extends Component {
       const data = snapshot.val()
       if (Object.values(data)[0].position) this.setState({ peopleMarkers: mapDataToPieces(data) })
     })
+    setTimeout(() => {
+      this.setState({loading: false})
+    }, 1000)
   }
 
   render() {
     const upperLeft = [64.837778, -147.716389]
     const bottomRight = [-41.286460, 174.776236]
-
-    return (
-      <Map style={{height: '100vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
-          <TileLayer
-              url='https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZWJlYXN0bGFrZSIsImEiOiJjajd1bXJyejk0OHRxMnhwa3l1ZXVvOXY2In0.8jJCGfw_ynmjZ_4PQ4sU7g'
-              attribution='OpenStreetMap'
-          />
-          { this.state.cityMarkers }
-          { this.state.lines }
-          { this.state.peopleMarkers }
-      </Map>
-    )
+    if (this.state.loading) {
+      return (
+        <div className='my-nice-tab-container'>
+          <div className='loading-state'>Loading...</div>
+        </div>
+      )
+    } else {
+      return (
+        <Map style={{height: '100vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
+            <TileLayer
+                url='https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZWJlYXN0bGFrZSIsImEiOiJjajd1bXJyejk0OHRxMnhwa3l1ZXVvOXY2In0.8jJCGfw_ynmjZ_4PQ4sU7g'
+                attribution='OpenStreetMap'
+            />
+            { this.state.cityMarkers }
+            { this.state.lines }
+            { this.state.peopleMarkers }
+        </Map>
+      )
+    }
   }
 }

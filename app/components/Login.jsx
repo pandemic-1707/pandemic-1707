@@ -10,35 +10,6 @@ const google = new firebase.auth.GoogleAuthProvider()
 // const github = new firebase.auth.GithubAuthProvider()
 const email = new firebase.auth.EmailAuthProvider()
 
-// If you want to request additional permissions, you'd do it
-// like so:
-//
-// google.addScope('https://www.googleapis.com/auth/plus.login')
-//
-// What kind of permissions can you ask for? There's a lot:
-//   https://developers.google.com/identity/protocols/googlescopes
-//
-// For instance, this line will request the ability to read, send,
-// and generally manage a user's email:
-//
-// google.addScope('https://mail.google.com/')
-
-// export default ({ auth }) =>
-//   // signInWithPopup will try to open a login popup, and if it's blocked, it'll
-//   // redirect. If you prefer, you can signInWithRedirect, which always
-//   // redirects.
-//   <div>
-//     <button className='btn btn-outline-info btn-sm'
-//     onClick={() => auth.signInWithPopup(google)}>Login with Google</button>
-//     <div className="container">
-//       <input id="email" type="email" placeholder="Email" />
-//       <input id="pwd" type="pwd" placeholder="Password" />
-//       <button id="buttonLogin" className="btn btn-action">Log in</button>
-//       <button id="buttonSignUp" className="btn btn-secondary">Sign Up</button>
-//       <button id="buttonLogout" className="btn btn-action hide">Log out</button>
-//     </div>
-//   </div>
-
 export default class Login extends Component {
   constructor(props) {
     super(props)
@@ -63,7 +34,7 @@ export default class Login extends Component {
     e.preventDefault()
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
-      this.props.history.push('/rooms/wait/room1')
+      console.log('login success')
     })
     .catch(error => {
       var errorCode = error.code
@@ -81,7 +52,8 @@ export default class Login extends Component {
     e.preventDefault()
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
-      this.props.history.push('/rooms/wait/room1')
+      // this.props.history.push('/rooms/wait/room1')
+      console.log('signup success')
     })
     .catch(error => {
       var errorCode = error.code
