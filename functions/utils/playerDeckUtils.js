@@ -1,80 +1,72 @@
-// these lines load the firebase-functions and firebase-admin modules
-// and initialize an admin app instance from which Realtime Database changes can be made
-const functions = require('firebase-functions')
-const admin = require('firebase-admin')
-admin.initializeApp(functions.config().firebase)
+const cities = require('../data/citiesColors') // only city names and colors
+const events = require('../data/events.js')
+const shuffle = require('./shuffle.js')
 
-const { cities, infectionDeck, events } = require('./data')
-const { shuffle } = require('./utils/shuffle')
-const { playerDeckUtils } = require('./utils/playerDeckUtils')
-
-const NUM_EPIDEMICS = 4
-
-// shuffle the infection deck and add it to the room
-exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    const room = event.data.val()
-    const shuffled = shuffle(infectionDeck)
-    return event.data.ref.child('infectionDeck').set(shuffled)
+// initial shuffle: returns a deck object of all city & event
+// cards shuffled together
+const initShufflePlayerDeck = () => {
+  // turn objects into arrays & shuffle
+  const citiesArr = Object.keys(cities).map((cityName) => {
+    return { city: cityName, props: cities[cityName] }
   })
+  const playerDeck = citiesArr.concat(events)
+  return shuffle(playerDeck)
+}
 
-// updated to initialize player locations at the same time
-exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    // TODO : playerNumber will change
-    const numPlayers = event.data.val().numPlayers
-    const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-    const updatedData = {}
-    // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
-    // playerHands: array of arrays (each array is initial player starting hand) }
-    const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
-    const playerDeck = playerDeckHands.playerDeck
-    const playerHands = playerDeckHands.playerHands
-    updatedData['/playerDeck'] = playerDeck
-    for (let i = 0; i < playerHands.length; i++) {
-      updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
-      updatedData['/players/player' + (i + 1) + '/position'] = cdcLocation
+// pick playerhands and remove cards from deck
+const initDealPlayerCards = (numPlayers, playerDeck) => {
+  // pick playerhands and remove cards from deck
+  let numPlayerHandCards = 0
+  // game specifies specific num of cards per player hand depending on
+  // num of players
+  if (numPlayers === 2) numPlayerHandCards = 4
+  if (numPlayers === 3) numPlayerHandCards = 3
+  if (numPlayers === 4) numPlayerHandCards = 2
+  const playerHands = [] // all player hands
+  for (let i = 0; i < numPlayers; i++) {
+    const playerHand = [] // individual player hand
+    for (let j = 0; j < numPlayerHandCards; j++) {
+      playerHand.push(playerDeck.pop())
     }
-    return event.data.ref.update(updatedData)
-  })
+    playerHands.push(playerHand)
+  }
+  // return playedeck and playerhands for firebase update
+  return { playerDeck: playerDeck, playerHands: playerHands }
+}
 
-// load the initial city data and add it to the room
-exports.initializeCities = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    const room = event.data.val()
-    return event.data.ref.child('cities').set(cities)
-  })
+// referenced from:
+// https://stackoverflow.com/questions/10865025/merge-flatten-an-array-of-arrays-in-javascript
+const flatten = (arr) => {
+  return arr.reduce(function(flat, toFlatten) {
+    return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten)
+  }, [])
+}
 
-// // use the first nine cities on the infection deck to set infection rates for start cities
-exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDeck')
-  .onCreate(event => {
-    const deck = event.data.val()
-    const updatedData = {}
-    const discardPile = [] // start the discard pile here
-    const infectionRate = [3, 2, 1]
-    const citiesToInfect = 3
+// add epidemic cards & shuffle
+const shuffleInEpidemicsPlayerDeck = (playerDeck, numEpidemics) => {
+  // split deck into numEpidemics
+  const numPerPiles = Math.floor(playerDeck.length / numEpidemics)
+  const piles = []
+  for (let i = 0; i < playerDeck.length; i += numPerPiles) { // num of piles = num of epidemics
+    const epidemicDeck = playerDeck.slice(i, i + numPerPiles)
+    // insert epidemics into each pile
+    epidemicDeck.push({ Epidemic: 'epidemic' })
+    // shuffle each pile
+    piles.push(shuffle(epidemicDeck))
+  }
+  // put piles back together
+  // const epidemicDeck = [].concat.apply([], piles)
+  const epidemicDeckFull = flatten(piles)
+  return epidemicDeckFull
+}
 
-    // go through each infection rate [3, 2, 1]
-    infectionRate.forEach((rate, idx) => {
-      // and infect three cities at each rate
-      for (let i = 0; i < citiesToInfect; i++) {
-        // some tricky math will give you the distance from the end of the array
-        // i.e. the 2nd city (i = 2) to infect with a rate of 2 (idx = 1) is 3 * 1 + 2 = 5 from the end
-        const distFromEnd = 3 * idx + i
-        const nextCity = deck[deck.length - 1 - distFromEnd]
-        // modify the infection rate for the given city
-        // N.B. keys in cities object cannot include spaces, so must use hyphens
-        // N.B. replace() only corrects first instance
-        updatedData['cities/' + nextCity.split(' ').join('-') + '/infectionRate'] = rate
-        // remove it from the infection deck
-        deck.pop()
-        // add it to the discard pile
-        discardPile.push(nextCity)
-      }
-    })
+const initPlayerDeck = (numPlayers, numEpidemics) => {
+  const initialPlayerDeck = initShufflePlayerDeck(numPlayers)
+  const playerHandsAndDeck = initDealPlayerCards(numPlayers, initialPlayerDeck)
+  const playerdeck = shuffleInEpidemicsPlayerDeck(playerHandsAndDeck.playerDeck, numEpidemics)
+  return { playerDeck: playerdeck, playerHands: playerHandsAndDeck.playerHands }
+}
 
-    updatedData['/infectionDeck'] = deck
-    updatedData['/infectionDiscard'] = discardPile
-
-    return event.data.ref.parent.update(updatedData)
-  })
+module.exports = {
+  initPlayerDeck, initShufflePlayerDeck, initDealPlayerCards, shuffleInEpidemicsPlayerDeck
+}
