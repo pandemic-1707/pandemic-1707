@@ -17,20 +17,23 @@ exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
     return event.data.ref.child('infectionDeck').set(shuffled)
   })
 
-// updated to initialize player locations at the same time
-exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
+// initialize players info
+exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
   .onCreate(event => {
-    // TODO : playerNumber will change
     const numPlayers = event.data.val().numPlayers
-    const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-    const updatedData = {}
-    // finalizePlayerDeck returns deck minus the hands for each player & starting hands
     const { playerDeck, hands } = finalizePlayerDeck(numPlayers, NUM_EPIDEMICS)
+    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+    const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
+      { name: 'blue', 'hexVal': '#00BDD8' },
+      { name: 'green', 'hexVal': '#74DE00' },
+      { name: 'yellow', 'hexVal': '#DEEA00' } ]
+    const shuffledRoles = shuffle(roles)
+    const shuffledColors = shuffle(colors)
+    const updatedData = {}
+    updatedData['/playerHandsArr'] = hands
     updatedData['/playerDeck'] = playerDeck
-    for (let i = 0; i < hands.length; i++) {
-      updatedData['/players/player' + (i + 1) + '/hand'] = hands[i]
-      updatedData['/players/player' + (i + 1) + '/position'] = cdcLocation
-    }
+    updatedData['/shuffledRoles'] = shuffledRoles
+    updatedData['/shuffledColors'] = shuffledColors
     return event.data.ref.update(updatedData)
   })
 

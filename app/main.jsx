@@ -35,12 +35,12 @@ import firebase from '../fire/index'
 
 // Our root App component just renders a little frame with a nav
 // and whatever children the router gave us.
-const App = ({ children }) =>
+/*const App = ({ children }) =>
   <div>
-    {/* Render our children (whatever the router gives us) */}
+    { Render our children (whatever the router gives us) }
     {children}
   </div>
-export default App
+export default App*/
 
 render(
   <Main />,

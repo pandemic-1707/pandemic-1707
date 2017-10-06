@@ -3,7 +3,6 @@ import { Dropdown } from 'semantic-ui-react'
 import fire from '../../fire'
 
 // TODO: remove - hyphens from city names display
-// TODO: shuttle: travel to research stations
 
 export default class PlayerActionMoveDropUp extends Component {
   constructor(props) {
@@ -44,7 +43,7 @@ export default class PlayerActionMoveDropUp extends Component {
   checkCharterCity = () => {
     if (this.props.activePlayer && this.props.activePlayer.position) {
       const cityName = this.props.activePlayer && this.props.activePlayer.position && this.props.activePlayer.position.city
-      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function (card) {
+      const charterCity = this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.find(function(card) {
         return cityName === card.city
       })
       if (charterCity) return charterCity
@@ -60,7 +59,7 @@ export default class PlayerActionMoveDropUp extends Component {
     if (charterCity) {
       return (
         <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
-          {allCities && allCities.length && allCities.map(function (city) {
+          {allCities && allCities.length && allCities.map(function(city) {
             return <option key={city} value={city + ':charter'}>{city}</option>
           })
           }
@@ -90,12 +89,12 @@ export default class PlayerActionMoveDropUp extends Component {
   // todo: will there be a bug if the players somehow hit confirm before getting db callbacks?
   handleConfirm = (e) => {
     e.preventDefault()
-    let moveToCity = this.state.selectedCity.replace('.', '')
+    const moveToCity = this.state.selectedCity.replace('.', '')
     // TODO: refactor so that St.-Petersbug doesn't have a period in backend playerhand!!
     // update hand without any used city cards
     let newHand = []
     if (this.state.selectedType === 'hand') {
-      newHand = this.props.activePlayer.hand.filter(function (card) {
+      newHand = this.props.activePlayer.hand.filter(function(card) {
         if (card.city) {
           return moveToCity !== card.city.replace('.', '')
         } else {
@@ -104,7 +103,7 @@ export default class PlayerActionMoveDropUp extends Component {
       })
     } else if (this.state.selectedType === 'charter') {
       const charterCity = this.state.charterCity
-      newHand = this.props.activePlayer.hand.filter(function (card) {
+      newHand = this.props.activePlayer.hand.filter(function(card) {
         if (card.city) {
           return charterCity !== card.city.replace('.', '')
         } else {
@@ -115,7 +114,7 @@ export default class PlayerActionMoveDropUp extends Component {
       newHand = this.props.activePlayer.hand
     }
     // update position and num actions left
-    fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerName}`).update({
+    fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerKey}`).update({
       position: { city: moveToCity, location: this.state.cities[moveToCity].location },
       numActions: this.props.numActions - 1,
       hand: newHand
@@ -145,7 +144,7 @@ export default class PlayerActionMoveDropUp extends Component {
   }
 
   render() {
-    let confirmButton = this.props.numActions && this.showConfirm()
+    const confirmButton = this.props.numActions && this.showConfirm()
     const nearbyCities = this.props.activePlayer && this.props.activePlayer.position && this.getNearbyCities(this.props.activePlayer.position.city)
     // check if charter available
     const charter = this.getCharterCityList()

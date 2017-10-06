@@ -7,50 +7,62 @@ export default class Sidebar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      players: {}
+      players: {},
+      loading: true
     }
   }
   componentDidMount() {
     // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
+    fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       this.setState({
-        players: snapshot.val()
+        players: snapshot.val().players
       })
     })
+    setTimeout(() => {
+      this.setState({loading: false})
+    }, 1000)
   }
   render() {
-    const players = Object.values(this.state.players).map((player, idx) => {
+    if (this.state.loading) {
       return (
-        <div key={idx}>
-          <div>
-            <div className="player-box">
-              <div className="player-name" style={{ backgroundColor: player.color.hexVal }}>
-                <img height="32" width="32" src={`/images/${player.role}.png`} />
-                <div>
-                  {player.name}
-                <br />
-                  {player.role}
+        <div className='my-nice-tab-container'>
+          <div className='loading-state'>Loading...</div>
+        </div>
+      )
+    } else {
+    // filter out numPlayers on players object
+      const playersItemsArr = Object.values(this.state.players).filter(x => typeof x === 'object')
+      const players = playersItemsArr.map((playerItems, idx) => {
+        return (
+          <div key={idx}>
+            <div>
+              <div className="player-box">
+                <div className={'player-name'}
+                  style={{backgroundColor: playersItemsArr[idx].color.hexVal}}>
+                  <img height="32" width="32" src={`/images/${playersItemsArr[idx].role}.png`} />
+                  <div>
+                    {playersItemsArr[idx].name}
+                  <br />
+                    {playersItemsArr[idx].role}
+                  </div>
                 </div>
-              </div>
-              <div className="player-hand">
-              {
-                console.log('idx, ', idx)
-              }
-              {
-                this.state.players['player1'].hand && this.state.players[`player${idx + 1}`].hand.map((obj, i) => {
-                  return (
+                <div className="player-hand">
+                {
+                  playersItemsArr[idx].hand && playersItemsArr[idx].hand.map((obj, i) => {
+                    return (
                       <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
-                  )
-                })
-              }
+                    )
+                  })
+                }
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )
+      })
+      return (
+        <div className="column">{players}</div>
       )
-    })
-    return (
-      <div className="column">{players}</div>
-    )
+    }
   }
 }

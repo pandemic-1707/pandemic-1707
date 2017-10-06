@@ -24,7 +24,9 @@ body {
 #gametitle {
 	color: red;
 }
-
+#gamecredit {
+  color: grey;
+}
 /* styling for markers */
 
 .city-marker {
@@ -77,7 +79,6 @@ body {
   display: flex;
   -webkit-flex-direction: row;
   flex-direction: row;
-  /*background-color: orange;*/
   height: 32px;
   font-size: 12px;
 }
@@ -122,13 +123,12 @@ form button {
   background-color: #48B3F0;
   color: white;
 }
-
-.player-actions-panel {
-}
-
 .player-action {
   text-align: center;
 }
-.navbar-light .navbar-nav .nav-link {
-  color: white;
+
+.player-actions-panel {
+}
+.player-action {
+  text-align: center;
 }
