@@ -2,6 +2,7 @@
 // and initialize an admin app instance from which Realtime Database changes can be made
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
+const cors = require('cors')({origin: true})
 admin.initializeApp(functions.config().firebase)
 
 const { cities, infectionDeck, events } = require('./data')
@@ -63,4 +64,50 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
     updatedData['/infectionDiscard'] = discardPile
 
     return event.data.ref.parent.update(updatedData)
+  })
+
+// listen for changes to player's hands; if there's an epidemic card, handle it
+exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId}/hand')
+  .onUpdate(event => {
+    const hand = event.data.val()
+    const room = event.data.ref.parent.parent.parent
+
+    // TO-DO: HANDLE EACH EPIDEMIC CARD
+    for (const card in hand) {
+      if (hand[card].hasOwnProperty('Epidemic')) {
+        const fetchCities = room.child('cities').once('value').then(snapshot => snapshot.val())
+        const fetchInfectionDeck = room.child('infectionDeck').once('value').then(snapshot => snapshot.val())
+        const fetchInfectionDiscard = room.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
+
+        return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
+        .then(data => {
+          const cities = data[0]
+          const infectionDeck = data[1]
+          const infectionDiscard = data[2]
+          const updatedDecks = {}
+
+          // TO-DO
+          // step 1: increase -- move the infection level forward
+
+          // step 2: infect -- draw the bottom card from the infection deck & add to discard
+          // TO-DO: UNLESS IT'S BEEN ERADICATED
+          const outbreakCard = infectionDeck.shift()
+          console.log('theres an outbreak in ', outbreakCard)
+          infectionDiscard.push(outbreakCard)
+
+          // step 2.5: handle the outbreak there
+          const outbreakSite = outbreakCard.split(' ').join('-')
+          const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
+
+          // step 3: intensify -- reshuffle infection discard and add it to pile
+          const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
+          updatedDecks['/infectionDeck'] = newInfectionDeck
+          updatedDecks['/infectionDiscard'] = []
+
+          const all = Object.assign({}, updatedDecks, updatedOutbreakData)
+          console.log('need to update ', all)
+          return room.update(all)
+        })
+      }
+    }
   })
