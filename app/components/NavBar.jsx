@@ -18,24 +18,21 @@ export default class NavBar extends Component {
       outbreaks: 0,
       researchCenter: 1,
       currPlayer: '',
-      currPlayersArr: [],
       players: {},
-      loading: true,
-      disabledStart: false
+      loading: true
     }
-    this.startGame = this.startGame.bind(this)
   }
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       const currPlayer = snapshot.val().state.currPlayer
       const players = snapshot.val().players
+      this.setState({
+        currPlayer: snapshot.val().state.currPlayer,
+        players: snapshot.val().players
+      })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand
         if (players[currPlayer].numActions === 0) {
-          this.setState({
-            currPlayer: snapshot.val().state.currPlayer,
-            disabledStart: snapshot.val().state.disabledStart
-          })
           // change numActions back to 4
           return fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
             numActions: 4
@@ -49,8 +46,6 @@ export default class NavBar extends Component {
           // pull those 2 out of player deck
           .then(() => {
             const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
-            console.log('playerDeck', snapshot.val().playerDeck)
-            console.log('updatedplayerDeck', updatedPlayerDeck)
             fire.database().ref(`/rooms/${this.props.roomName}`).update({
               playerDeck: updatedPlayerDeck
             })
@@ -60,10 +55,10 @@ export default class NavBar extends Component {
             const i = (snapshot.val().state.currPlayersArr.indexOf(snapshot.val().state.currPlayer) + 1)
             console.log('i', i)
             fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-              currPlayer: this.state.currPlayersArr[i]
+              currPlayer: snapshot.val().state.currPlayersArr[i]
             })
             this.setState({
-              currPlayer: this.state.currPlayersArr[i]
+              currPlayer: snapshot.val().state.currPlayersArr[i]
             })
           })
         }
@@ -82,38 +77,15 @@ export default class NavBar extends Component {
       blue: this.state.blue,
       infectionIdx: this.state.infectionIdx,
       outbreaks: this.state.outbreaks,
-      researchCenter: this.state.researchCenter,
-      currPlayer: this.state.currPlayer,
-      currPlayersArr: this.state.currPlayersArr,
-      disabledStart: this.state.disabledStart
-    })
-  }
-  startGame() {
-    return fire.database().ref(`/rooms/${this.props.roomName}`).once('value').then(snapshot => {
-      this.setState({
-        disabledStart: true,
-        players: snapshot.val().players,
-        playerDeck: snapshot.val().playerDeck
-      })
-    })
-    .then(() => {
-      const shuffledCurrPlayers = shuffle(Object.keys(this.state.players))
-      this.setState({
-        currPlayersArr: shuffledCurrPlayers,
-        currPlayer: shuffledCurrPlayers[0]
-      })
-      fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-        currPlayer: this.state.currPlayer,
-        currPlayersArr: this.state.currPlayersArr,
-        disabledStart: this.state.disabledStart
-      })
+      researchCenter: this.state.researchCenter
     })
   }
   render() {
-    const { players, currPlayer, disabledStart } = this.state
-    console.log('disabledStart', disabledStart)
+    const { players, currPlayer } = this.state
     let currPlayerName = ''
-    if (currPlayer) currPlayerName = players[currPlayer].name
+    if (currPlayer) {
+      currPlayerName = players[currPlayer].name
+    }
     if (this.state.loading) {
       return (
         <div className='my-nice-tab-container'>
@@ -171,12 +143,6 @@ export default class NavBar extends Component {
                 <div className="nav-link">{this.state.researchCenter}</div>
               </li>
               <li><WhoAmI auth={auth}/></li>
-              <li className="nav-item">
-                <button
-                disabled={disabledStart}
-                onClick={this.startGame}
-                className="btn btn-success">Start Game</button>
-              </li>
               <li className="nav-item">
                 <div className="nav-link">Current Turn: {currPlayerName}</div>
               </li>

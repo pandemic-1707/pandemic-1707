@@ -35,6 +35,7 @@ export default class Welcome extends Component {
       modalIsOpen: false,
       roomName: 'one',
       numPlayers: 2,
+      userId: '',
       players: {
         player1: {
           name: ''
@@ -51,9 +52,7 @@ export default class Welcome extends Component {
       },
       touched: {
         name1: false,
-        name2: false,
-        name3: false,
-        name4: false
+        name2: false
       }
     }
     this.openModal = this.openModal.bind(this)
@@ -62,8 +61,26 @@ export default class Welcome extends Component {
     this.savePlayerName = this.savePlayerName.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
+
+  componentDidMount() {
+    this.unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        this.setState({
+          userId: user.uid
+        })
+      }
+    })
+  }
+  componentWillUnmount() {
+    this.unsubscribe()
+  }
+
   openModal() {
-    this.setState({modalIsOpen: true})
+    if (this.state.userId) {
+      this.setState({modalIsOpen: true})
+    } else {
+      alert('Please Login To Create A Room!')
+    }
   }
 
   saveRoomData(field, e) {
@@ -109,8 +126,6 @@ export default class Welcome extends Component {
   render() {
     const name1 = this.state.players.player1.name
     const name2 = this.state.players.player2.name
-    const name3 = this.state.players.player3.name
-    const name4 = this.state.players.player4.name
     const errors = validate(name1, name2)
     const isDisabled = Object.keys(errors).some(x => errors[x])
 

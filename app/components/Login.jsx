@@ -75,7 +75,7 @@ export default class Login extends Component {
     return (
       <form>
         <button className='btn btn-outline-info btn-sm'
-        onClick={() => this.props.auth.signInWithPopup(google)}>Login with Google</button>
+        onClick={() => firebase.auth().signInWithPopup(google)}>Login with Google</button>
         <input type="text" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
         <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
         <button className="btn btn-action" onClick={this.handleLogInSubmit}>Log In</button>

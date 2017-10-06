@@ -10,20 +10,20 @@ export const name = user => {
   return user.displayName || user.email
 }
 
-export const WhoAmI = ({user, auth, history}) =>
+export const WhoAmI = ({user, auth}) =>
   <div className="whoami">
     <span className="whoami-user-name">{name(user)}</span>
     { // If nobody is logged in, or the current user is anonymous,
       (!user || user.isAnonymous)?
       // ...then show signin links...
-      <Login auth={auth} history={history}/>
+      <Login auth={auth} />
       /// ...otherwise, show a logout button.
       : <div><button className='btn btn-outline-info btn-sm' onClick={() => auth.signOut()}>logout</button></div> }
   </div>
 
 export default class extends React.Component {
   componentDidMount() {
-    const {auth, history} = this.props
+    const {auth} = this.props
     this.unsubscribe = auth.onAuthStateChanged(user => this.setState({user}))
   }
 
@@ -33,6 +33,6 @@ export default class extends React.Component {
 
   render() {
     const {user} = this.state || {}
-    return <WhoAmI user={user} auth={auth} history={history}/>
+    return <WhoAmI user={user} auth={auth} />
   }
 }
