@@ -12,7 +12,6 @@ const NUM_EPIDEMICS = 4
 // shuffle the infection deck and add it to the room
 exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
-    const room = event.data.val()
     const shuffled = shuffle(infectionDeck)
     return event.data.ref.child('infectionDeck').set(shuffled)
   })
@@ -37,7 +36,6 @@ exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
 // load the initial city data and add it to the room
 exports.initializeCities = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
-    const room = event.data.val()
     return event.data.ref.child('cities').set(cities)
   })
 
