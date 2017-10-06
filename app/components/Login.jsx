@@ -77,15 +77,17 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <form>
-        <button className='btn btn-outline-info btn-sm'
-        onClick={this.handleRedirectGoogle}>Login with Google</button>
-        <input type="text" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
-        <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
-        <button className="btn btn-action btn-sm" onClick={this.handleLogInSubmit}>Log In</button>
-        <button className="btn btn-secondary btn-sm" onClick={this.handleSignUpSubmit}>Sign Up</button>
-        <button className="btn btn-action btn-sm" onClick={this.handleLogOutSubmit}>Log Out</button>
-      </form>
+      <div>
+        <button className='google login'
+            onClick={() => this.props.auth.signInWithPopup(google)}>Login with Google</button>
+        <form>
+          <input type="text" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
+          <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
+          <button className="btn btn-action btn-sm" onClick={this.handleLogInSubmit}>Log In</button>
+          <button className="btn btn-secondary btn-sm" onClick={this.handleSignUpSubmit}>Sign Up</button>
+          <button className="btn btn-action btn-sm" onClick={this.handleLogOutSubmit}>Log Out</button>
+        </form>
+      </div>
     )
   }
 }
