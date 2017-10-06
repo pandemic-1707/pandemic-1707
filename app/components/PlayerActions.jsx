@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import fire from '../../fire'
 import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
+import axios from 'axios'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 
@@ -13,6 +14,8 @@ export default class PlayerActions extends Component {
       cities: [], 
       currPlayer: ''
     }
+
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
@@ -37,6 +40,15 @@ export default class PlayerActions extends Component {
   handleMoveAction = () => {
     // create popup
 
+  }
+
+  handleClick() {
+    console.log('you tried to cause an epidemic! x)')
+    // CHANGE TO DATABASE WRITE
+    // axios.get('https://us-central1-pandemic-1707.cloudfunctions.net/propagateEpidemic')
+    //   .then(() => {
+    //     console.log('I got a response from my function!')
+    //   })
   }
 
   // TODO: get the active player
@@ -82,8 +94,11 @@ export default class PlayerActions extends Component {
             <div className="col-sm-2 player-action text-center">
               <span>Share</span>
             </div>
-            <div className="col-sm-2 player-action text-center">
+            <div className="col-sm-1 player-action text-center">
               <span>Event</span>
+            </div>
+            <div className="col-sm-1 player-action text-center">
+              <button onClick={this.handleClick}>Epidemic</button>
             </div>
           </div>
           <div className="row text-center">
