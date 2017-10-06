@@ -13,7 +13,6 @@ const NUM_EPIDEMICS = 4
 // shuffle the infection deck and add it to the room
 exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   .onCreate(event => {
-    const room = event.data.val()
     const shuffled = shuffle(infectionDeck)
     return event.data.ref.child('infectionDeck').set(shuffled)
   })
@@ -53,21 +52,13 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
     const infectionRate = [3, 2, 1]
     const citiesToInfect = 3
 
-    // go through each infection rate [3, 2, 1]
+    // go through each infection rate [3, 2, 1],
+    // infect three cities at each rate & add to discard pile
+    // N.B. keys in cities object cannot include spaces, so must use hyphens
     infectionRate.forEach((rate, idx) => {
-      // and infect three cities at each rate
       for (let i = 0; i < citiesToInfect; i++) {
-        // some tricky math will give you the distance from the end of the array
-        // i.e. the 2nd city (i = 2) to infect with a rate of 2 (idx = 1) is 3 * 1 + 2 = 5 from the end
-        const distFromEnd = 3 * idx + i
-        const nextCity = deck[deck.length - 1 - distFromEnd]
-        // modify the infection rate for the given city
-        // N.B. keys in cities object cannot include spaces, so must use hyphens
-        // N.B. replace() only corrects first instance
+        const nextCity = deck.pop()
         updatedData['cities/' + nextCity.split(' ').join('-') + '/infectionRate'] = rate
-        // remove it from the infection deck
-        deck.pop()
-        // add it to the discard pile
         discardPile.push(nextCity)
       }
     })

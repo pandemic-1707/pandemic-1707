@@ -1,6 +1,6 @@
 import React from 'react'
 import firebase from 'APP/fire'
-import ignite, {withAuth, FireInput} from './ignite'
+import ignite, {withAuth, FireInput} from '../utils/ignite'
 
 const users = firebase.database().ref('users')
     , nickname = uid => users.child(uid).child('nickname')
