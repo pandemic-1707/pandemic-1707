@@ -42,9 +42,9 @@ export default ignite(withAuth(class extends React.Component {
       return <span>You must be logged in to send messages.</span>
     }
     return <form onSubmit={this.sendMessage}>
-      <FireInput fireRef={nickname(user.uid)} />
-      <input name='body'/>
-      <input type='submit'/>
+      <FireInput fireRef={nickname(user.uid)} placeholder='your name' />
+      <input className="form-control" placeholder='Type your message...' name='body' />
+      <input className="btn btn-sm btn-primary" type='submit'/>
     </form>
   }
 

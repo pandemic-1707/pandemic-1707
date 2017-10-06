@@ -13,19 +13,6 @@ const deckUtils = utils.deckUtils
 const playerDeckUtils = utils.playerDeckUtils
 const playerUtils = utils.playerUtils
 
-function shuffle(array) {
-  let temp = null
-
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1))
-    temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
-  }
-
-  return array
-}
-
 const NUM_PLAYERS_4 = 4
 const NUM_EPIDEMICS = 4
 
@@ -38,22 +25,26 @@ exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
   })
 
 // updated to initialize player locations at the same time
-exports.initializePlayerInfo = functions.database.ref('/rooms/{name}')
+exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
   .onCreate(event => {
-    // TODO : playerNumber will change
     const numPlayers = event.data.val().numPlayers
-    const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-    const updatedData = {}
-    // initPlayerDeck returns { playerDeck: shuffled deck with epidemics,
-    // playerHands: array of arrays (each array is initial player starting hand) }
     const playerDeckHands = playerDeckUtils.initPlayerDeck(numPlayers, NUM_EPIDEMICS)
-    const playerDeck = playerDeckHands.playerDeck
     const playerHands = playerDeckHands.playerHands
+    console.log('playerHands', playerHands)
+    const playerDeck = playerDeckHands.playerDeck
+    console.log('playerHands', playerHands)
+    const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
+    const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
+      { name: 'blue', 'hexVal': '#00BDD8' },
+      { name: 'green', 'hexVal': '#74DE00' },
+      { name: 'yellow', 'hexVal': '#DEEA00' } ]
+    const shuffledRoles = deckUtils.shuffle(roles)
+    const shuffledColors = deckUtils.shuffle(colors)
+    const updatedData = {}
+    updatedData['/playerHandsArr'] = playerHands
     updatedData['/playerDeck'] = playerDeck
-    for (let i = 0; i < playerHands.length; i++) {
-      updatedData['/players/player' + (i + 1) + '/hand'] = playerHands[i]
-      updatedData['/players/player' + (i + 1) + '/position'] = cdcLocation
-    }
+    updatedData['/shuffledRoles'] = shuffledRoles
+    updatedData['/shuffledColors'] = shuffledColors
     return event.data.ref.update(updatedData)
   })
 

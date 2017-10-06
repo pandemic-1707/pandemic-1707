@@ -10,7 +10,8 @@ export default class PlayerActions extends Component {
     super(props)
     this.state = {
       players: {},
-      cities: []
+      cities: [], 
+      currPlayer: ''
     }
   }
 
@@ -24,6 +25,11 @@ export default class PlayerActions extends Component {
     fire.database().ref(`/rooms/${this.props.roomName}/cities`).on('value', snapshot => {
       this.setState({
         cities: snapshot.val()
+      })
+    })
+    fire.database().ref(`/rooms/${this.props.roomName}/state/currPlayer`).on('value', snapshot => {
+      this.setState({
+        currPlayer: snapshot.val(),
       })
     })
   }
@@ -50,7 +56,7 @@ export default class PlayerActions extends Component {
         numActions: activePlayer.numActions - 1,
       })
     } else {
-      // let player know this city isn't treatable, maybe fade button
+      // TODO: let player know this city isn't treatable, maybe fade button
     }
   }
 
@@ -81,7 +87,7 @@ export default class PlayerActions extends Component {
           </div>
           <div className="row text-center">
             <div className="col-sm-12 text-center">
-              Actions Left: {activePlayer.numActions}
+              Actions Left: {activePlayer.numActions && activePlayer.numActions}
             </div>
           </div>
         </div>
