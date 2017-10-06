@@ -85,8 +85,13 @@ export default class PlayerActions extends Component {
         research: true
       })
       .then(() => {
+        // discard used city card by creating newHand without it
+        const newHand = activePlayer.hand.filter(function(card) {
+          return card.city !== buildInCity.city
+        })
         fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
           numActions: activePlayer.numActions - 1,
+          hand: newHand
         })
       })
     } else {
