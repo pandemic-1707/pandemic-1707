@@ -58,14 +58,17 @@ export default class PlayerActions extends Component {
   }
 
   treatDisease = () => {
+    console.log('is is treating?')
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
     if (this.state.cities[activePlayerCity].infectionRate > 0) {
-      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+      return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
         infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
       })
-      fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerName}`).update({
-        numActions: activePlayer.numActions - 1,
+      .then(() => {
+        fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+          numActions: activePlayer.numActions - 1,
+        })
       })
     } else {
       // TODO: let player know this city isn't treatable, maybe fade button
