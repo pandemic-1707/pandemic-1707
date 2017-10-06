@@ -56,7 +56,6 @@ export default class NavBar extends Component {
           .then(() => {
             const currPlayersArr = snapshot.val().state.currPlayersArr
             const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-            console.log('i', i)
             fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
               currPlayer: currPlayersArr[i]
             })
@@ -73,15 +72,15 @@ export default class NavBar extends Component {
   }
   componentWillMount() {
     // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-      red: this.state.red,
-      yellow: this.state.yellow,
-      black: this.state.black,
-      blue: this.state.blue,
-      infectionIdx: this.state.infectionIdx,
-      outbreaks: this.state.outbreaks,
-      researchCenter: this.state.researchCenter
-    })
+    // fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
+    //   red: this.state.red,
+    //   yellow: this.state.yellow,
+    //   black: this.state.black,
+    //   blue: this.state.blue,
+    //   infectionIdx: this.state.infectionIdx,
+    //   outbreaks: this.state.outbreaks,
+    //   researchCenter: this.state.researchCenter
+    // })
   }
   render() {
     const { players, currPlayer } = this.state
