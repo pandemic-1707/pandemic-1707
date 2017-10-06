@@ -17,6 +17,7 @@ export default class NavBar extends Component {
       infectionIdx: 0,
       outbreaks: 0,
       researchCenter: 1,
+      curedDiseases: [],
       currPlayer: '',
       players: {},
       loading: true
@@ -28,7 +29,8 @@ export default class NavBar extends Component {
       const players = snapshot.val().players
       this.setState({
         currPlayer: snapshot.val().state.currPlayer,
-        players: snapshot.val().players
+        players: snapshot.val().players,
+        researchCenter: snapshot.val().state.researchCenter
       })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand

@@ -11,7 +11,7 @@ export default class PlayerActions extends Component {
     super(props)
     this.state = {
       players: {},
-      cities: [], 
+      cities: [],
       currPlayer: ''
     }
 
@@ -64,11 +64,11 @@ export default class PlayerActions extends Component {
       return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
         infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
       })
-      .then(() => {
-        fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-          numActions: activePlayer.numActions - 1,
+        .then(() => {
+          fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+            numActions: activePlayer.numActions - 1,
+          })
         })
-      })
     } else {
       // TODO: let player know this city isn't treatable, maybe fade button
     }
@@ -77,23 +77,36 @@ export default class PlayerActions extends Component {
   buildResearch = () => {
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
-    const buildInCity = activePlayer.hand.find(function(card) {
+    const buildInCity = activePlayer.hand.find(function (card) {
       return card.city === activePlayerCity
     })
     if (buildInCity) {
-      return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
-        research: true
+      // check num research stations, over 6 means we have to reallocate stations
+      let numResearchCenters = 0
+      return fire.database().ref(`/rooms/${this.props.roomName}/state/researchCenter`).once('value', snapshot => {
+        numResearchCenters = snapshot.val()
       })
-      .then(() => {
-        // discard used city card by creating newHand without it
-        const newHand = activePlayer.hand.filter(function(card) {
-          return card.city !== buildInCity.city
+        .then(() => {
+          // set city to have research station
+          return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+            research: true
+          })
+            .then(() => {
+              // discard used city card by creating newHand without it
+              const newHand = activePlayer.hand.filter(function(card) {
+                return card.city !== buildInCity.city
+              })
+              fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+                numActions: activePlayer.numActions - 1,
+                hand: newHand
+              })
+              // add num research stations to game state
+              fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
+                researchCenter: numResearchCenters + 1
+              })
+              // TODO: max num research stations is 6, take away from other cities when over
+            })
         })
-        fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-          numActions: activePlayer.numActions - 1,
-          hand: newHand
-        })
-      })
     } else {
       // TODO: let player they don't have city card, maybe fade button
     }
@@ -101,7 +114,6 @@ export default class PlayerActions extends Component {
 
   render() {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
-    console.log('IS MY CODE UPDATING???', activePlayer)
     return (
       <div>
         <div className="container-fluid player-actions-panel">
