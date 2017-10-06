@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
+import Rules from './Rules'
 
 // Get the auth API from Firebase.
 const auth = fire.auth()
@@ -19,8 +20,15 @@ export default class NavBar extends Component {
       researchCenter: 1,
       currPlayer: '',
       players: {},
-      loading: true
+      loading: true,
+      rulesOpen: false
     }
+  }
+  openRules() {
+    this.setState({rulesOpen: true})
+  }
+  closeRules() {
+    this.setState({rulesOpen: false})
   }
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
@@ -146,6 +154,9 @@ export default class NavBar extends Component {
               <li><WhoAmI auth={auth}/></li>
               <li className="nav-item">
                 <div className="nav-link">Current Turn: {currPlayerName}</div>
+              </li>
+              <li className="nav-item">
+                <button className="btn btn-outline-success" onClick={this.openRules}>Rules</button>
               </li>
             </ul>
           </div>
