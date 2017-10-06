@@ -66,8 +66,8 @@ export default class Wait extends Component {
       })(snapshot.val().numPlayers)
       promise.then(() => {
         fire.database().ref(`/rooms/${roomName}`).once('value').then(newSnapshot => {
-          console.log('shuffledRoles', newSnapshot.val().shuffledRoles)
           const myOrder = Object.keys(newSnapshot.child('players').val()).indexOf(user.uid)
+          console.log('myOrder', myOrder)
           const myRole = newSnapshot.val().shuffledRoles[myOrder]
           const myColor = newSnapshot.val().shuffledColors[myOrder]
           const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
@@ -82,24 +82,15 @@ export default class Wait extends Component {
           })
           .then(() => {
             const shuffledCurrPlayers = shuffle(Object.keys(newSnapshot.val().players))
-            this.setState({
-              currPlayersArr: shuffledCurrPlayers,
-              currPlayer: shuffledCurrPlayers[0]
-            })
-          })
-          .then(() => {
             fire.database().ref(`/rooms/${roomName}/state`).update({
-              currPlayer: this.state.currPlayer,
-              currPlayersArr: this.state.currPlayersArr,
-              disabledStart: this.state.disabledStart
+              currPlayer: shuffledCurrPlayers[0],
+              currPlayersArr: shuffledCurrPlayers,
+              disabledStart: false
             })
           })
           .then(() => {
             if (newSnapshot.val().numPlayers !== Object.keys(newSnapshot.val().players).length) {
               alert('Waiting for your friends to join')
-              this.setState({
-                disabledStart: false
-              })
             } else {
               this.props.history.push(`/rooms/${roomName}`)
             }
