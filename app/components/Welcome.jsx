@@ -5,8 +5,7 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import { filteredObj, setCurrPlayers } from '../utils/welcome-utils'
-import utils from '../../functions/node_modules/pandemic-1707-utils'
-const playerDeckUtils = utils.playerDeckUtils
+
 const auth = fire.auth()
 const NUM_STARTING_ACTIONS = 4
 
