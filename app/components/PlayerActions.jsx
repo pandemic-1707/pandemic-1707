@@ -58,7 +58,6 @@ export default class PlayerActions extends Component {
   }
 
   treatDisease = () => {
-    console.log('is is treating?')
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
     if (this.state.cities[activePlayerCity].infectionRate > 0) {
@@ -75,9 +74,29 @@ export default class PlayerActions extends Component {
     }
   }
 
+  buildResearch = () => {
+    const activePlayer = this.getActivePlayer(this.state.players)
+    const activePlayerCity = activePlayer.position.city
+    const buildInCity = activePlayer.hand.find(function(card) {
+      return card.city === activePlayerCity
+    })
+    if (buildInCity) {
+      return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+        research: true
+      })
+      .then(() => {
+        fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+          numActions: activePlayer.numActions - 1,
+        })
+      })
+    } else {
+      // TODO: let player they don't have city card, maybe fade button
+    }
+  }
+
   render() {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
-    console.log('activePlayer', activePlayer)
+    console.log('IS MY CODE UPDATING???', activePlayer)
     return (
       <div>
         <div className="container-fluid player-actions-panel">
@@ -92,7 +111,7 @@ export default class PlayerActions extends Component {
               <span>Cure</span>
             </div>
             <div className="col-sm-2 player-action text-center">
-              <span>Build</span>
+              <button onClick={this.buildResearch}>Build</button>
             </div>
             <div className="col-sm-2 player-action text-center">
               <span>Share</span>
