@@ -94,39 +94,41 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
     const room = event.data.ref.parent.parent.parent
 
     // TO-DO: HANDLE EACH EPIDEMIC CARD
-    if (hand.hasOwnProperty('Epidemic')) {
-      const fetchCities = room.child('cities').once('value').then(snapshot => snapshot.val())
-      const fetchInfectionDeck = room.child('infectionDeck').once('value').then(snapshot => snapshot.val())
-      const fetchInfectionDiscard = room.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
+    for (const card in hand) {
+      if (hand[card].hasOwnProperty('Epidemic')) {
+        const fetchCities = room.child('cities').once('value').then(snapshot => snapshot.val())
+        const fetchInfectionDeck = room.child('infectionDeck').once('value').then(snapshot => snapshot.val())
+        const fetchInfectionDiscard = room.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
 
-      return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
-      .then(data => {
-        const cities = data[0]
-        const infectionDeck = data[1]
-        const infectionDiscard = data[2]
-        const updatedDecks = {}
+        return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
+        .then(data => {
+          const cities = data[0]
+          const infectionDeck = data[1]
+          const infectionDiscard = data[2]
+          const updatedDecks = {}
 
-        // TO-DO
-        // step 1: increase -- move the infection level forward
+          // TO-DO
+          // step 1: increase -- move the infection level forward
 
-        // step 2: infect -- draw the bottom card from the infection deck & add to discard
-        // TO-DO: UNLESS IT'S BEEN ERADICATED
-        const outbreakCard = infectionDeck.shift()
-        console.log('theres an outbreak in ', outbreakCard)
-        infectionDiscard.push(outbreakCard)
+          // step 2: infect -- draw the bottom card from the infection deck & add to discard
+          // TO-DO: UNLESS IT'S BEEN ERADICATED
+          const outbreakCard = infectionDeck.shift()
+          console.log('theres an outbreak in ', outbreakCard)
+          infectionDiscard.push(outbreakCard)
 
-        // step 2.5: handle the outbreak there
-        const outbreakSite = outbreakCard.split(' ').join('-')
-        const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
+          // step 2.5: handle the outbreak there
+          const outbreakSite = outbreakCard.split(' ').join('-')
+          const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
 
-        // step 3: intensify -- reshuffle infection discard and add it to pile
-        const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
-        updatedDecks['/infectionDeck'] = newInfectionDeck
-        updatedDecks['/infectionDiscard'] = []
+          // step 3: intensify -- reshuffle infection discard and add it to pile
+          const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
+          updatedDecks['/infectionDeck'] = newInfectionDeck
+          updatedDecks['/infectionDiscard'] = []
 
-        const all = Object.assign({}, updatedDecks, updatedOutbreakData)
-        console.log('need to update ', all)
-        return room.update(all)
-      })
+          const all = Object.assign({}, updatedDecks, updatedOutbreakData)
+          console.log('need to update ', all)
+          return room.update(all)
+        })
+      }
     }
   })
