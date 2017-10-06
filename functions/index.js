@@ -107,7 +107,7 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
           const infectionDiscard = data[2]
           const updatedDecks = {}
 
-          // TO-DO
+          // TO-DO:
           // step 1: increase -- move the infection level forward
 
           // step 2: infect -- draw the bottom card from the infection deck & add to discard
