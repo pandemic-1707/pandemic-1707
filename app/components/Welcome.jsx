@@ -157,7 +157,7 @@ export default class Welcome extends Component {
         <WhoAmI auth={auth} history={this.props.history} />
         <div id="title">
           <h1 id="gametitle">PLANETAMIC</h1><br />
-          <h2> A Game by Emily Eastlake, An Le and Mary Yen </h2>
+          <h2 id="gamecredit"> A Game by Emily Eastlake, An Le and Mary Yen </h2>
           <br />
           <button type="button"
           className="btn btn-outline-primary"
@@ -211,7 +211,7 @@ export default class Welcome extends Component {
           </form>
           </Modal>
           <br />
-          <button className="btn btn-outline-success">Rules</button>
+          <a href="https://www.thespruce.com/how-to-play-pandemic-410923"><button className="btn btn-outline-success">Rules</button></a>
         </div>
       </div>
     )

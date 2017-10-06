@@ -42,6 +42,7 @@ export default class Room extends Component {
   }
   render() {
     let room = null
+    console.log('this.state.isCurrentPlayer', this.state.isCurrentPlayer)
     if (this.state.LoggedIn) {
       room =
         <div>

@@ -42,7 +42,7 @@ export default class PlayerActions extends Component {
   // TODO: get the active player
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
-    return Object.assign({ playerName: playerKeys[0] }, players[playerKeys[0]])
+    return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
   }
 
   treatDisease = () => {
@@ -62,6 +62,7 @@ export default class PlayerActions extends Component {
 
   render() {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
+    console.log('activePlayer', activePlayer)
     return (
       <div>
         <div className="container-fluid player-actions-panel">

@@ -20,6 +20,7 @@ export default class Login extends Component {
     this.handleLogInSubmit = this.handleLogInSubmit.bind(this)
     this.handleLogOutSubmit = this.handleLogOutSubmit.bind(this)
     this.handleSignUpSubmit = this.handleSignUpSubmit.bind(this)
+    this.handleRedirectGoogle = this.handleRedirectGoogle.bind(this)
   }
   componentWillMount() {
     firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -71,16 +72,19 @@ export default class Login extends Component {
     e.preventDefault()
     firebase.auth().signOut()
   }
+  handleRedirectGoogle(e) {
+    firebase.auth().signInWithRedirect(google).catch(error => console.log(error))
+  }
   render() {
     return (
       <form>
         <button className='btn btn-outline-info btn-sm'
-        onClick={() => firebase.auth().signInWithPopup(google)}>Login with Google</button>
+        onClick={this.handleRedirectGoogle}>Login with Google</button>
         <input type="text" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
         <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
-        <button className="btn btn-action" onClick={this.handleLogInSubmit}>Log In</button>
-        <button className="btn btn-secondary" onClick={this.handleSignUpSubmit}>Sign Up</button>
-        <button className="btn btn-action" onClick={this.handleLogOutSubmit}>Log Out</button>
+        <button className="btn btn-action btn-sm" onClick={this.handleLogInSubmit}>Log In</button>
+        <button className="btn btn-secondary btn-sm" onClick={this.handleSignUpSubmit}>Sign Up</button>
+        <button className="btn btn-action btn-sm" onClick={this.handleLogOutSubmit}>Log Out</button>
       </form>
     )
   }

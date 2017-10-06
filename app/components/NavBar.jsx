@@ -52,13 +52,14 @@ export default class NavBar extends Component {
           })
           // update to the next currPlayer
           .then(() => {
-            const i = (snapshot.val().state.currPlayersArr.indexOf(snapshot.val().state.currPlayer) + 1)
+            const currPlayersArr = snapshot.val().state.currPlayersArr
+            const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
             console.log('i', i)
             fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-              currPlayer: snapshot.val().state.currPlayersArr[i]
+              currPlayer: currPlayersArr[i]
             })
             this.setState({
-              currPlayer: snapshot.val().state.currPlayersArr[i]
+              currPlayer: currPlayersArr[i]
             })
           })
         }

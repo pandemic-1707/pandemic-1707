@@ -24,7 +24,9 @@ body {
 #gametitle {
 	color: red;
 }
-
+#gamecredit {
+  color: grey;
+}
 /* styling for markers */
 
 .city-marker {
@@ -130,4 +132,3 @@ form button {
 .player-action {
   text-align: center;
 }
-
