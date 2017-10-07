@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Welcome from './Welcome'
-import Sidebar from './Sidebar'
 import Room from './Room'
+import EnterRoom from './EnterRoom'
 import Wait from './Wait'
 
 export default class Main extends Component {
@@ -14,6 +14,7 @@ export default class Main extends Component {
           <Route exact path="/" component={Welcome} />
           <Route exact path="/rooms/wait/:roomName" component={Wait} />
           <Route exact path="/rooms/:roomName" component={Room} />
+          <Route exact path="/rooms/enter" component={EnterRoom} />
         </Switch>
       </Router>
       </div>

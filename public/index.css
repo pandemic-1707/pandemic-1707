@@ -1,5 +1,6 @@
 body {
   height: 100%;
+  overflow: hidden;
 }
 .welcome {
   background: url("/images/background.jpg") no-repeat center center fixed; 
@@ -22,7 +23,7 @@ body {
   justify-content: center;
 }
 #gametitle {
-	color: red;
+  color: red;
 }
 #gamecredit {
   color: grey;
@@ -30,10 +31,10 @@ body {
 /* styling for markers */
 
 .city-marker {
-	width: 20px !important;
-	height: 20px !important;
-	border: 1px solid rgba(0, 0, 0, .2);
-	border-radius: 50%;
+  width: 20px !important;
+  height: 20px !important;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 50%;
   text-align: center;
   font-weight: bold;
   text-shadow: 0 1px 0 black;
@@ -41,30 +42,30 @@ body {
 }
 
 .blue {
-	background: steelblue;
-	box-shadow: 0 0 5px 5px #26cceb;
+  background: steelblue;
+  box-shadow: 0 0 5px 5px #26cceb;
 }
 
 .red {
-	background: red;
-	box-shadow: 0 0 5px 5px #f97174;
+  background: red;
+  box-shadow: 0 0 5px 5px #f97174;
 }
 
 .yellow {
-	background: yellow;
-	box-shadow: 0 0 5px 5px #f2f000;
+  background: yellow;
+  box-shadow: 0 0 5px 5px #f2f000;
 }
 
 .black {
-	background: black;
-	box-shadow: 0 0 5px 5px #b4b4b4;
+  background: black;
+  box-shadow: 0 0 5px 5px #b4b4b4;
 }
 
 .research-station-marker {
-	width: 25px;
-	height: 25px;
-	border: 1px solid rgba(0, 0, 0, .2);
-	background: #ffffff;
+  width: 25px;
+  height: 25px;
+  border: 1px solid rgba(0, 0, 0, .2);
+  background: #ffffff;
 }
 
 .whoami-user-name {
@@ -97,6 +98,7 @@ body {
 
   .main-content {
     flex: 1;
+    height: 100px;
   }
 
   .sidebar {
@@ -110,6 +112,9 @@ body {
 .footer {
   height: 70px;
   background-color: brown;
+}
+#map {
+  height:70%;
 }
 form input.error {
   border-color: red;

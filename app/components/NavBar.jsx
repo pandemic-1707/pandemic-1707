@@ -3,7 +3,7 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-
+import { Menu } from 'semantic-ui-react'
 // Get the auth API from Firebase.
 const auth = fire.auth()
 
@@ -20,15 +20,8 @@ export default class NavBar extends Component {
       researchCenter: 1,
       currPlayer: '',
       players: {},
-      loading: true,
-      rulesOpen: false
+      loading: true
     }
-  }
-  openRules() {
-    this.setState({rulesOpen: true})
-  }
-  closeRules() {
-    this.setState({rulesOpen: false})
   }
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
@@ -97,70 +90,42 @@ export default class NavBar extends Component {
     }
     if (this.state.loading) {
       return (
-        <div className='my-nice-tab-container'>
+        <div>
           <div className='loading-state'>Loading...</div>
         </div>
       )
     } else {
       return (
-        <nav className="navbar navbar-inverse bg-inverse navbar-toggleable-md">
-          <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <img src={'/images/redIcon.png'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.red}</div>
-              </li>
-              <li className="nav-item">
-                <img src={'/images/blackIcon.png'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.black}</div>
-              </li>
-              <li className="nav-item">
-                <img src={'/images/blueIcon.png'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.blue}</div>
-              </li>
-              <li className="nav-item">
-                <img src={'/images/yellowIcon.png'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.yellow}</div>
-              </li>
-              <li className="nav-item">
-                <img src={'/images/infectionMarker.jpg'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.infection}</div>
-              </li>
-              <li className="nav-item">
-                <img src={'/images/OutbreakMarker.png'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.outbreaks}</div>
-              </li>
-              <li className="nav-item">
-                <img src={'/images/researchCenter.png'} width="30" height="30" alt="" />
-              </li>
-              <li className="nav-item">
-                <div className="nav-link">{this.state.researchCenter}</div>
-              </li>
-              <li><WhoAmI auth={auth}/></li>
-              <li className="nav-item">
-                <div className="nav-link">Current Turn: {currPlayerName}</div>
-              </li>
-              <li className="nav-item">
-                <button className="btn btn-outline-success" onClick={this.openRules}>Rules</button>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        <Menu inverted>
+        <Menu.Item>
+          <img src={'/images/redIcon.png'} />
+          {this.state.red}
+          <img src={'/images/blackIcon.png'} />
+          {this.state.black}
+          <img src={'/images/blueIcon.png'} />
+          {this.state.blue}
+          <img src={'/images/yellowIcon.png'} />
+          {this.state.yellow}
+          <img src={'/images/infectionMarker.jpg'} />
+          {this.state.infection}
+          <img src={'/images/OutbreakMarker.png'} />
+          {this.state.outbreaks}
+          <img src={'/images/researchCenter.png'} />
+          {this.state.researchCenter}
+        </Menu.Item>
+
+        <Menu.Item>
+          Current Turn: {currPlayerName}
+        </Menu.Item>
+
+        <Menu.Item>
+         <Rules />
+        </Menu.Item>
+
+        <Menu.Item>
+          <WhoAmI auth={auth}/>
+        </Menu.Item>
+      </Menu>
       )
     }
   }
