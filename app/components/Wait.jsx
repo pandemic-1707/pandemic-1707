@@ -80,6 +80,7 @@ export default class Wait extends Component {
             position: cdcLocation,
             numActions: NUM_STARTING_ACTIONS
           })
+          // TODO: move to firebase backend for game state init
             .then(() => {
               const shuffledCurrPlayers = shuffle(Object.keys(newSnapshot.val().players))
               fire.database().ref(`/rooms/${roomName}/state`).update({
