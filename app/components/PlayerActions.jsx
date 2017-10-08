@@ -4,14 +4,19 @@ import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 import axios from 'axios'
 
+const NUM_CARDS_FOR_CURE = 5
+
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
+// TODO: most efficient to check for conditions after movement confirmed () =>
+//  make a backend cloud func that listens for player loc change and sets state as needed
+// TODO: modularize actions
 
 export default class PlayerActions extends Component {
   constructor(props) {
     super(props)
     this.state = {
       players: {},
-      cities: [],
+      cities: {},
       currPlayer: ''
     }
 
@@ -51,7 +56,7 @@ export default class PlayerActions extends Component {
     //   })
   }
 
-  // TODO: get the active player
+  // TODO: get the active playercities
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
     return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
@@ -112,8 +117,44 @@ export default class PlayerActions extends Component {
     }
   }
 
+  // ///////CURE///////
+  // canCureDisease > displayCardsForCure > handleCureCardChange, handleCureCardConfirm > cureDisease > change treat func so that it will auto cure all disease
+
+  // check if it's possible to cure disease at this city
+    // TODO: refactor to only have to check if research city once 
+  // returns { curableColors: curableColors, sameColors: sameColors }
+  // sameColors has key=color, value = array of cards of same color
+  // curableColors is array of curable colors
+    // if we have no curableColors, deactivate cure button
+  canCureDisease = (activePlayer, allCities) => {
+    // are we in a research city?
+    console.log("ACTIVE PLAYER", activePlayer)
+    console.log("ALL CITIES", allCities)
+    const activePlayerCity = activePlayer.position.city
+    const researchCity = Object.keys(allCities).find(function (city) {
+      if (city === activePlayerCity && allCities[city].research === true) {
+        return city
+      }
+    })
+    // do we have 5 city cards of the same color
+    const sameColors = {}
+    activePlayer.hand.forEach(function (card) {
+      if (card.props) {
+        if (sameColors[card.props.color]) sameColors[card.props.color].push(card)
+        else sameColors[card.props.color] = [card]
+      }
+    })
+    const curableColors = Object.keys(sameColors).map(function (color) {
+      if (sameColors[color] >= NUM_CARDS_FOR_CURE) return color
+    })
+    console.log("CAN CURE", { curableColors: curableColors, sameColors: sameColors })
+    return { curableColors: curableColors, sameColors: sameColors }
+  }
+
   render() {
-    const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
+    const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
+    const allCities = this.state.cities
+    if (activePlayer.position && allCities) this.canCureDisease(activePlayer, allCities)
     return (
       <div>
         <div className="container-fluid player-actions-panel">
