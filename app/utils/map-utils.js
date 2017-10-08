@@ -11,8 +11,8 @@ export function mapDataToMarkers(cities) {
     // assign the color stored on city object as a class name
     const cityMarker = divIcon({className: `city-marker ${city.color}`, html: html})
     // return a marker with position and custom icon
-    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker} >
-      <Tooltip direction='top' offset={[-8, -2]} opacity={1} >
+    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker}>
+      <Tooltip direction='top' offset={[-8, -2]} opacity={1}>
         <span>{key.split('-').join(' ')}</span>
       </Tooltip>
     </Marker>
