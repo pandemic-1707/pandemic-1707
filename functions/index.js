@@ -6,7 +6,7 @@ const cors = require('cors')({origin: true})
 admin.initializeApp(functions.config().firebase)
 
 const { state, cities, infectionDeck, events } = require('./data')
-const { shuffle, finalizePlayerDeck } = require('./utils')
+const { shuffle, finalizePlayerDeck, handleOutbreak } = require('./utils')
 
 const NUM_EPIDEMICS = 4
 
@@ -67,6 +67,20 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
     updatedData['/infectionDiscard'] = discardPile
 
     return event.data.ref.parent.update(updatedData)
+  })
+
+// update the tiles any time an infection rate changes
+exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infectionRate')
+  .onUpdate(event => {
+    const stateRef = event.data.ref.parent.parent.parent.child('state')
+    const difference = event.data.val() - event.data.previous.val()
+    const color = cities[event.params.city].color + 'Tiles'
+
+    return stateRef.child(color).once('value').then(snapshot => {
+      const oldCount = snapshot.val()
+      const newCount = oldCount - difference
+      return stateRef.update({[color]: newCount})
+    })
   })
 
 // exports.infectNextCities = functions.database.ref('')
