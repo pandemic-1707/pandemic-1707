@@ -83,8 +83,6 @@ exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infect
     })
   })
 
-// exports.infectNextCities = functions.database.ref('')
-
 // listen for changes to player's hands; if there's an epidemic card, handle it
 exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId}/hand')
   .onUpdate(event => {
