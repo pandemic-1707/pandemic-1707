@@ -22,6 +22,7 @@ exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
   .onCreate(event => {
     const numPlayers = event.data.val().numPlayers
     const { playerDeck, hands } = finalizePlayerDeck(numPlayers, NUM_EPIDEMICS)
+    console.log('hands', hands)
     const roles = ['Scientist', 'Generalist', 'Researcher', 'Medic', 'Dispatcher']
     const colors = [ { name: 'pink', 'hexVal': '#EB0069' },
       { name: 'blue', 'hexVal': '#00BDD8' },

@@ -11,7 +11,7 @@ module.exports = function(numPlayers, playerDeck) {
   for (let i = 0; i < numPlayers; i++) {
     const hand = [] // individual player hand
     for (let j = 0; j < numPlayerHandCards; j++) {
-      hands.push(playerDeck.pop())
+      hand.push(playerDeck.pop())
     }
     hands.push(hand)
   }
