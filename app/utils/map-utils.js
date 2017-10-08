@@ -1,7 +1,7 @@
 import React from 'react'
 import cities from '../../functions/data/cities'
 import L, { divIcon } from 'leaflet'
-import { Marker, Polyline } from 'react-leaflet'
+import { Marker, Polyline, Tooltip } from 'react-leaflet'
 
 export function mapDataToMarkers(cities) {
   return Object.keys(cities).map(key => {
@@ -10,12 +10,12 @@ export function mapDataToMarkers(cities) {
     const html = city.infectionRate ? city.infectionRate : ''
     // assign the color stored on city object as a class name
     const cityMarker = divIcon({className: `city-marker ${city.color}`, html: html})
-      .bindTooltip('Label me', {
-        permanent: true,
-        direction: 'right'
-      })
     // return a marker with position and custom icon
-    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker} />
+    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker} >
+      <Tooltip direction='top' offset={[-8, -2]} opacity={1} >
+        <span>{key.split('-').join(' ')}</span>
+      </Tooltip>
+    </Marker>
   })
 }
 
