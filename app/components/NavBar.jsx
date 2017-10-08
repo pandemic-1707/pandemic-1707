@@ -27,8 +27,6 @@ export default class NavBar extends Component {
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
       const gameState = snapshot.val()
-      console.log('i detect a state change!')
-      console.log(gameState)
       if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })
     })
 
@@ -82,8 +80,6 @@ export default class NavBar extends Component {
   render() {
     const { players, currPlayer } = this.state
     let currPlayerName = ''
-    console.log('this.state.gameState')
-    console.log(this.state.gameState)
     if (currPlayer) {
       currPlayerName = players[currPlayer].name
     }
