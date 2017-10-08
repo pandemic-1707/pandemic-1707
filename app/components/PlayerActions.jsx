@@ -7,6 +7,9 @@ import axios from 'axios'
 const NUM_CARDS_FOR_CURE = 5
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
+// TODO: most efficient to check for conditions after movement confirmed () =>
+//  make a backend cloud func that listens for player loc change and sets state as needed
+// TODO: modularize actions
 
 export default class PlayerActions extends Component {
   constructor(props) {
@@ -14,7 +17,8 @@ export default class PlayerActions extends Component {
     this.state = {
       players: {},
       cities: [],
-      currPlayer: ''
+      currPlayer: '',
+      cureCards: []
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -39,11 +43,6 @@ export default class PlayerActions extends Component {
     })
   }
 
-  handleMoveAction = () => {
-    // create popup
-
-  }
-
   handleClick() {
     console.log('you tried to cause an epidemic! x)')
     // CHANGE TO DATABASE WRITE
@@ -53,7 +52,6 @@ export default class PlayerActions extends Component {
     //   })
   }
 
-  // TODO: get the active player
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
     return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
@@ -116,7 +114,7 @@ export default class PlayerActions extends Component {
 
   // returns { curableColors: curableColors, sameColors: sameColors }
   // sameColors has key=color, value = array of cards of same color
-  // curableColors is array of curable colors
+  // curableColors is array of curable colors (if none, no curable colors)
   // if we have no curableColors, deactivate cure button
   canCureDisease = (activePlayer, allCities) => {
     // are we in a research city?
@@ -129,26 +127,69 @@ export default class PlayerActions extends Component {
     // do we have 5 city cards of the same color
     const sameColors = {}
     activePlayer.hand.forEach(function (card) {
-      if (sameColors[card.props.color]) sameColors[card.props.color].push(card)
-      else sameColors[card.props.color] = [card]
+      if (card.props) {
+        if (sameColors[card.props.color]) sameColors[card.props.color].push(card)
+        else sameColors[card.props.color] = [card]
+      }
     })
     const curableColors = Object.keys(sameColors).map(function (color) {
       if (sameColors[color] >= NUM_CARDS_FOR_CURE) return color
     })
+    console.log("CAN CURE", { curableColors: curableColors, sameColors: sameColors })
     return { curableColors: curableColors, sameColors: sameColors }
   }
 
-  cureDisease = () => {
+  handleCureCardConfirm = (e) => {
+    e.preventDefault()
+    // TODO: check that cards are all same color
+    const selectedCureCards = this.state.cureCards
+    this.cureDisease(selectedCureCards)
+  }
+
+  // changes to the dropdown selection
+  handleCureCardChange = (e) => {
+    // e.target.value is array of selected cards
+    this.setState({ cureCards: e.target.value })
+  }
+
+  // allow player to choose 5 cards to discard for cure
+  // takes obj of form { curableColors: curableColors, sameColors: sameColors }
+  // from canCureDisease
+  // TODO: after confirm: if (curables.curableColors.length) this.displayCardsForCure
+  // TODO: check that cards are all same color
+  displayCardsForCure = (curables) => {
+    const curableColors = curables.curableColors
+    const sameColors = curables.sameColors
+    return (
+      <div>
+        <select id="select-cards-for-cure" multiple="multiple" onChange={this.handleCureCardChange}>
+          {
+            curableColors.map((color) => {
+              <optgroup label={color}>
+                {
+                  sameColors[color].map((cityName) => {
+                    return <option key={cityName} value={cityName}>{cityName}</option>
+                  })
+                })
+              }
+            </optgroup>
+            })
+          }
+        </select>
+        <button onClick={this.handleCureCardConfirm} >Confirm</button>
+      </div>
+    )
+  }
+
+  // cureCards is array of cards to be discarded for cure
+  cureDisease = (cureCards) => {
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
-    // TODO: allow player to pick 5 cards they want to discard,
-    // put in toDiscard array
-    // look for cards to discard and create newHand without the discarded cards
-    const toDiscard = []
+    // look for cure cards to discard and create newHand without the cure cards
     const newHand = activePlayer.hand.filter(function (card) {
       // newHand can't have any cards we want to discard
-      return toDiscard.every(function (toDiscard) {
-        return card.city !== toDiscard.city
+      return cureCards.every(function (cureCards) {
+        return card.city !== cureCards.city
       })
     })
     fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
@@ -168,6 +209,8 @@ export default class PlayerActions extends Component {
 
   render() {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
+    const allCities = this.state.cities && this.state.cities
+    if (activePlayer.position.city && allCities) this.canCureDisease(activePlayer, allCities)
     return (
       <div>
         <div className="container-fluid player-actions-panel">
