@@ -5,17 +5,22 @@ const admin = require('firebase-admin')
 const cors = require('cors')({origin: true})
 admin.initializeApp(functions.config().firebase)
 
-const { cities, infectionDeck, events } = require('./data')
+const { state, cities, infectionDeck, events } = require('./data')
 const { shuffle, finalizePlayerDeck } = require('./utils')
 
 const NUM_EPIDEMICS = 4
 
+// set the initial game state
+exports.initializeState = functions.database.ref('/rooms/{name}')
+  .onCreate(event => event.data.ref.child('state').set(state))
+
 // shuffle the infection deck and add it to the room
 exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    const shuffled = shuffle(infectionDeck)
-    return event.data.ref.child('infectionDeck').set(shuffled)
-  })
+  .onCreate(event => event.data.ref.child('infectionDeck').set(shuffle(infectionDeck)))
+
+// load the initial city data and add it to the room
+exports.initializeCities = functions.database.ref('/rooms/{name}')
+  .onCreate(event => event.data.ref.child('cities').set(cities))
 
 // initialize players info
 exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
@@ -38,13 +43,7 @@ exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
     return event.data.ref.update(updatedData)
   })
 
-// load the initial city data and add it to the room
-exports.initializeCities = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    return event.data.ref.child('cities').set(cities)
-  })
-
-// // use the first nine cities on the infection deck to set infection rates for start cities
+// use the first nine cities on the infection deck to set infection rates for start cities
 exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDeck')
   .onCreate(event => {
     const deck = event.data.val()
@@ -70,6 +69,8 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
     return event.data.ref.parent.update(updatedData)
   })
 
+// exports.infectNextCities = functions.database.ref('')
+
 // listen for changes to player's hands; if there's an epidemic card, handle it
 exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId}/hand')
   .onUpdate(event => {
@@ -92,6 +93,7 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
 
           // TO-DO:
           // step 1: increase -- move the infection level forward
+
 
           // step 2: infect -- draw the bottom card from the infection deck & add to discard
           // TO-DO: UNLESS IT'S BEEN ERADICATED
