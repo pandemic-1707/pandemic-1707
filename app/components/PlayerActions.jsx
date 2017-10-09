@@ -177,8 +177,8 @@ export default class PlayerActions extends Component {
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const allCities = this.state.cities
-    // const canCure = this.canCureDisease(activePlayer, allCities)
-    const canCure = true
+    const canCure = this.canCureDisease(activePlayer, allCities)
+    // const canCure = true
     console.log("ACTIVE PLAYER", activePlayer)
     return (
       <div>
