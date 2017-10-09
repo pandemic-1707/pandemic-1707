@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
-import cureUtils from '../utils/cure-utils.js'
 import {Button, Menu} from 'semantic-ui-react'
 import PlayerActionsCure from './PlayerActionsCure'
-
-const NUM_CARDS_FOR_CURE = 5
+import cureUtils from '../utils/cure-utils.js'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: most efficient to check for conditions after movement confirmed () =>
@@ -114,35 +112,6 @@ export default class PlayerActions extends Component {
     }
   }
 
-  // ///////CURE///////
-  // canCureDisease > displayCardsForCure > handleCureCardChange, handleCureCardConfirm > cureDisease > change treat func so that it will auto cure all disease
-
-  // allow player to choose 5 cards to discard for cure
-  // takes obj of form { curableColors: curableColors, sameColors: sameColors }
-  // from canCureDisease
-  // TODO: after confirm: if (curables.curableColors.length) this.displayCardsForCure
-  // TODO: check that cards are all same color
-  displayCardsForCure = (curables) => {
-    const curableColors = curables.curableColors
-    const sameColors = curables.sameColors
-    console.log("DISPLAY CURE CARDS", curableColors, sameColors)
-    return (
-      <div>
-        <select id="select-cards-for-cure" className="ui upward dropdown" multiple>
-          {
-            sameColors['blue'].map(function (card) {
-              const cityName = card.city
-              return <option key={cityName} value={cityName}>
-                <input id="checkBox" type="checkbox"></input> {cityName}
-                </option>
-            })
-          }
-        </select>
-        <button onClick={this.handleCureCardConfirm} >Confirm</button>
-      </div>
-    )
-  }
-
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const allCities = this.state.cities
@@ -186,18 +155,6 @@ export default class PlayerActions extends Component {
       }
     }
 
-    const customStyles = {
-      content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-      }
-    }
-
-    console.log("ACTIVE PLAYER", activePlayer)
     return (
       <Menu inverted>
         <Menu.Item>
@@ -209,7 +166,7 @@ export default class PlayerActions extends Component {
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <PlayerActionsCure />
+        <PlayerActionsCure curables={canCure} activePlayer={activePlayer}/>
         </Menu.Item>
         <Menu.Item>
         <Button
