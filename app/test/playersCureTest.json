@@ -1,6 +1,6 @@
 {
   "players": {
-      "i'm not in a research city => return false": {
+    "i'm not in a research city => return false": {
       "color": {
         "hexVal": "#74DE00",
         "name": "green"
@@ -70,6 +70,58 @@
           "city": "Riyadh",
           "props": {
             "color": "black"
+          }
+        }
+      ],
+      "name": "aw@a.com",
+      "numActions": 4,
+      "offset": [
+        -1,
+        -1
+      ],
+      "position": {
+        "city": "Atlanta",
+        "location": [
+          33.748995,
+          -84.387982
+        ]
+      },
+      "role": "Researcher"
+    },
+    "i'm in research city & have 5 cure cards => return obj": {
+      "color": {
+        "hexVal": "#74DE00",
+        "name": "green"
+      },
+      "hand": [
+        {
+          "city": "Atlanta",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Chicago",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Essen",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Madrid",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Milan",
+          "props": {
+            "color": "blue"
           }
         }
       ],

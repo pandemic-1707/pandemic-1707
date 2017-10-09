@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import fire from '../../fire'
 import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
+import cureUtils from '../utils/cure-utils.js'
 
 const NUM_CARDS_FOR_CURE = 5
 
@@ -54,8 +55,6 @@ export default class PlayerActions extends Component {
   // returns active player uid key
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
-    console.log("IN METHOD CURR PLAYER KEY", this.state.currPlayer)
-    console.log("IN METHOD CURR PLAYER", players[this.state.currPlayer])
     return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
   }
 
@@ -117,68 +116,86 @@ export default class PlayerActions extends Component {
   // ///////CURE///////
   // canCureDisease > displayCardsForCure > handleCureCardChange, handleCureCardConfirm > cureDisease > change treat func so that it will auto cure all disease
 
-  // check if it's possible to cure disease at this city
-  // TODO: refactor to only have to check if research city once 
-  // returns { curableColors: curableColors, sameColors: sameColors }
-  // sameColors has key=color, value = array of cards of same color
-  // curableColors is array of curable colors
-  // if we have no curableColors, deactivate cure button
-  canCureDisease = (activePlayer, allCities) => {
-    // are we in a research city?
-    const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
-    const researchCity = Object.keys(allCities).find(function (city) {
-      if (city === activePlayerCity && allCities[city].research === true) {
-        return city
-      }
-    })
-    if (researchCity) {
-      // do we have 5 city cards of the same color
-      const sameColors = {}
-      activePlayer.hand.forEach(function (card) {
-        if (card.props) {
-          if (sameColors[card.props.color]) sameColors[card.props.color].push(card)
-          else sameColors[card.props.color] = [card]
-        }
-      })
-      const curableColors = []
-      Object.keys(sameColors).map(function (color) {
-        if (sameColors[color] >= NUM_CARDS_FOR_CURE) curableColors.push(color)
-      })
-      if (curableColors.length) return { curableColors: curableColors, sameColors: sameColors }
-      else return false
-    }
-    return false
-  }
-
-  // cureCards is array of cards to be discarded for cure
-  cureDisease = () => {
-    const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
-    const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
-    // look for cure cards to discard and create newHand without the cure cards
-    // const cureCards = this.state.cureCards
-    const cureCards = ['Shanghai', 'Bangkok']
-    const newHand = activePlayer.hand.filter(function (card) {
-      // newHand can't have any cards we want to discard
-      return cureCards.every(function (cureCards) {
-        return card.city !== cureCards.city
-      })
-    })
-    fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-      numActions: activePlayer.numActions - 1,
-      hand: newHand
-    })
-    // add to curedDiseases
-    fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-      curedDiseases: []
-    })
-    // TODO: ... have treat disease clear all 3 infection rate for the color 
+  // allow player to choose 5 cards to discard for cure
+  // takes obj of form { curableColors: curableColors, sameColors: sameColors }
+  // from canCureDisease
+  // TODO: after confirm: if (curables.curableColors.length) this.displayCardsForCure
+  // TODO: check that cards are all same color
+  displayCardsForCure = (curables) => {
+    const curableColors = curables.curableColors
+    const sameColors = curables.sameColors
+    console.log("DISPLAY CURE CARDS", curableColors, sameColors)
+    return (
+      <div>
+        <select id="select-cards-for-cure" className="ui upward dropdown" multiple>
+          {
+            sameColors['blue'].map(function (card) {
+              const cityName = card.city
+              return <option key={cityName} value={cityName}>
+                <input id="checkBox" type="checkbox"></input> {cityName}
+                </option>
+            })
+          }
+        </select>
+        <button onClick={this.handleCureCardConfirm} >Confirm</button>
+      </div>
+    )
   }
 
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const allCities = this.state.cities
-    const canCure = this.canCureDisease(activePlayer, allCities)
-    // const canCure = true
+    // const canCure = cureUtils.canCureDisease(activePlayer, allCities)
+
+    const canCure = {
+      curableColors: ['blue'],
+      sameColors: {
+        blue: [
+          {
+            'city': 'Atlanta',
+            'props': {
+              'color': 'blue'
+            }
+          },
+          {
+            'city': 'Chicago',
+            'props': {
+              'color': 'blue'
+            }
+          },
+          {
+            'city': 'Essen',
+            'props': {
+              'color': 'blue'
+            }
+          },
+          {
+            'city': 'Madrid',
+            'props': {
+              'color': 'blue'
+            }
+          },
+          {
+            'city': 'Milan',
+            'props': {
+              'color': 'blue'
+            }
+          }
+        ]
+      }
+    }
+
+    const customStyles = {
+      content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+      }
+    }
+
     console.log("ACTIVE PLAYER", activePlayer)
     return (
       <div>
@@ -192,7 +209,7 @@ export default class PlayerActions extends Component {
             </div>
             <div className="col-sm-2 player-action text-center">
               {
-                canCure && <button onClick={this.cureDisease}>Cure</button>
+                canCure && this.displayCardsForCure(canCure)
               }
             </div>
             <div className="col-sm-2 player-action text-center">

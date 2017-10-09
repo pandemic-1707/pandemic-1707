@@ -1,8 +1,10 @@
 const NUM_CARDS_FOR_CURE = 5
 
 module.exports = {
+// ///////CURE///////
+  // canCureDisease > displayCardsForCure > handleCureCardChange, handleCureCardConfirm > cureDisease > change treat func so that it will auto cure all disease
 
-    // check if it's possible to cure disease at this city
+  // check if it's possible to cure disease at this city
   // TODO: refactor to only have to check if research city once 
   // returns { curableColors: curableColors, sameColors: sameColors }
   // sameColors has key=color, value = array of cards of same color
@@ -27,7 +29,7 @@ module.exports = {
       })
       const curableColors = []
       Object.keys(sameColors).map(function (color) {
-        if (sameColors[color] >= NUM_CARDS_FOR_CURE) curableColors.push(color)
+        if (sameColors[color].length >= NUM_CARDS_FOR_CURE) curableColors.push(color)
       })
       if (curableColors.length) return { curableColors: curableColors, sameColors: sameColors }
       else return false
