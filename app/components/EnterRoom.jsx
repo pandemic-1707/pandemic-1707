@@ -52,6 +52,7 @@ class EnterRoom extends Component {
     this.saveRoomData = this.saveRoomData.bind(this)
     this.savePlayerName = this.savePlayerName.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleRedirect = this.handleRedirect.bind(this)
   }
 
   componentDidMount() {
@@ -111,6 +112,8 @@ class EnterRoom extends Component {
     fire.database().ref(`rooms/${roomName}`).set({
       numPlayers: numPlayers
     })
+  }
+  handleRedirect(e) {
     this.props.history.push(`/rooms/wait/${this.state.roomName}`)
   }
 
@@ -138,6 +141,7 @@ class EnterRoom extends Component {
       )
     }
     return (
+      <div>
       <Modal
         trigger={<Button onClick={this.handleOpen} color="teal">New Game</Button>}
         open={this.state.modalOpen}
@@ -156,12 +160,26 @@ class EnterRoom extends Component {
           </Form.Field>
           <Form.Select label='Number of Players' options={options} placeholder='Number of Players' />
           <Form.Field> {inputFields} </Form.Field>
-          <Button color='green' onClick={this.handleSubmit} inverted>
-            <Icon name='checkmark' /> Submit
-          </Button>
+          
+            <Modal trigger={<Button color='green' onClick={this.handleSubmit} inverted>
+            <Icon name='checkmark' /> Submit</Button>}
+            >
+              <Header icon="linkify" content="Yay!" />
+              <Modal.Content>
+              Send this link to your friends, then enter the room!
+              <br />
+              https://pandemic-1707.firebaseapp.com/rooms/wait/{this.state.roomName}
+              </Modal.Content>
+              <Modal.Actions>
+                <Button color='green' onClick={this.handleRedirect}>
+                  <Icon name='game' /> Play
+                </Button>
+              </Modal.Actions>
+            </Modal>
         </Form>
       </Modal.Content>
       </Modal>
+      </div>
     )
   }
 }
