@@ -1,5 +1,6 @@
 body {
   height: 100%;
+  overflow: hidden;
 }
 .welcome {
   background: url("/images/background.jpg") no-repeat center center fixed; 
@@ -131,4 +132,7 @@ form button {
 }
 .player-action {
   text-align: center;
+}
+#map {
+  height: 70%;
 }

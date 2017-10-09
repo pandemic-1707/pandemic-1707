@@ -42,6 +42,5 @@ module.exports = function(outbreakSite, cities) {
       })
     }
   }
-
   return { updatedData, nOutbreaks }
 }

@@ -3,6 +3,8 @@ import fire from '../../fire/index'
 import shuffle from 'shuffle-array'
 const auth = fire.auth()
 import WhoAmI from './WhoAmI'
+import {Button} from 'semantic-ui-react'
+
 const NUM_STARTING_ACTIONS = 4
 
 export default class Wait extends Component {
@@ -27,6 +29,17 @@ export default class Wait extends Component {
         })
       }
     })
+    // disable Enter Room button if user doesn't belong
+    fire.database().ref(`/rooms/${this.props.match.params.roomName}`).on('value', snapshot => {
+      if (snapshot.val().players) {
+        const playerKeys = Object.keys(snapshot.val().players)
+        if (!playerKeys.includes(this.state.user.uid) && snapshot.val().numPlayers === playerKeys.length) {
+          this.setState({
+            disabledStart: true
+          })
+        }
+      }
+    })
   }
   componentWillUnmount() {
     this.unsubscribe()
@@ -36,9 +49,7 @@ export default class Wait extends Component {
     const { user } = this.state
     const roomName = this.props.match.params.roomName
     fire.database().ref(`/rooms/${roomName}`).once('value').then(snapshot => {
-      // set disableStart to true
       this.setState({
-        disabledStart: true,
         players: snapshot.val().players
       })
       let promise = null
@@ -66,12 +77,13 @@ export default class Wait extends Component {
       })(snapshot.val().numPlayers)
       promise.then(() => {
         fire.database().ref(`/rooms/${roomName}`).once('value').then(newSnapshot => {
+          const val = newSnapshot.val()
           const myOrder = Object.keys(newSnapshot.child('players').val()).indexOf(user.uid)
           console.log('myOrder', myOrder)
-          const myRole = newSnapshot.val().shuffledRoles[myOrder]
-          const myColor = newSnapshot.val().shuffledColors[myOrder]
+          const myRole = val.shuffledRoles[myOrder]
+          const myColor = val.shuffledColors[myOrder]
           const cdcLocation = {city: 'Atlanta', location: [33.748995, -84.387982]}
-          const myHand = newSnapshot.val().playerHandsArr[myOrder]
+          const myHand = val.playerHandsArr[myOrder]
           return fire.database().ref(`/rooms/${roomName}/players/${user.uid}`).update({
             role: myRole,
             color: myColor,
@@ -81,7 +93,7 @@ export default class Wait extends Component {
             numActions: NUM_STARTING_ACTIONS
           })
           .then(() => {
-            const shuffledCurrPlayers = shuffle(Object.keys(newSnapshot.val().players))
+            const shuffledCurrPlayers = shuffle(Object.keys(val.players))
             fire.database().ref(`/rooms/${roomName}/state`).update({
               currPlayer: shuffledCurrPlayers[0],
               currPlayersArr: shuffledCurrPlayers,
@@ -89,7 +101,8 @@ export default class Wait extends Component {
             })
           })
           .then(() => {
-            if (newSnapshot.val().numPlayers !== Object.keys(newSnapshot.val().players).length) {
+            const playerKeys = Object.keys(val.players)
+            if (playerKeys.includes(user.uid) && val.numPlayers > playerKeys.length) {
               alert('Waiting for your friends to join')
             } else {
               this.props.history.push(`/rooms/${roomName}`)
@@ -103,9 +116,10 @@ export default class Wait extends Component {
     return (
       <div>
         <WhoAmI auth={auth}/>
-        <button onClick={this.startGame}
-        disabled={this.state.disabledStart}
-        className="btn btn-success">Enter Room</button>
+        <Button className={this.state.disabledStart ? 'disabled' : ''}
+        onClick={this.startGame}
+        color="teal"
+        content="Enter Room" />
       </div>
     )
   }
