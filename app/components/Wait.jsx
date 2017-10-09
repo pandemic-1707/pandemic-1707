@@ -31,11 +31,13 @@ export default class Wait extends Component {
     })
     // disable Enter Room button if user doesn't belong
     fire.database().ref(`/rooms/${this.props.match.params.roomName}`).on('value', snapshot => {
-      const playerKeys = Object.keys(snapshot.val().players)
-      if (!playerKeys.includes(this.state.user.uid) && snapshot.val().numPlayers === playerKeys.length) {
-        this.setState({
-          disabledStart: true
-        })
+      if (snapshot.val().players) {
+        const playerKeys = Object.keys(snapshot.val().players)
+        if (!playerKeys.includes(this.state.user.uid) && snapshot.val().numPlayers === playerKeys.length) {
+          this.setState({
+            disabledStart: true
+          })
+        }
       }
     })
   }
@@ -100,7 +102,7 @@ export default class Wait extends Component {
           })
           .then(() => {
             const playerKeys = Object.keys(val.players)
-            if (playerKeys.includes(user.uid) && val.numPlayers < playerKeys.length) {
+            if (playerKeys.includes(user.uid) && val.numPlayers > playerKeys.length) {
               alert('Waiting for your friends to join')
             } else {
               this.props.history.push(`/rooms/${roomName}`)

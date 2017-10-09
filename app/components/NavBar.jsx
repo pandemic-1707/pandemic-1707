@@ -11,19 +11,18 @@ export default class NavBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      red: 24,
-      yellow: 24,
-      black: 24,
-      blue: 24,
-      infectionIdx: 0,
-      outbreaks: 0,
-      researchCenter: 1,
+      gameState: {},
       currPlayer: '',
       players: {},
       loading: true
     }
   }
   componentDidMount() {
+    fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
+      const gameState = snapshot.val()
+      if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })
+    })
+
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       const currPlayer = snapshot.val().state.currPlayer
       const players = snapshot.val().players
@@ -70,18 +69,7 @@ export default class NavBar extends Component {
       this.setState({loading: false})
     }, 1000)
   }
-  componentWillMount() {
-    // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-      red: this.state.red,
-      yellow: this.state.yellow,
-      black: this.state.black,
-      blue: this.state.blue,
-      infectionIdx: this.state.infectionIdx,
-      outbreaks: this.state.outbreaks,
-      researchCenter: this.state.researchCenter
-    })
-  }
+
   render() {
     const { players, currPlayer } = this.state
     let currPlayerName = ''
@@ -99,19 +87,19 @@ export default class NavBar extends Component {
         <Menu inverted>
         <Menu.Item>
           <img src={'/images/redIcon.png'} />
-          {this.state.red}
+          {this.state.gameState.red}
           <img src={'/images/blackIcon.png'} />
-          {this.state.black}
+          {this.state.gameState.black}
           <img src={'/images/blueIcon.png'} />
-          {this.state.blue}
+          {this.state.gameState.blue}
           <img src={'/images/yellowIcon.png'} />
-          {this.state.yellow}
+          {this.state.gameState.yellow}
           <img src={'/images/infectionMarker.jpg'} />
-          {this.state.infection}
+          {this.state.gameState.infection}
           <img src={'/images/OutbreakMarker.png'} />
-          {this.state.outbreaks}
+          {this.state.gameState.outbreaks}
           <img src={'/images/researchCenter.png'} />
-          {this.state.researchCenter}
+          {this.state.gameState.researchCenter}
         </Menu.Item>
 
         <Menu.Item>
@@ -123,7 +111,7 @@ export default class NavBar extends Component {
         </Menu.Item>
 
         <Menu.Item>
-          {`Welcome, ${this.state.players[currPlayer].name}!`}
+          {`Welcome, ${auth.currentUser.displayName}!`}
           <Button size="tiny" onClick={() => auth.signOut()}>Logout</Button>
         </Menu.Item>
       </Menu>

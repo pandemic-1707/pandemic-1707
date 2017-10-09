@@ -1,6 +1,15 @@
 const firebase = require('firebase')
 
 // -- // -- // -- // Firebase Config // -- // -- // -- //
+const config = {
+  apiKey: "AIzaSyAGBkAvlLOydiC7O_BOqV5XxiYuj-MZ1EE",
+  authDomain: "pandemic-1707.firebaseapp.com",
+  databaseURL: "https://pandemic-1707.firebaseio.com",
+  projectId: "pandemic-1707",
+  storageBucket: "pandemic-1707.appspot.com",
+  messagingSenderId: "1029700706030"
+}
+
 // const config = {
 //   apiKey: "AIzaSyDEXSwSvp-dKXB8wJPgHD_HUNyvMS7DmU8",
 //   authDomain: "my-pandemic-dev.firebaseapp.com",
@@ -9,15 +18,6 @@ const firebase = require('firebase')
 //   storageBucket: "",
 //   messagingSenderId: "728951653926"
 // }
-
-const config = {
-  apiKey: 'AIzaSyAGBkAvlLOydiC7O_BOqV5XxiYuj-MZ1EE',
-  authDomain: 'pandemic-1707.firebaseapp.com',
-  databaseURL: 'https://pandemic-1707.firebaseio.com',
-  projectId: 'pandemic-1707',
-  storageBucket: 'pandemic-1707.appspot.com',
-  messagingSenderId: '1029700706030'
-}
 
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 
