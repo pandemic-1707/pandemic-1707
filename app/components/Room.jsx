@@ -52,7 +52,7 @@ export default class Room extends Component {
               <div><Chat auth={auth} fireRef={db.ref(`/rooms/${this.props.match.params.roomName}/chat`)} /></div>
             </div>
             <div className="main-content">
-              <NavBar roomName={this.props.match.params.roomName} />
+              <header><NavBar roomName={this.props.match.params.roomName} /></header>
               <Map roomName={this.props.match.params.roomName} />
               <footer className="footer">
                 {
