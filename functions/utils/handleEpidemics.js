@@ -1,14 +1,18 @@
-module.exports = function(roomRef, playerRef, player) {
+const handleOutbreak = require('./handleOutbreak')
+const shuffle = require('./shuffle')
+
+module.exports = function(refs) {
+  const { player, playerRef, roomRef } = refs
 
   playerRef.child('hand').once('value').then(snapshot => {
     const hand = snapshot.val()
 
     for (const card in hand) {
       if (hand[card].hasOwnProperty('Epidemic')) {
-        const fetchCities = room.child('cities').once('value').then(snapshot => snapshot.val())
-        const fetchInfectionDeck = room.child('infectionDeck').once('value').then(snapshot => snapshot.val())
-        const fetchInfectionDiscard = room.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
-    
+        const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
+        const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
+        const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
+
         return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
         .then(data => {
           const cities = data[0]
@@ -31,27 +35,9 @@ module.exports = function(roomRef, playerRef, player) {
           updatedDecks['/infectionDiscard'] = []
 
           const all = Object.assign({}, updatedDecks, updatedOutbreakData)
-          return room.update(all)
-
+          return roomRef.update(all)
+        })
       }
     }
-  }
-  
-
-  return Promise.all([fetchPlayerHand, fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
-  .then(data => {
-    const updatedData = {}
-    const playerDeck = data[0]
-    const playerHand = data[1]
-
-    // pop two cards off the playerDeck
-    const firstCard = playerDeck.pop()
-    const secondCard = playerDeck.pop()
-    playerHand.push(firstCard, secondCard)
-
-    updatedData['/playerDeck'] = playerDeck
-    updatedData[`/players/${player}/hand`] = playerHand
-
-    return roomRef.update(updatedData)
   })
 }

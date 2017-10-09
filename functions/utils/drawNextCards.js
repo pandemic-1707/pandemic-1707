@@ -1,4 +1,5 @@
-module.exports = function(roomRef, playerRef, player) {
+module.exports = function(refs) {
+  const { player, playerRef, roomRef } = refs
   const fetchPlayerDeck = roomRef.child('playerDeck').once('value').then(snapshot => snapshot.val())
   const fetchPlayerHand = playerRef.child('hand').once('value').then(snapshot => snapshot.val())
 
