@@ -43,7 +43,7 @@ export default class PlayerActions extends Component {
     })
     fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).on('value', snapshot => {
       this.setState({
-        currPlayer: snapshot.val(),
+        cureCards: snapshot.val(),
       })
     })
   }
@@ -65,6 +65,8 @@ export default class PlayerActions extends Component {
   // TODO: get the active playercities
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
+    console.log("IN METHOD CURR PLAYER KEY", this.state.currPlayer)
+    console.log("IN METHOD CURR PLAYER", players[this.state.currPlayer])
     return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
   }
 
@@ -86,7 +88,7 @@ export default class PlayerActions extends Component {
   }
 
   buildResearch = () => {
-    const activePlayer = this.getActivePlayer(this.state.players)
+    const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
     const buildInCity = activePlayer.hand.find(function (card) {
       return card.city === activePlayerCity
@@ -161,7 +163,7 @@ export default class PlayerActions extends Component {
 
   // cureCards is array of cards to be discarded for cure
   cureDisease = () => {
-    const activePlayer = this.getActivePlayer(this.state.players)
+    const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
     // look for cure cards to discard and create newHand without the cure cards
     // const cureCards = this.state.cureCards
@@ -188,6 +190,7 @@ export default class PlayerActions extends Component {
     const allCities = this.state.cities
     // const canCure = this.canCureDisease(activePlayer, allCities)
     const canCure = true
+    console.log("ACTIVE PLAYER", activePlayer)
     return (
       <div>
         <div className="container-fluid player-actions-panel">
