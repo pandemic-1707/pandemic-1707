@@ -27,6 +27,7 @@ export default class NavBar extends Component {
     this.setState({rulesOpen: false})
   }
   componentDidMount() {
+    // component listens for changes in the game state (tiles, infection rate, outbreaks, etc.)
     fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
       const gameState = snapshot.val()
       if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })

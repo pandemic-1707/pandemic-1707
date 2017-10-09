@@ -6,7 +6,7 @@ const cors = require('cors')({origin: true})
 admin.initializeApp(functions.config().firebase)
 
 const { state, cities, infectionDeck, events } = require('./data')
-const { shuffle, finalizePlayerDeck, handleOutbreak } = require('./utils')
+const { shuffle, finalizePlayerDeck, handleOutbreak, drawNextCards } = require('./utils')
 
 const NUM_EPIDEMICS = 4
 
@@ -100,6 +100,30 @@ exports.increaseInfectionRate = functions.database.ref('/rooms/{name}/state/outb
 
       return stateRef.update(updatedData)
     })
+  })
+
+// listen for a player's actions to run out (i.e. the end of their turn)
+exports.handleTurnChange = functions.database.ref('/rooms/{name}/players/{player}/numActions')
+  .onUpdate(event => {
+    const turnsRemaining = event.data.val()
+    const player = event.params.player
+    const playerRef = event.data.ref.parent
+    const roomRef = event.data.ref.parent.parent.parent
+
+    // when a player's turn is over
+    if (turnsRemaining === 0) {
+      // draw their next two cards
+      drawNextCards(roomRef, playerRef, player)
+      .then(data => {
+        console.log('data in .then')
+        console.log(data)
+      })
+      // handle any epidemics
+
+      // draw infection cards
+
+      // change to the next player
+    }
   })
 
 // listen for changes to player's hands; if there's an epidemic card, handle it
