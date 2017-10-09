@@ -2,7 +2,7 @@ module.exports = function(roomRef, playerRef, player) {
   const fetchPlayerDeck = roomRef.child('playerDeck').once('value').then(snapshot => snapshot.val())
   const fetchPlayerHand = playerRef.child('hand').once('value').then(snapshot => snapshot.val())
 
-  Promise.all([fetchPlayerDeck, fetchPlayerHand])
+  return Promise.all([fetchPlayerDeck, fetchPlayerHand])
   .then(data => {
     const updatedData = {}
     const playerDeck = data[0]
