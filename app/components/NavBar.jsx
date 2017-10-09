@@ -23,6 +23,8 @@ export default class NavBar extends Component {
       loading: true,
       rulesOpen: false
     }
+    this.openRules = this.openRules.bind(this)
+    this.closeRules = this.closeRules.bind(this)
   }
   openRules() {
     this.setState({rulesOpen: true})
@@ -157,6 +159,7 @@ export default class NavBar extends Component {
               </li>
               <li className="nav-item">
                 <button className="btn btn-outline-success" onClick={this.openRules}>Rules</button>
+                <Rules />
               </li>
             </ul>
           </div>
