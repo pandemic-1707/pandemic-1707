@@ -3,7 +3,7 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import { Menu } from 'semantic-ui-react'
+
 // Get the auth API from Firebase.
 const auth = fire.auth()
 
@@ -14,8 +14,17 @@ export default class NavBar extends Component {
       gameState: {},
       currPlayer: '',
       players: {},
-      loading: true
+      loading: true,
+      rulesOpen: false
     }
+    this.openRules = this.openRules.bind(this)
+    this.closeRules = this.closeRules.bind(this)
+  }
+  openRules() {
+    this.setState({rulesOpen: true})
+  }
+  closeRules() {
+    this.setState({rulesOpen: false})
   }
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
@@ -24,12 +33,11 @@ export default class NavBar extends Component {
     })
 
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
-      const val = snapshot.val()
-      const currPlayer = val.state.currPlayer
-      const players = val.players
+      const currPlayer = snapshot.val().state.currPlayer
+      const players = snapshot.val().players
       this.setState({
-        currPlayer: val.state.currPlayer,
-        players: val.players
+        currPlayer: snapshot.val().state.currPlayer,
+        players: snapshot.val().players
       })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand
@@ -41,19 +49,19 @@ export default class NavBar extends Component {
           // push those 2 onto player's hand
           .then(() => {
             fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-              hand: [...hand, val.playerDeck.shift()]
+              hand: [...hand, snapshot.val().playerDeck.shift()]
             })
           })
           // pull those 2 out of player deck
           .then(() => {
-            const updatedPlayerDeck = val.playerDeck.slice(1)
+            const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
             fire.database().ref(`/rooms/${this.props.roomName}`).update({
               playerDeck: updatedPlayerDeck
             })
           })
           // update to the next currPlayer
           .then(() => {
-            const currPlayersArr = val.state.currPlayersArr
+            const currPlayersArr = snapshot.val().state.currPlayersArr
             const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
             console.log('i', i)
             fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
@@ -79,7 +87,7 @@ export default class NavBar extends Component {
     }
     if (this.state.loading) {
       return (
-        <div>
+        <div className='my-nice-tab-container'>
           <div className='loading-state'>Loading...</div>
         </div>
       )
@@ -139,6 +147,7 @@ export default class NavBar extends Component {
               </li>
               <li className="nav-item">
                 <button className="btn btn-outline-success" onClick={this.openRules}>Rules</button>
+                <Rules />
               </li>
             </ul>
           </div>
