@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
-import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
+<<<<<<< HEAD
 import cureUtils from '../utils/cure-utils.js'
 
 const NUM_CARDS_FOR_CURE = 5
+=======
+import axios from 'axios'
+import {Button, Menu} from 'semantic-ui-react'
+>>>>>>> master
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: most efficient to check for conditions after movement confirmed () =>
@@ -198,37 +202,48 @@ export default class PlayerActions extends Component {
 
     console.log("ACTIVE PLAYER", activePlayer)
     return (
-      <div>
-        <div className="container-fluid player-actions-panel">
-          <div className="row">
-            <div className="col-sm-2 player-action text-center">
-              <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <button onClick={this.treatDisease}>Treat</button>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              {
-                canCure && this.displayCardsForCure(canCure)
-              }
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <button onClick={this.buildResearch}>Build</button>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Share</span>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Event</span>
-            </div>
-          </div>
-          <div className="row text-center">
-            <div className="col-sm-12 text-center">
-              Actions Left: {activePlayer.numActions && activePlayer.numActions}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Menu inverted>
+        <Menu.Item>
+          <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+          onClick={this.treatDisease}>Treat
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+        onClick={this.treatDisease}
+        >
+          Cure
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+        onClick={this.buildResearch}
+        >
+          Build
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button>
+          Share
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button>
+          Event
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+          onClick={this.handleClick}>Epidemic
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          Actions Left: {activePlayer.numActions && activePlayer.numActions}
+        </Menu.Item>
+      </Menu>
     )
   }
 }

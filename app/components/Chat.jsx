@@ -1,6 +1,7 @@
 import React from 'react'
 import firebase from 'APP/fire'
 import ignite, {withAuth, FireInput} from '../utils/ignite'
+import {Button, Form} from 'semantic-ui-react'
 
 const users = firebase.database().ref('users')
     , nickname = uid => users.child(uid).child('nickname')
@@ -41,11 +42,11 @@ export default ignite(withAuth(class extends React.Component {
     if (!user) {
       return <span>You must be logged in to send messages.</span>
     }
-    return <form onSubmit={this.sendMessage}>
+    return <Form onSubmit={this.sendMessage}>
       <FireInput fireRef={nickname(user.uid)} placeholder='your name' />
-      <input className="form-control" placeholder='Type your message...' name='body' />
-      <input className="btn btn-sm btn-primary" type='submit'/>
-    </form>
+      <Form.Input placeholder='Type your message...' name='body' />
+      <Form.Button size="small">Submit</Form.Button>
+    </Form>
   }
 
   render() {

@@ -18,14 +18,6 @@ const config = {
 //   storageBucket: "",
 //   messagingSenderId: "728951653926"
 // }
-// const config = {
-//   apiKey: "AIzaSyBgX0wfqj3WMG7BN9aRiXDhPpNfqhgcvho",
-//   authDomain: "pandemic-dev.firebaseapp.com",
-//   databaseURL: "https://pandemic-dev.firebaseio.com",
-//   projectId: "pandemic-dev",
-//   storageBucket: "pandemic-dev.appspot.com",
-//   messagingSenderId: "76885611649"
-// }
 
 // -- // -- // -- // -- // -- // -- // -- // -- // -- //
 

@@ -29,11 +29,11 @@ export default class Room extends Component {
           userId: user.uid
         })
       }
-    })
-    fire.database().ref(`/rooms/${this.props.match.params.roomName}/state`).on('value', snapshot => {
-      const currPlayer = snapshot.val().currPlayer
-      this.setState({
-        isCurrentPlayer: currPlayer === this.state.userId
+      fire.database().ref(`/rooms/${this.props.match.params.roomName}/state`).on('value', snapshot => {
+        const currPlayer = snapshot.val().currPlayer
+        this.setState({
+          isCurrentPlayer: currPlayer === user.uid
+        })
       })
     })
   }

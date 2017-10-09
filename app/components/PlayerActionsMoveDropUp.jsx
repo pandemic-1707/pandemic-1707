@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dropdown } from 'semantic-ui-react'
+import { Dropdown, Button } from 'semantic-ui-react'
 import fire from '../../fire'
 
 // TODO: remove - hyphens from city names display
@@ -175,7 +175,7 @@ export default class PlayerActionMoveDropUp extends Component {
             {/* display only if you have a card matching your current city */}
             {charter}
           </select>
-          {confirmButton && <button onClick={this.handleConfirm} >Confirm</button>}
+          {confirmButton && <Button size="mini" onClick={this.handleConfirm} >Confirm</Button>}
         </div>
       </div>
     )
