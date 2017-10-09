@@ -3,7 +3,7 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import { Menu } from 'semantic-ui-react'
+
 // Get the auth API from Firebase.
 const auth = fire.auth()
 
@@ -20,17 +20,23 @@ export default class NavBar extends Component {
       researchCenter: 1,
       currPlayer: '',
       players: {},
-      loading: true
+      loading: true,
+      rulesOpen: false
     }
+  }
+  openRules() {
+    this.setState({rulesOpen: true})
+  }
+  closeRules() {
+    this.setState({rulesOpen: false})
   }
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
-      const val = snapshot.val()
-      const currPlayer = val.state.currPlayer
-      const players = val.players
+      const currPlayer = snapshot.val().state.currPlayer
+      const players = snapshot.val().players
       this.setState({
-        currPlayer: val.state.currPlayer,
-        players: val.players
+        currPlayer: snapshot.val().state.currPlayer,
+        players: snapshot.val().players
       })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand
@@ -42,19 +48,19 @@ export default class NavBar extends Component {
           // push those 2 onto player's hand
           .then(() => {
             fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-              hand: [...hand, val.playerDeck.shift()]
+              hand: [...hand, snapshot.val().playerDeck.shift()]
             })
           })
           // pull those 2 out of player deck
           .then(() => {
-            const updatedPlayerDeck = val.playerDeck.slice(1)
+            const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
             fire.database().ref(`/rooms/${this.props.roomName}`).update({
               playerDeck: updatedPlayerDeck
             })
           })
           // update to the next currPlayer
           .then(() => {
-            const currPlayersArr = val.state.currPlayersArr
+            const currPlayersArr = snapshot.val().state.currPlayersArr
             const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
             console.log('i', i)
             fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
@@ -91,42 +97,70 @@ export default class NavBar extends Component {
     }
     if (this.state.loading) {
       return (
-        <div>
+        <div className='my-nice-tab-container'>
           <div className='loading-state'>Loading...</div>
         </div>
       )
     } else {
       return (
-        <Menu inverted>
-        <Menu.Item>
-          <img src={'/images/redIcon.png'} />
-          {this.state.red}
-          <img src={'/images/blackIcon.png'} />
-          {this.state.black}
-          <img src={'/images/blueIcon.png'} />
-          {this.state.blue}
-          <img src={'/images/yellowIcon.png'} />
-          {this.state.yellow}
-          <img src={'/images/infectionMarker.jpg'} />
-          {this.state.infection}
-          <img src={'/images/OutbreakMarker.png'} />
-          {this.state.outbreaks}
-          <img src={'/images/researchCenter.png'} />
-          {this.state.researchCenter}
-        </Menu.Item>
-
-        <Menu.Item>
-          Current Turn: {currPlayerName}
-        </Menu.Item>
-
-        <Menu.Item>
-         <Rules />
-        </Menu.Item>
-
-        <Menu.Item>
-          <WhoAmI auth={auth}/>
-        </Menu.Item>
-      </Menu>
+        <nav className="navbar navbar-inverse bg-inverse navbar-toggleable-md">
+          <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <img src={'/images/redIcon.png'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.red}</div>
+              </li>
+              <li className="nav-item">
+                <img src={'/images/blackIcon.png'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.black}</div>
+              </li>
+              <li className="nav-item">
+                <img src={'/images/blueIcon.png'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.blue}</div>
+              </li>
+              <li className="nav-item">
+                <img src={'/images/yellowIcon.png'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.yellow}</div>
+              </li>
+              <li className="nav-item">
+                <img src={'/images/infectionMarker.jpg'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.infection}</div>
+              </li>
+              <li className="nav-item">
+                <img src={'/images/OutbreakMarker.png'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.outbreaks}</div>
+              </li>
+              <li className="nav-item">
+                <img src={'/images/researchCenter.png'} width="30" height="30" alt="" />
+              </li>
+              <li className="nav-item">
+                <div className="nav-link">{this.state.researchCenter}</div>
+              </li>
+              <li><WhoAmI auth={auth}/></li>
+              <li className="nav-item">
+                <div className="nav-link">Current Turn: {currPlayerName}</div>
+              </li>
+              <li className="nav-item">
+                <button className="btn btn-outline-success" onClick={this.openRules}>Rules</button>
+              </li>
+            </ul>
+          </div>
+        </nav>
       )
     }
   }
