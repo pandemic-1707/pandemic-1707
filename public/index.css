@@ -111,7 +111,6 @@ body {
 }
 .footer {
   height: 70px;
-  background-color: brown;
 }
 form input.error {
   border-color: red;
