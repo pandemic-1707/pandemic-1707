@@ -11,13 +11,7 @@ export default class NavBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      red: 24,
-      yellow: 24,
-      black: 24,
-      blue: 24,
-      infectionIdx: 0,
-      outbreaks: 0,
-      researchCenter: 1,
+      gameState: {},
       currPlayer: '',
       players: {},
       loading: true,
@@ -33,6 +27,11 @@ export default class NavBar extends Component {
     this.setState({rulesOpen: false})
   }
   componentDidMount() {
+    fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
+      const gameState = snapshot.val()
+      if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })
+    })
+
     fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       const currPlayer = snapshot.val().state.currPlayer
       const players = snapshot.val().players
@@ -79,18 +78,7 @@ export default class NavBar extends Component {
       this.setState({loading: false})
     }, 1000)
   }
-  componentWillMount() {
-    // set local state to firebase state
-    fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-      red: this.state.red,
-      yellow: this.state.yellow,
-      black: this.state.black,
-      blue: this.state.blue,
-      infectionIdx: this.state.infectionIdx,
-      outbreaks: this.state.outbreaks,
-      researchCenter: this.state.researchCenter
-    })
-  }
+
   render() {
     const { players, currPlayer } = this.state
     let currPlayerName = ''
@@ -115,43 +103,43 @@ export default class NavBar extends Component {
                 <img src={'/images/redIcon.png'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.red}</div>
+                <div className="nav-link">{this.state.gameState.redTiles}</div>
               </li>
               <li className="nav-item">
                 <img src={'/images/blackIcon.png'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.black}</div>
+                <div className="nav-link">{this.state.gameState.blackTiles}</div>
               </li>
               <li className="nav-item">
                 <img src={'/images/blueIcon.png'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.blue}</div>
+                <div className="nav-link">{this.state.gameState.blueTiles}</div>
               </li>
               <li className="nav-item">
                 <img src={'/images/yellowIcon.png'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.yellow}</div>
+                <div className="nav-link">{this.state.gameState.yellowTiles}</div>
               </li>
               <li className="nav-item">
                 <img src={'/images/infectionMarker.jpg'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.infection}</div>
+                <div className="nav-link">{this.state.gameState.infectionRate}</div>
               </li>
               <li className="nav-item">
                 <img src={'/images/OutbreakMarker.png'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.outbreaks}</div>
+                <div className="nav-link">{this.state.gameState.outbreaks}</div>
               </li>
               <li className="nav-item">
                 <img src={'/images/researchCenter.png'} width="30" height="30" alt="" />
               </li>
               <li className="nav-item">
-                <div className="nav-link">{this.state.researchCenter}</div>
+                <div className="nav-link">{this.state.gameState.researchCenters}</div>
               </li>
               <li><WhoAmI auth={auth}/></li>
               <li className="nav-item">

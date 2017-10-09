@@ -36,6 +36,7 @@ export default class Wait extends Component {
     const { user } = this.state
     const roomName = this.props.match.params.roomName
     fire.database().ref(`/rooms/${roomName}`).once('value').then(snapshot => {
+      console.log("PLAYERS", snapshot.val())
       // set disableStart to true
       this.setState({
         disabledStart: true,
