@@ -1,49 +1,25 @@
 import React, { Component } from 'react'
-import Modal from 'react-modal'
+import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)'
-  }
-}
+export default class Rules extends Component {
+  state = { modalOpen: false }
 
-export default class Welcome extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      rulesOpen: false
-    }
-    this.openRules = this.openRules.bind(this)
-    this.closeRules = this.closeRules.bind(this)
-  }
-  openRules() {
-    this.setState({rulesOpen: true})
-  }
-  closeRules() {
-    this.setState({rulesOpen: false})
-  }
+  handleOpen = () => this.setState({ modalOpen: true })
+
+  handleClose = () => this.setState({ modalOpen: false })
+
   render() {
-    return(
-        <Modal
-        isOpen={this.state.rulesOpen}
-        onRequestClose={this.closeRules}
-        style={customStyles}
-        contentLabel="Example Modal"
-        >
-          <button type="button"
-            className="close"
-            aria-label="Close"
-            onClick={this.closeRules}
-            >
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <div>
-            <h3>In this game, you can't lose (at least not yet).</h3>
+    return (
+      <Modal
+        trigger={<Button onClick={this.handleOpen}>Rules</Button>}
+        open={this.state.modalOpen}
+        onClose={this.handleClose}
+        basic
+        size='small'
+      >
+        <Header icon='browser' content='Rules' />
+        <Modal.Content>
+          <h3>In this game, you can't lose (at least not yet).</h3>
             <h4>The question is: how quickly can you eradicate the disease?</h4>
             <h3>How to Play:</h3>
             <p> Work together as a team to cure a deadly pandemic as quickly as possible as it spreads across the world map. </p>
@@ -57,8 +33,13 @@ export default class Welcome extends Component {
             causing an outbreak if necessary. (If a fourth disease cube would ever be added to a city, that city suffers an outbreak,
             spreading cubes to all adjacent cities.) </p>
             <p> When you remove all the infection from the board, you have won! </p>
-          </div>
-        </Modal>
-      )
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color='green' onClick={this.handleClose} inverted>
+            <Icon name='checkmark' /> Got it
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    )
   }
 }
