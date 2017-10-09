@@ -45,7 +45,7 @@ export default ignite(withAuth(class extends React.Component {
     return <Form onSubmit={this.sendMessage}>
       <FireInput fireRef={nickname(user.uid)} placeholder='your name' />
       <Form.Input placeholder='Type your message...' name='body' />
-      <Form.Button size="small">Submit</Form.Button>
+      <Form.Button size="small" color="orange">Submit</Form.Button>
     </Form>
   }
 

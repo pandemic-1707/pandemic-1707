@@ -53,7 +53,7 @@ export default class GameMap extends Component {
       )
     } else {
       return (
-        <Map id="map" style={{height: '80vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
+        <Map id="map" style={{height: '85vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
             <TileLayer
                 url='https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZWJlYXN0bGFrZSIsImEiOiJjajd1bXJyejk0OHRxMnhwa3l1ZXVvOXY2In0.8jJCGfw_ynmjZ_4PQ4sU7g'
                 attribution='OpenStreetMap'
