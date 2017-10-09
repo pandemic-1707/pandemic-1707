@@ -6,7 +6,7 @@ const cors = require('cors')({origin: true})
 admin.initializeApp(functions.config().firebase)
 
 const { cities, infectionDeck, events } = require('./data')
-const { shuffle, finalizePlayerDeck } = require('./utils')
+const { shuffle, finalizePlayerDeck, handleOutbreak, incrementOutbreaks } = require('./utils')
 
 const NUM_EPIDEMICS = 4
 
@@ -100,7 +100,8 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
           const outbreakSite = outbreakCard.split(' ').join('-')
-          const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
+          const { updatedOutbreakData, nOutbreaks } = handleOutbreak(outbreakSite, cities)
+          incrementOutbreaks(nOutbreaks, room)
 
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
