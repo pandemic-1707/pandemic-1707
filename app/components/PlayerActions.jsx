@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import fire from '../../fire'
 import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
-import axios from 'axios'
 
 const NUM_CARDS_FOR_CURE = 5
 
@@ -10,6 +9,7 @@ const NUM_CARDS_FOR_CURE = 5
 // TODO: most efficient to check for conditions after movement confirmed () =>
 //  make a backend cloud func that listens for player loc change and sets state as needed
 // TODO: modularize actions
+// TODO: have buttons activate when available
 
 export default class PlayerActions extends Component {
   constructor(props) {
@@ -20,8 +20,6 @@ export default class PlayerActions extends Component {
       currPlayer: '',
       cureCards: []
     }
-
-    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
@@ -53,16 +51,7 @@ export default class PlayerActions extends Component {
 
   }
 
-  handleClick() {
-    console.log('you tried to cause an epidemic! x)')
-    // CHANGE TO DATABASE WRITE
-    // axios.get('https://us-central1-pandemic-1707.cloudfunctions.net/propagateEpidemic')
-    //   .then(() => {
-    //     console.log('I got a response from my function!')
-    //   })
-  }
-
-  // TODO: get the active playercities
+  // returns active player uid key
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
     console.log("IN METHOD CURR PLAYER KEY", this.state.currPlayer)
@@ -74,7 +63,7 @@ export default class PlayerActions extends Component {
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
     if (this.state.cities[activePlayerCity].infectionRate > 0) {
-      return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
         infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
       })
         .then(() => {
@@ -212,11 +201,8 @@ export default class PlayerActions extends Component {
             <div className="col-sm-2 player-action text-center">
               <span>Share</span>
             </div>
-            <div className="col-sm-1 player-action text-center">
+            <div className="col-sm-2 player-action text-center">
               <span>Event</span>
-            </div>
-            <div className="col-sm-1 player-action text-center">
-              <button onClick={this.handleClick}>Epidemic</button>
             </div>
           </div>
           <div className="row text-center">

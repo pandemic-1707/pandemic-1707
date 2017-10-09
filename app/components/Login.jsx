@@ -15,27 +15,26 @@ export default class Login extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      name: ''
     }
     this.handleLogInSubmit = this.handleLogInSubmit.bind(this)
     this.handleLogOutSubmit = this.handleLogOutSubmit.bind(this)
     this.handleSignUpSubmit = this.handleSignUpSubmit.bind(this)
     this.handleRedirectGoogle = this.handleRedirectGoogle.bind(this)
   }
-  componentWillMount() {
-    firebase.auth().onAuthStateChanged(firebaseUser => {
-      if (firebaseUser) {
-        console.log('current user', firebaseUser)
-      } else {
-        console.log('not logged in')
-      }
-    })
-  }
   handleLogInSubmit(e) {
     e.preventDefault()
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
-      console.log('login success')
+      var user = firebase.auth().currentUser
+      console.log('user', user)
+      user.updateProfile({
+        displayName: this.state.name
+      })
+      .then(() => {
+        console.log('login success')
+      })
     })
     .catch(error => {
       var errorCode = error.code
@@ -53,8 +52,13 @@ export default class Login extends Component {
     e.preventDefault()
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
-      // this.props.history.push('/rooms/wait/room1')
-      console.log('signup success')
+      var user = firebase.auth().currentUser
+      user.updateProfile({
+        displayName: this.state.name
+      })
+      .then(() => {
+        console.log('signup success')
+      })
     })
     .catch(error => {
       var errorCode = error.code
@@ -70,6 +74,7 @@ export default class Login extends Component {
   }
   handleLogOutSubmit(e) {
     e.preventDefault()
+    this.props.history.push('/')
     firebase.auth().signOut()
   }
   handleRedirectGoogle(e) {
@@ -77,15 +82,18 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <form>
-        <button className='btn btn-outline-info btn-sm'
-        onClick={this.handleRedirectGoogle}>Login with Google</button>
-        <input type="text" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
-        <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
-        <button className="btn btn-action btn-sm" onClick={this.handleLogInSubmit}>Log In</button>
-        <button className="btn btn-secondary btn-sm" onClick={this.handleSignUpSubmit}>Sign Up</button>
-        <button className="btn btn-action btn-sm" onClick={this.handleLogOutSubmit}>Log Out</button>
-      </form>
+      <div>
+        <button className='google login'
+            onClick={() => this.props.auth.signInWithPopup(google)}>Login with Google</button>
+        <form>
+          <input type="name" placeholder="name" value={this.state.name} onChange={e => this.setState({name: e.target.value})} />
+          <input type="text" placeholder="email" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
+          <input type="password" placeholder="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
+          <button className="btn btn-action btn-sm" onClick={this.handleLogInSubmit}>Log In</button>
+          <button className="btn btn-secondary btn-sm" onClick={this.handleSignUpSubmit}>Sign Up</button>
+          <button className="btn btn-action btn-sm" onClick={this.handleLogOutSubmit}>Log Out</button>
+        </form>
+      </div>
     )
   }
 }
