@@ -87,19 +87,19 @@ export default class NavBar extends Component {
         <Menu inverted>
         <Menu.Item>
           <img src={'/images/redIcon.png'} />
-          {this.state.gameState.red}
+          {this.state.gameState.redTiles}
           <img src={'/images/blackIcon.png'} />
-          {this.state.gameState.black}
+          {this.state.gameState.blackTiles}
           <img src={'/images/blueIcon.png'} />
-          {this.state.gameState.blue}
+          {this.state.gameState.blueTiles}
           <img src={'/images/yellowIcon.png'} />
-          {this.state.gameState.yellow}
+          {this.state.gameState.yellowTiles}
           <img src={'/images/infectionMarker.jpg'} />
-          {this.state.gameState.infection}
+          {this.state.gameState.infectionRate}
           <img src={'/images/OutbreakMarker.png'} />
           {this.state.gameState.outbreaks}
           <img src={'/images/researchCenter.png'} />
-          {this.state.gameState.researchCenter}
+          {this.state.gameState.researchCenters}
         </Menu.Item>
 
         <Menu.Item>
