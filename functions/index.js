@@ -72,7 +72,8 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
 // update the tiles any time an infection rate changes
 exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infectionRate')
   .onUpdate(event => {
-    const stateRef = event.data.ref.parent.parent.parent.child('state')
+    const 
+    Ref = event.data.ref.parent.parent.parent.child('state')
     const difference = event.data.val() - event.data.previous.val()
     const color = cities[event.params.city].color + 'Tiles'
 
