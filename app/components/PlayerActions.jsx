@@ -41,6 +41,11 @@ export default class PlayerActions extends Component {
         currPlayer: snapshot.val(),
       })
     })
+    fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).on('value', snapshot => {
+      this.setState({
+        currPlayer: snapshot.val(),
+      })
+    })
   }
 
   handleMoveAction = () => {
@@ -159,7 +164,8 @@ export default class PlayerActions extends Component {
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
     // look for cure cards to discard and create newHand without the cure cards
-    const cureCards = this.state.cureCards
+    // const cureCards = this.state.cureCards
+    const cureCards = ['Shanghai', 'Bangkok']
     const newHand = activePlayer.hand.filter(function (card) {
       // newHand can't have any cards we want to discard
       return cureCards.every(function (cureCards) {
@@ -174,17 +180,14 @@ export default class PlayerActions extends Component {
     fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
       curedDiseases: []
     })
-    fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-      curedDiseases: []
-    })
-
     // TODO: ... have treat disease clear all 3 infection rate for the color 
   }
 
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const allCities = this.state.cities
-    const canCure = this.canCureDisease(activePlayer, allCities)
+    // const canCure = this.canCureDisease(activePlayer, allCities)
+    const canCure = true
     return (
       <div>
         <div className="container-fluid player-actions-panel">
