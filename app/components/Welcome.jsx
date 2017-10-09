@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import WhoAmI from './WhoAmI'
+import { filteredObj, setCurrPlayers } from '../utils/welcome-utils'
 import Rules from './Rules'
 import EnterRoom from './EnterRoom'
 import fire from '../../fire'
