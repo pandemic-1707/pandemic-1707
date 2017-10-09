@@ -3,6 +3,7 @@ import fire from '../../fire'
 import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 import axios from 'axios'
+import {Button, Menu} from 'semantic-ui-react'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 
@@ -79,38 +80,44 @@ export default class PlayerActions extends Component {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
     console.log('activePlayer', activePlayer)
     return (
-      <div>
-        <div className="container-fluid player-actions-panel">
-          <div className="row">
-            <div className="col-sm-2 player-action text-center">
-              <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <button onClick={this.treatDisease}>Treat</button>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Cure</span>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Build</span>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Share</span>
-            </div>
-            <div className="col-sm-1 player-action text-center">
-              <span>Event</span>
-            </div>
-            <div className="col-sm-1 player-action text-center">
-              <button onClick={this.handleClick}>Epidemic</button>
-            </div>
-          </div>
-          <div className="row text-center">
-            <div className="col-sm-12 text-center">
-              Actions Left: {activePlayer.numActions && activePlayer.numActions}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Menu inverted>
+        <Menu.Item>
+          <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+          onClick={this.treatDisease}>Treat
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button>
+          Cure
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button>
+          Build
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button>
+          Share
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button>
+          Event
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+        <Button
+          onClick={this.handleClick}>Epidemic
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          Actions Left: {activePlayer.numActions && activePlayer.numActions}
+        </Menu.Item>
+      </Menu>
     )
   }
 }
