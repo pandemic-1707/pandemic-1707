@@ -6,7 +6,11 @@ import fire from '../../fire'
 const NUM_CARDS_FOR_CURE = 5
 
 export default class PlayerActionsCure extends Component {
-  state = { modalOpen: false }
+  state = {
+    modalOpen: false,
+    color: '',
+    cureCards: []
+  }
 
   handleOpen = () => this.setState({ modalOpen: true })
 
@@ -24,12 +28,14 @@ export default class PlayerActionsCure extends Component {
     console.log(curableColors, sameColors)
     return (
       <div>
-        <form id="select-cards-for-cure" onChange={this.handleCureCardChange}>
+        <form id="select-cards-for-cure" onSubmit={() => (this.cureDisease())}>
           {
             curableColors.map((color) => {
               return (
                 <div>
-                  <Button size="small" onClick={this.setFirstFive(color)} color={color}>{color}</Button>                  {
+                  <button onClick={this.setFirstFive}>blue</button>
+                  {/* <Button size="small" onClick={() => (this.setFirstFive(color))} color={color}>{color}</Button> */}
+                  {
                     sameColors[color].map((card) => {
                       const cityName = card.city
                       return <div key={cityName} value={cityName}>{cityName}</div>
@@ -40,21 +46,33 @@ export default class PlayerActionsCure extends Component {
             })
           }
         </form>
-        <button onClick={this.handleCureCardConfirm} >Confirm</button>
+        <Button size="small" onClick={this.handleSubmit} color='white'>Confirm</Button>
       </div>
     )
   }
 
   // let player use first 5 cards of that color for cure
-  setFirstFive = (color) => {
-    const cureCards = this.props.curables.sameColors[color].slice(0, 5)
-    this.cureDisease(color, cureCards)
+  setFirstFive = () => {
+    const color = 'blue'
+    const firstFiveCureCards = this.props.curables.sameColors[color].slice(0, 5)
+    this.setState({
+      cureCards: firstFiveCureCards,
+      color: color
+    })
+  }
+
+  handleSubmit(e) {
+    e.preventDefault()
+    this.cureDisease()
   }
 
   // cureCards is array of cards to be discarded for cure
-  cureDisease = (color, cureCards) => {
+  cureDisease = () => {
     const activePlayer = this.props.activePlayer
-    const activePlayerCity = activePlayer.position.city
+    const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
+    const color = this.state.color
+    const cureCards = this.state.cureCards
+        console.log('COLOR AND CURE', color, cureCards)
     // look for cure cards to discard and create newHand without the cure cards
     const newHand = activePlayer.hand.filter(function (card) {
       // newHand can't have any cards we want to discard
@@ -62,19 +80,21 @@ export default class PlayerActionsCure extends Component {
         return card.city !== cureCards.city
       })
     })
+    console.log('NEW HAND', newHand)
     fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
       numActions: activePlayer.numActions - 1,
       hand: newHand
     })
     // add to curedDiseases
-    let newCuredColors = []
-    fire.database().ref(`/rooms/${this.props.roomName}/state/curedColors`).on('value', snapshot => {
-      newCuredColors = snapshot.val()
-      newCuredColors.push(color)
+    let newCuredDiseases = []
+    fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).once('value', snapshot => {
+      newCuredDiseases = snapshot.val()
+      newCuredDiseases.push(color)
+      console.log("NEW CURES", newCuredDiseases)
     })
       .then(() => {
         fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-          curedDiseases: newCuredColors
+          curedDiseases: newCuredDiseases
         })
       })
 
