@@ -3,6 +3,7 @@ import fire from '../../fire'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 import cureUtils from '../utils/cure-utils.js'
 import {Button, Menu} from 'semantic-ui-react'
+import PlayerActionsCure from './PlayerActionsCure'
 
 const NUM_CARDS_FOR_CURE = 5
 
@@ -208,11 +209,7 @@ export default class PlayerActions extends Component {
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <Button
-        onClick={this.treatDisease}
-        >
-          Cure
-        </Button>
+        <PlayerActionsCure />
         </Menu.Item>
         <Menu.Item>
         <Button
