@@ -47,13 +47,13 @@ export default class GameMap extends Component {
     const bottomRight = [-41.286460, 174.776236]
     if (this.state.loading) {
       return (
-        <div className='my-nice-tab-container'>
+        <div>
           <div className='loading-state'>Loading...</div>
         </div>
       )
     } else {
       return (
-        <Map style={{height: '100vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
+        <Map id="map" style={{height: '80vh'}} bounds={[upperLeft, bottomRight]} maxBounds={[upperLeft, bottomRight]}>
             <TileLayer
                 url='https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZWJlYXN0bGFrZSIsImEiOiJjajd1bXJyejk0OHRxMnhwa3l1ZXVvOXY2In0.8jJCGfw_ynmjZ_4PQ4sU7g'
                 attribution='OpenStreetMap'

@@ -10,12 +10,17 @@ const { shuffle, finalizePlayerDeck, handleOutbreak, incrementOutbreaks } = requ
 
 const NUM_EPIDEMICS = 4
 
+// set the initial game state
+exports.initializeState = functions.database.ref('/rooms/{name}')
+  .onCreate(event => event.data.ref.child('state').set(state))
+
 // shuffle the infection deck and add it to the room
 exports.initializeInfectionDeck = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    const shuffled = shuffle(infectionDeck)
-    return event.data.ref.child('infectionDeck').set(shuffled)
-  })
+  .onCreate(event => event.data.ref.child('infectionDeck').set(shuffle(infectionDeck)))
+
+// load the initial city data and add it to the room
+exports.initializeCities = functions.database.ref('/rooms/{name}')
+  .onCreate(event => event.data.ref.child('cities').set(cities))
 
 // initialize players info
 exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
@@ -38,13 +43,7 @@ exports.initializePlayerDeck = functions.database.ref('/rooms/{name}/')
     return event.data.ref.update(updatedData)
   })
 
-// load the initial city data and add it to the room
-exports.initializeCities = functions.database.ref('/rooms/{name}')
-  .onCreate(event => {
-    return event.data.ref.child('cities').set(cities)
-  })
-
-// // use the first nine cities on the infection deck to set infection rates for start cities
+// use the first nine cities on the infection deck to set infection rates for start cities
 exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDeck')
   .onCreate(event => {
     const deck = event.data.val()
@@ -70,6 +69,40 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
     return event.data.ref.parent.update(updatedData)
   })
 
+// update the tiles any time an infection rate changes
+exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infectionRate')
+  .onUpdate(event => {
+    const 
+    Ref = event.data.ref.parent.parent.parent.child('state')
+    const difference = event.data.val() - event.data.previous.val()
+    const color = cities[event.params.city].color + 'Tiles'
+
+    return stateRef.child(color).once('value').then(snapshot => {
+      const oldCount = snapshot.val()
+      const newCount = oldCount - difference
+      return stateRef.update({[color]: newCount})
+    })
+  })
+
+// moves the infection rate forward everytime the number of outbreaks increases
+exports.increaseInfectionRate = functions.database.ref('/rooms/{name}/state/outbreaks')
+  .onUpdate(event => {
+    // TO-DO: check for losing condition if outbreak is 8
+    const stateRef = event.data.ref.parent
+
+    return stateRef.child('infectionTrack').once('value').then(snapshot => {
+      const infectionTrack = snapshot.val()
+      const nextRate = infectionTrack.shift()
+
+      const updatedData = {
+        '/infectionRate': nextRate,
+        '/infectionTrack': infectionTrack
+      }
+
+      return stateRef.update(updatedData)
+    })
+  })
+
 // listen for changes to player's hands; if there's an epidemic card, handle it
 exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId}/hand')
   .onUpdate(event => {
@@ -92,6 +125,7 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
 
           // TO-DO:
           // step 1: increase -- move the infection level forward
+
 
           // step 2: infect -- draw the bottom card from the infection deck & add to discard
           // TO-DO: UNLESS IT'S BEEN ERADICATED
