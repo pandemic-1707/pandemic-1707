@@ -143,36 +143,6 @@ export default class NavBar extends Component {
             </ul>
           </div>
         </nav>
-        <Menu inverted>
-        <Menu.Item>
-          <img src={'/images/redIcon.png'} />
-          {this.state.red}
-          <img src={'/images/blackIcon.png'} />
-          {this.state.black}
-          <img src={'/images/blueIcon.png'} />
-          {this.state.blue}
-          <img src={'/images/yellowIcon.png'} />
-          {this.state.yellow}
-          <img src={'/images/infectionMarker.jpg'} />
-          {this.state.infection}
-          <img src={'/images/OutbreakMarker.png'} />
-          {this.state.outbreaks}
-          <img src={'/images/researchCenter.png'} />
-          {this.state.researchCenter}
-        </Menu.Item>
-
-        <Menu.Item>
-          Current Turn: {currPlayerName}
-        </Menu.Item>
-
-        <Menu.Item>
-         <Rules />
-        </Menu.Item>
-
-        <Menu.Item>
-          <WhoAmI auth={auth}/>
-        </Menu.Item>
-      </Menu>
       )
     }
   }
