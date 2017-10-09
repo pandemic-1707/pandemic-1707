@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
-<<<<<<< HEAD
 import cureUtils from '../utils/cure-utils.js'
+import {Button, Menu} from 'semantic-ui-react'
 
 const NUM_CARDS_FOR_CURE = 5
-=======
-import axios from 'axios'
-import {Button, Menu} from 'semantic-ui-react'
->>>>>>> master
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: most efficient to check for conditions after movement confirmed () =>
