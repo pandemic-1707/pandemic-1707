@@ -26,35 +26,37 @@ export default class PlayerActionsCure extends Component {
     const curableColors = this.props.curables.curableColors
     const sameColors = this.props.curables.sameColors
     if (curableColors && sameColors) {
+      let colPortion = ''
+      if (curableColors.length === 1) colPortion = 'sixteen'
+      if (curableColors.length === 2) colPortion = 'eight'
+      if (curableColors.length === 3) colPortion = 'five'
+      if (curableColors.length === 4) colPortion = 'four'
+
       return (
-        <div>
-          <form id="select-cards-for-cure">
-            {
-              curableColors.map((color) => {
-                return (
-                  <div>
-                    <Button size="small" onClick={this.setFirstFive} color={color} >{color}</Button>
-                    {/* <button onClick={this.setFirstFive}>blue</button> */}
-                    {
-                      sameColors[color].map((card) => {
-                        const cityName = card.city
-                        return <div key={cityName} value={cityName}>{cityName}</div>
-                      })
-                    }
-                  </div>
-                )
-              })
-            }
-          </form>
+        <div className="ui grid">
+          {
+            curableColors.map((color) => {
+              return (
+                <div className={`${colPortion} wide column`}>
+                  <Button size="small" onClick={(e) => this.setFirstFive(e, color)} color={color} >{color}</Button>
+                  {
+                    sameColors[color].map((card) => {
+                      const cityName = card.city
+                      return <div key={cityName} value={cityName}>{cityName}</div>
+                    })
+                  }
+                </div>
+              )
+            })
+          }
         </div>
       )
     }
   }
 
   // let player use first 5 cards of that color for cure
-  setFirstFive = (e) => {
+  setFirstFive = (e, color) => {
     e.preventDefault()
-    const color = 'blue'
     const firstFiveCureCards = this.props.curables.sameColors[color].slice(0, 5)
     this.setState({
       cureCards: firstFiveCureCards,
@@ -105,13 +107,13 @@ export default class PlayerActionsCure extends Component {
           basic
           size='small'
         >
-          <Header icon='browser' content='cureCards' />
+          <Header color={this.state.color} content={`Which disease are we curing?   ${this.state.color}`} />
           <Modal.Content>
-            <h3>You can cure a disease</h3>
             {this.displayCardsForCure()}
           </Modal.Content>
           <Modal.Actions>
-            <Button size="small" onClick={this.cureDisease} color='olive'>Confirm</Button>
+             <Button size="small" onClick={this.cureDisease} color='olive' disabled={!this.state.cureCards.length} >Confirm</Button>
+             <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
           </Modal.Actions>
         </Modal>
       )
