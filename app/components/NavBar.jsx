@@ -28,7 +28,8 @@ export default class NavBar extends Component {
       const players = snapshot.val().players
       this.setState({
         currPlayer: snapshot.val().state.currPlayer,
-        players: snapshot.val().players
+        players: snapshot.val().players,
+        researchCenter: snapshot.val().state.researchCenter
       })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand
@@ -54,7 +55,6 @@ export default class NavBar extends Component {
           .then(() => {
             const currPlayersArr = snapshot.val().state.currPlayersArr
             const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-            console.log('i', i)
             fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
               currPlayer: currPlayersArr[i]
             })
@@ -69,7 +69,6 @@ export default class NavBar extends Component {
       this.setState({loading: false})
     }, 1000)
   }
-
   render() {
     const { players, currPlayer } = this.state
     let currPlayerName = ''
