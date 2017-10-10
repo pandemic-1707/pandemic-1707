@@ -6,18 +6,31 @@ import { Marker, Polyline, Tooltip } from 'react-leaflet'
 export function mapDataToMarkers(cities) {
   return Object.keys(cities).map(key => {
     const city = cities[key]
+    console.log('trying to draw for city ', key)
     // only render a number of the infection rate is non-zero
     const html = city.infectionRate ? city.infectionRate : ''
     // assign a city marker or research station marker accordingly
     const cityMarker = divIcon({className: `city-marker ${city.color} ${city.color}-shadow`, html: html})
     const researchStationMarker = divIcon({className: `research-station-marker ${city.color}-shadow`, html: html})
     const marker = city.research ? researchStationMarker : cityMarker
-    // return a marker with position and custom icon
-    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>
-      <Tooltip direction='top' offset={[-8, -2]} opacity={1}>
-        <span>{key.split('-').join(' ')}</span>
-      </Tooltip>
-    </Marker>
+    // draw a line between location and real location with the color of the city if they're different
+    let locationIndicator = ''
+    if (city.location[0] !== city.realLocation[0] || city.location[1] !== city.realLocation[1]) {
+      console.log('need to draw a marker')
+      console.log('location')
+      console.log(city.location)
+      console.log('real location')
+      console.log(city.realLocation)
+      locationIndicator = <Polyline key={`${key}-indicator`} positions={[city.location, city.realLocation]} color={city.color} weight="1"/>
+    }
+    return <div>
+      <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>
+        <Tooltip direction='top' offset={[-8, -2]} opacity={1}>
+          <span>{key.split('-').join(' ')}</span>
+        </Tooltip>
+      </Marker>
+      { locationIndicator }
+    </div>
   })
 }
 

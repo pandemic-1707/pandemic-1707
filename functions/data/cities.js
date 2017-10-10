@@ -4,7 +4,7 @@ module.exports = {
   'Baghdad': { color: 'black', location: [33.312806, 44.361488], realLocation: [33.312806, 44.361488], connections: ['Istanbul', 'Cairo', 'Tehran', 'Riyadh'], infectionRate: 0 },
   'Bangkok': { color: 'red', location: [13.756331, 100.501765], realLocation: [13.756331, 100.501765], connections: ['Kolkata', 'Hong-Kong', 'Ho-Chi-Minh-City', 'Jakarta', 'Chennai'], infectionRate: 0 },
   'Beijing': { color: 'red', location: [39.904200, 116.407396], realLocation: [39.904200, 116.407396], connections: ['Seoul', 'Shanghai'], infectionRate: 0 },
-  'Bogota': { color: 'yellow', location: [4.710989, -74.072092], reallocation: [4.710989, -74.072092], connections: ['Miami', 'Mexico-City', 'Lima', 'Buenos-Aires', 'Sao-Paulo'], infectionRate: 0 },
+  'Bogota': { color: 'yellow', location: [4.710989, -74.072092], realLocation: [4.710989, -74.072092], connections: ['Miami', 'Mexico-City', 'Lima', 'Buenos-Aires', 'Sao-Paulo'], infectionRate: 0 },
   'Buenos-Aires': { color: 'yellow', location: [-34.603684, -58.381559], realLocation: [-34.603684, -58.381559], connections: ['Bogota', 'Sao-Paulo', 'Santiago', 'Johannesburg'], infectionRate: 0 },
   'Cairo': { color: 'black', location: [30.044420, 31.235712], realLocation: [30.044420, 31.235712], connections: ['Algiers', 'Istanbul', 'Riyadh', 'Khartoum'], infectionRate: 0 },
   'Chennai': { color: 'black', location: [13.082680, 80.270718], realLocation: [13.082680, 80.270718], connections: ['Mumbai', 'Delhi', 'Kolkata', 'Jakarta'], infectionRate: 0 },
