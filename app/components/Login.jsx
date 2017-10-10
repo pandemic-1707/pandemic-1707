@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-
+import { Button, Form } from 'semantic-ui-react'
 import firebase from '../../fire/index'
 
 const google = new firebase.auth.GoogleAuthProvider()
@@ -15,7 +15,8 @@ export default class Login extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      name: ''
     }
     this.handleLogInSubmit = this.handleLogInSubmit.bind(this)
     this.handleLogOutSubmit = this.handleLogOutSubmit.bind(this)
@@ -35,7 +36,10 @@ export default class Login extends Component {
     e.preventDefault()
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
-      console.log('login success')
+      var user = firebase.auth().currentUser
+      user.updateProfile({
+        displayName: this.state.name
+      }).then(() => console.log('login success'))
     })
     .catch(error => {
       var errorCode = error.code
@@ -53,8 +57,10 @@ export default class Login extends Component {
     e.preventDefault()
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
     .then(() => {
-      // this.props.history.push('/rooms/wait/room1')
-      console.log('signup success')
+      var user = firebase.auth().currentUser
+      user.updateProfile({
+        displayName: this.state.name
+      }).then(() => console.log('signup success'))
     })
     .catch(error => {
       var errorCode = error.code
@@ -77,15 +83,34 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <form>
-        <button className='btn btn-outline-info btn-sm'
-        onClick={this.handleRedirectGoogle}>Login with Google</button>
-        <input type="text" value={this.state.email} onChange={e => this.setState({email: e.target.value})} />
-        <input type="password" value={this.state.password} onChange={e => this.setState({password: e.target.value})} />
-        <button className="btn btn-action btn-sm" onClick={this.handleLogInSubmit}>Log In</button>
-        <button className="btn btn-secondary btn-sm" onClick={this.handleSignUpSubmit}>Sign Up</button>
-        <button className="btn btn-action btn-sm" onClick={this.handleLogOutSubmit}>Log Out</button>
-      </form>
+      <div>
+        <Button primary size='small'
+            onClick={() => this.props.auth.signInWithPopup(google)}>Login with Google</Button>
+        <Form>
+          <Form.Group>
+          <Form.Input
+            type="name"
+            value={this.state.name}
+            onChange={e => this.setState({name: e.target.value})}
+            placeholder="name"
+          />
+          <Form.Input
+            type="text" value={this.state.email}
+            onChange={e => this.setState({email: e.target.value})}
+            placeholder="email"
+          />
+          <Form.Input type="password" value={this.state.password}
+          placeholder="password"
+          onChange={e => this.setState({password: e.target.value})}
+          />
+          <Button.Group>
+          <Button size='small' primary onClick={this.handleLogInSubmit}>Log In</Button>
+          <Button size='small' primary onClick={this.handleSignUpSubmit}>Sign Up</Button>
+          <Button size='small' primary onClick={this.handleLogOutSubmit}>Log Out</Button>
+          </Button.Group>
+          </Form.Group>
+        </Form>
+      </div>
     )
   }
 }

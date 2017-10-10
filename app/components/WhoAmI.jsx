@@ -1,5 +1,6 @@
 import React from 'react'
 import firebase from '../../fire/index'
+import { Button } from 'semantic-ui-react'
 const auth = firebase.auth()
 
 import Login from './Login'
@@ -18,7 +19,7 @@ export const WhoAmI = ({user, auth}) =>
       // ...then show signin links...
       <Login auth={auth} />
       /// ...otherwise, show a logout button.
-      : <div><button className='btn btn-outline-info btn-sm' onClick={() => auth.signOut()}>logout</button></div> }
+      : <div><Button size="small" onClick={() => auth.signOut()}>logout</Button></div> }
   </div>
 
 export default class extends React.Component {

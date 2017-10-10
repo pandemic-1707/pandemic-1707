@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
-import Modal from 'react-modal'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 import axios from 'axios'
+import { Button, Menu } from 'semantic-ui-react'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
+// TODO: have buttons activate when available
 
 export default class PlayerActions extends Component {
   constructor(props) {
@@ -14,8 +15,6 @@ export default class PlayerActions extends Component {
       cities: [],
       currPlayer: ''
     }
-
-    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
@@ -42,16 +41,7 @@ export default class PlayerActions extends Component {
 
   }
 
-  handleClick() {
-    console.log('you tried to cause an epidemic! x)')
-    // CHANGE TO DATABASE WRITE
-    // axios.get('https://us-central1-pandemic-1707.cloudfunctions.net/propagateEpidemic')
-    //   .then(() => {
-    //     console.log('I got a response from my function!')
-    //   })
-  }
-
-  // TODO: get the active player
+  // returns active player uid key
   getActivePlayer = (players) => {
     const playerKeys = Object.keys(players)
     return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
@@ -61,14 +51,12 @@ export default class PlayerActions extends Component {
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
     if (this.state.cities[activePlayerCity].infectionRate > 0) {
-      return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
         infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
       })
-        .then(() => {
-          fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-            numActions: activePlayer.numActions - 1,
-          })
-        })
+      fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+        numActions: activePlayer.numActions - 1,
+      })
     } else {
       // TODO: let player know this city isn't treatable, maybe fade button
     }
@@ -77,13 +65,20 @@ export default class PlayerActions extends Component {
   buildResearch = () => {
     const activePlayer = this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
+    const allCities = this.state.cities
+    // does this city already have a research station?
+    const isResearchCity = allCities[activePlayerCity].research === true
+    if (isResearchCity) {
+      return // if so, can't build research station
+    }
+    // do we have the city card to use?
     const buildInCity = activePlayer.hand.find(function (card) {
       return card.city === activePlayerCity
     })
     if (buildInCity) {
       // check num research stations, over 6 means we have to reallocate stations
       let numResearchCenters = 0
-      return fire.database().ref(`/rooms/${this.props.roomName}/state/researchCenter`).once('value', snapshot => {
+      return fire.database().ref(`/rooms/${this.props.roomName}/state/researchCenters`).once('value', snapshot => {
         numResearchCenters = snapshot.val()
       })
         .then(() => {
@@ -93,7 +88,7 @@ export default class PlayerActions extends Component {
           })
             .then(() => {
               // discard used city card by creating newHand without it
-              const newHand = activePlayer.hand.filter(function(card) {
+              const newHand = activePlayer.hand.filter(function (card) {
                 return card.city !== buildInCity.city
               })
               fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
@@ -102,7 +97,7 @@ export default class PlayerActions extends Component {
               })
               // add num research stations to game state
               fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-                researchCenter: numResearchCenters + 1
+                researchCenters: numResearchCenters - 1
               })
               // TODO: max num research stations is 6, take away from other cities when over
             })
@@ -114,39 +109,50 @@ export default class PlayerActions extends Component {
 
   render() {
     const activePlayer = this.state.players && Object.keys(this.state.players).length && this.getActivePlayer(this.state.players)
+    console.log("RENDERING")
     return (
-      <div>
-        <div className="container-fluid player-actions-panel">
-          <div className="row">
-            <div className="col-sm-2 player-action text-center">
-              <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <button onClick={this.treatDisease}>Treat</button>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Cure</span>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <button onClick={this.buildResearch}>Build</button>
-            </div>
-            <div className="col-sm-2 player-action text-center">
-              <span>Share</span>
-            </div>
-            <div className="col-sm-1 player-action text-center">
-              <span>Event</span>
-            </div>
-            <div className="col-sm-1 player-action text-center">
-              <button onClick={this.handleClick}>Epidemic</button>
-            </div>
-          </div>
-          <div className="row text-center">
-            <div className="col-sm-12 text-center">
-              Actions Left: {activePlayer.numActions && activePlayer.numActions}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Menu inverted>
+        <Menu.Item>
+          <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
+        </Menu.Item>
+        <Menu.Item>
+          <Button
+            onClick={this.treatDisease}>Treat
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          <Button
+            onClick={this.treatDisease}
+          >
+            Cure
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          <Button
+            onClick={this.buildResearch}
+          >
+            Build
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          <Button>
+            Share
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          <Button>
+            Event
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          <Button
+            onClick={this.handleClick}>Epidemic
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          Actions Left: {activePlayer.numActions && activePlayer.numActions}
+        </Menu.Item>
+      </Menu>
     )
   }
 }
