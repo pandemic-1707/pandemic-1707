@@ -1,7 +1,7 @@
 const NUM_CARDS_FOR_CURE = 5
 
 module.exports = {
-// ///////CURE///////
+  // ///////CURE///////
   // canCureDisease > displayCardsForCure > handleCureCardChange, handleCureCardConfirm > cureDisease > change treat func so that it will auto cure all disease
 
   // check if it's possible to cure disease at this city
@@ -21,6 +21,8 @@ module.exports = {
     if (researchCity) {
       // do we have 5 city cards of the same color
       const sameColors = {}
+      // we have no cards on hand
+      if (!activePlayer.hand || !activePlayer.hand.length) return false
       activePlayer.hand.forEach(function (card) {
         if (card.props) {
           if (sameColors[card.props.color]) sameColors[card.props.color].push(card)

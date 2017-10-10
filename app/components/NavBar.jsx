@@ -31,7 +31,8 @@ export default class NavBar extends Component {
         players: snapshot.val().players
       })
       if (players && currPlayer) {
-        const hand = players[currPlayer].hand
+        let hand = []
+        if (players[currPlayer].hand) hand = players[currPlayer].hand
         if (players[currPlayer].numActions === 0) {
           // change numActions back to 4
           return fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
