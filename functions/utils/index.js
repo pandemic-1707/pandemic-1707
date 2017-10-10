@@ -4,5 +4,7 @@ module.exports = {
   handleOutbreak: require('./handleOutbreak'),
   drawNextCards: require('./drawNextCards'),
   handleEpidemics: require('./handleEpidemics'),
-  infectNextCities: require('./infectNextCities')
+  infectNextCities: require('./infectNextCities'),
+  changeTurn: require('./changeTurn'),
+  handleOutreak: require('./handleOutbreak')
 }

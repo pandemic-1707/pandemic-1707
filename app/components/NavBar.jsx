@@ -40,19 +40,19 @@ export default class NavBar extends Component {
         currPlayer: snapshot.val().state.currPlayer,
         players: snapshot.val().players
       })
-      if (players && currPlayer) {
-        const hand = players[currPlayer].hand
-        if (players[currPlayer].numActions === 0) {
-          const currPlayersArr = snapshot.val().state.currPlayersArr
-          const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-          fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-            currPlayer: currPlayersArr[i]
-          })
-          this.setState({
-            currPlayer: currPlayersArr[i]
-          })
-        }
-      }
+      // if (players && currPlayer) {
+      //   const hand = players[currPlayer].hand
+      //   if (players[currPlayer].numActions === 0) {
+      //     const currPlayersArr = snapshot.val().state.currPlayersArr
+      //     const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
+      //     fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
+      //       currPlayer: currPlayersArr[i]
+      //     })
+      //     this.setState({
+      //       currPlayer: currPlayersArr[i]
+      //     })
+      //   }
+      // }
     })
     setTimeout(() => {
       this.setState({loading: false})

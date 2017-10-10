@@ -13,6 +13,10 @@ module.exports = function(refs) {
     const firstCard = playerDeck.pop()
     const secondCard = playerDeck.pop()
     playerHand.push(firstCard, secondCard)
+    console.log('next player card')
+    console.log(firstCard)
+    console.log('next next player card')
+    console.log(secondCard)
 
     updatedData['/playerDeck'] = playerDeck
     updatedData[`/players/${player}/hand`] = playerHand

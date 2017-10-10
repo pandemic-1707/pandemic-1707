@@ -6,6 +6,7 @@ module.exports = function(outbreakSite, cities) {
   updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
 
   if (cities[outbreakSite].infectionRate > 0) {
+    console.log('it caused an outbreak!')
     const outbreakQueue = [outbreakSite]
     const seen = new Set()
 
@@ -40,6 +41,8 @@ module.exports = function(outbreakSite, cities) {
       })
     }
   }
+  console.log('it affected ')
+  console.log(updatedData)
 
   return updatedData
 }

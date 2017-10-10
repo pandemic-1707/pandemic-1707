@@ -5,27 +5,35 @@ const increaseInfectionRate = require('./increaseInfectionRate')
 module.exports = function(refs) {
   const { player, playerRef, roomRef } = refs
 
-  playerRef.child('hand').once('value').then(snapshot => {
+  return playerRef.child('hand').once('value').then(snapshot => {
     const hand = snapshot.val()
 
     for (const card in hand) {
       if (hand[card].hasOwnProperty('Epidemic')) {
+        console.log('there was an epidemic!')
         const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
-        const completeIncrease = increaseInfectionRate()
+        const completeIncrease = increaseInfectionRate(roomRef)
 
         return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard, completeIncrease])
         .then(data => {
           const cities = data[0]
           const infectionDeck = data[1]
-          const infectionDiscard = data[2]
+          let infectionDiscard = data[2]
           const updatedDecks = {}
 
           // step 2: infect -- draw the bottom card from the infection deck & add to discard
           // TO-DO: UNLESS IT'S BEEN ERADICATED
           const outbreakCard = infectionDeck.shift()
-          infectionDiscard.push(outbreakCard)
+          if (infectionDiscard) {
+            infectionDiscard = [outbreakCard]
+          } else {
+            infectionDiscard.push(outbreakCard)
+          }
+          console.log('we will randomly infect ' + outbreakCard)
+          console.log('the new infectionDiscardPile (before shuffling) is')
+          console.log(infectionDiscard)
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
           const outbreakSite = outbreakCard.split(' ').join('-')
@@ -34,7 +42,10 @@ module.exports = function(refs) {
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
           updatedDecks['/infectionDeck'] = newInfectionDeck
+          console.log('the new infection deck is replaced')
+          console.log(newInfectionDeck)
           updatedDecks['/infectionDiscard'] = []
+          console.log('the infection discard pile is being set back to nothing')
 
           const all = Object.assign({}, updatedDecks, updatedData)
           return roomRef.update(all)
