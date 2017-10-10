@@ -40,6 +40,9 @@ body {
   text-shadow: 0 1px 0 black;
   color: white;
 }
+header {
+  overflow: hidden;
+}
 
 .blue {
 	background: steelblue;
@@ -142,6 +145,7 @@ li {
 }
 .footer {
   height: 70px;
+  overflow: hidden;
 }
 form input.error {
   border-color: red;
@@ -166,4 +170,11 @@ form button {
 }
 #map {
   height: 70%;
+}
+.cityoptions {
+  color: black;
+}
+
+select {
+  color: black;
 }

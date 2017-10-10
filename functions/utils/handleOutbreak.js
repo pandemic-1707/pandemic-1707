@@ -1,10 +1,11 @@
 module.exports = function(outbreakSite, cities) {
-  // TO-DO: MOVE THIS INTO HANDLE EPIDEMIC
+  // outbreak site must get an infectionRate of 3
+  // if the infection rate was 0 before, that's all you need to do
   const updatedData = {}
   updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
   let nOutbreaks
 
-  // TO-DO: MOVE THIS IF STATEMTN
+  // TO-DO: MOVE THIS IF STATEMENT
   // if epidemic site had infection rate > 0 (i.e. adding three to it would push you over the edge)
   // then you have an outbreak! handle it
   if (cities[outbreakSite].infectionRate > 0) {

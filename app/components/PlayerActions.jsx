@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
+import CureCelebration from './CureCelebration'
 import { Button, Menu } from 'semantic-ui-react'
 import PlayerActionsCure from './PlayerActionsCure'
 import cureUtils from '../utils/cure-utils.js'
@@ -109,7 +110,7 @@ export default class PlayerActions extends Component {
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-          <Button
+          <Button color="blue"
             onClick={this.treatDisease}>Treat
         </Button>
         </Menu.Item>
@@ -123,13 +124,8 @@ export default class PlayerActions extends Component {
           <PlayerActionsShare activePlayer={activePlayer} traders={traders} />
         </Menu.Item>
         <Menu.Item>
-          <Button>
+          <Button color="teal">
             Event
-        </Button>
-        </Menu.Item>
-        <Menu.Item>
-          <Button
-            onClick={this.handleClick}>Epidemic
         </Button>
         </Menu.Item>
         <Menu.Item>

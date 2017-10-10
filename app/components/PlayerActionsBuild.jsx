@@ -16,7 +16,7 @@ export default class PlayerActionsBuild extends Component {
 
   buildResearch = () => {
     const activePlayer = this.props.activePlayer
-    const activePlayerCity = activePlayer.position.city
+    const activePlayerCity = activePlayer.position.city.replace('.', '')
     const allCities = this.props.allCities
     // does this city already have a research station?
     const isResearchCity = allCities[activePlayerCity].research === true
@@ -24,8 +24,10 @@ export default class PlayerActionsBuild extends Component {
       return // if so, can't build research station
     }
     // do we have the city card to use?
-    const buildInCity = activePlayer.hand.find(function (card) {
-      return card.city === activePlayerCity
+    const buildInCity = activePlayer.hand.find(function(card) {
+      if (card.city) {
+        return card.city.replace('.', '') === activePlayerCity
+      }
     })
     if (buildInCity) {
       // check num research stations, over 6 means we have to reallocate stations
@@ -63,6 +65,7 @@ export default class PlayerActionsBuild extends Component {
     return (
       <div>
         <Button
+          color="purple"
           onClick={this.buildResearch}
         >Build
         </Button>

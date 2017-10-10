@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { Button, Header, Icon, Modal, Form } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Form, Select } from 'semantic-ui-react'
 import { filteredObj, setCurrPlayers } from '../utils/welcome-utils'
 import fire from '../../fire'
 import shuffle from 'shuffle-array'
@@ -154,13 +154,22 @@ class EnterRoom extends Component {
         <Form>
           <Form.Field>
             <label>Room Name</label>
-            <input placeholder='Room Name' 
+            <input placeholder='Room Name'
             onChange={this.saveRoomData.bind(this, 'roomName')}
             />
           </Form.Field>
-          <Form.Select label='Number of Players' options={options} placeholder='Number of Players' />
+          <Form.Field>
+          <select
+          label='Number of Players'
+          control={Select}
+          onChange={this.saveRoomData.bind(this, 'numPlayers')}
+          placeholder='Number of Players' >
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+          </Form.Field>
           <Form.Field> {inputFields} </Form.Field>
-          
             <Modal trigger={<Button color='green' onClick={this.handleSubmit} inverted>
             <Icon name='checkmark' /> Submit</Button>}
             >
@@ -176,8 +185,8 @@ class EnterRoom extends Component {
                 </Button>
               </Modal.Actions>
             </Modal>
-        </Form>
-      </Modal.Content>
+          </Form>
+       </Modal.Content>
       </Modal>
       </div>
     )
