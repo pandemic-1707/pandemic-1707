@@ -1,5 +1,7 @@
 // TO-DO: REFACTOR INTO TWO FUNCTIONS: 1) INFECT/DETECT OUTBREAKS AND 2) HANDLE OUTBREAK
 module.exports = function(outbreakSite, cities) {
+  // outbreak site must get an infectionRate of 3
+  // if the infection rate was 0 before, that's all you need to do
   const updatedData = {}
   updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
 
@@ -9,6 +11,7 @@ module.exports = function(outbreakSite, cities) {
 
     while (outbreakQueue.length) {
       const nextOutbreakSite = outbreakQueue.shift()
+      console.log('theres an outbreak in ', nextOutbreakSite)
       const connections = cities[nextOutbreakSite].connections
 
       connections.forEach(connection => {

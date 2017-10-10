@@ -3,5 +3,6 @@ module.exports = {
   finalizePlayerDeck: require('./finalizePlayerDeck'),
   handleOutbreak: require('./handleOutbreak'),
   drawNextCards: require('./drawNextCards'),
-  handleEpidemics: require('./handleEpidemics')
+  handleEpidemics: require('./handleEpidemics'),
+  infectNextCities: require('./infectNextCities')
 }
