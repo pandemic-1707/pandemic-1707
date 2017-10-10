@@ -77,8 +77,5 @@ exports.handleTurnChange = functions.database.ref('/rooms/{name}/players/{player
       .then(() => handleEpidemics(refs))
       .then(() => infectNextCities(refs))
       .then(() => changeTurn(refs))
-      .then(() => {
-        console.log('i finished!')
-      })
     }
   })
