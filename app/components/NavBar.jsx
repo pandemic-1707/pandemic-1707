@@ -30,9 +30,11 @@ export default class NavBar extends Component {
     db.ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       const currPlayer = snapshot.val().state.currPlayer
       const players = snapshot.val().players
+      const researchCenter = snapshot.val().state.researchCenter
       this.setState({
         currPlayer: currPlayer,
-        players: players
+        players: players,
+        researchCenter: researchCenter
       })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand
