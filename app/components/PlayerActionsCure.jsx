@@ -112,7 +112,25 @@ export default class PlayerActionsCure extends Component {
             {this.displayCardsForCure()}
           </Modal.Content>
           <Modal.Actions>
-             <Button size="small" onClick={this.cureDisease} color='olive' disabled={!this.state.cureCards.length} >Confirm</Button>
+             <Modal
+                trigger={<Button size="small"
+                onClick={this.cureDisease} color='olive'
+                disabled={!this.state.cureCards.length} >
+                Confirm</Button>}
+                onClose={this.handleClose}
+                basic
+                size='small'
+              >
+                <Header icon='fire extinguisher' content="Yay you've cured the disease!" />
+                <Modal.Content>
+                  <h3>Woot!</h3>
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button color='green' onClick={this.handleClose} inverted>
+                    <Icon name='checkmark' /> Awesome
+                  </Button>
+                </Modal.Actions>
+              </Modal>
              <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
           </Modal.Actions>
         </Modal>

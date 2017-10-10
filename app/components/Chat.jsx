@@ -1,5 +1,5 @@
 import React from 'react'
-import firebase from 'APP/fire'
+import firebase from '../../fire'
 import ignite, {withAuth, FireInput} from '../utils/ignite'
 import {Button, Form} from 'semantic-ui-react'
 
