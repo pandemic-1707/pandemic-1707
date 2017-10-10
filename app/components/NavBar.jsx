@@ -111,8 +111,8 @@ export default class NavBar extends Component {
         </Menu.Item>
 
         <Menu.Item>
-          {`Welcome, ${auth.currentUser.displayName}!`}
-          <Button size="tiny" onClick={() => auth.signOut()}>Logout</Button>
+          {`Welcome, ${auth.currentUser.displayName}! `}
+          <Button size="mini" color="violet" onClick={() => auth.signOut()}>Logout</Button>
         </Menu.Item>
       </Menu>
       )
