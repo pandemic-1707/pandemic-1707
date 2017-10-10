@@ -37,7 +37,7 @@ export default class PlayerActionsCure extends Component {
           {
             curableColors.map((color) => {
               return (
-                <div className={`${colPortion} wide column`}>
+                <div className={`${colPortion} wide column`} key={color}>
                   <Button size="small" onClick={(e) => this.setFirstFive(e, color)} color={color} >{color}</Button>
                   {
                     sameColors[color].map((card) => {
