@@ -37,8 +37,8 @@ export default class NavBar extends Component {
         researchCenter: researchCenter
       })
       if (players && currPlayer) {
-        const hand = players[currPlayer].hand
-        // if currPlayer has no more actions left
+        let hand = []
+        if (players[currPlayer].hand) hand = players[currPlayer].hand
         if (players[currPlayer].numActions === 0) {
           // change numActions back to 4
           return db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({

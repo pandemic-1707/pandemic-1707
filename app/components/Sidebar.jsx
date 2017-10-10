@@ -3,17 +3,13 @@ import fire from '../../fire'
 import { Form, List, Transition } from 'semantic-ui-react'
 
 const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
-const transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce']
 
 export default class Sidebar extends Component {
   constructor(props) {
     super(props)
     this.state = {
       players: {},
-      loading: true,
-      animation: transitions[2],
-      duration: 500,
-      visible: true
+      loading: true
     }
   }
   componentDidMount() {

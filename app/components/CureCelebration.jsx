@@ -18,7 +18,6 @@ export default class Alerts extends Component {
   render() {
     return (
       <Modal
-        trigger={<Button onClick={this.handleOpen}>Cure</Button>}
         open={this.state.alertOpen}
         onClose={this.handleClose}
         basic
