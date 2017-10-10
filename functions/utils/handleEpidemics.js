@@ -1,5 +1,6 @@
 const handleOutbreak = require('./handleOutbreak')
 const shuffle = require('./shuffle')
+const increaseInfectionRate = require('./increaseInfectionRate')
 
 module.exports = function(refs) {
   const { player, playerRef, roomRef } = refs
@@ -8,14 +9,13 @@ module.exports = function(refs) {
     const hand = snapshot.val()
 
     for (const card in hand) {
-      console.log('checking ', hand[card])
       if (hand[card].hasOwnProperty('Epidemic')) {
-        console.log('its an epidemic!')
         const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
+        const completeIncrease = increaseInfectionRate()
 
-        return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard])
+        return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard, completeIncrease])
         .then(data => {
           const cities = data[0]
           const infectionDeck = data[1]
@@ -39,8 +39,6 @@ module.exports = function(refs) {
           const all = Object.assign({}, updatedDecks, updatedData)
           return roomRef.update(all)
         })
-      } else {
-        console.log('not an epidemic')
       }
     }
   })

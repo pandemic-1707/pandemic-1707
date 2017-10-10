@@ -84,25 +84,6 @@ exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infect
     })
   })
 
-// moves the infection rate forward everytime the number of outbreaks increases
-exports.increaseInfectionRate = functions.database.ref('/rooms/{name}/state/outbreaks')
-  .onUpdate(event => {
-    // TO-DO: check for losing condition if outbreak is 8
-    const stateRef = event.data.ref.parent
-
-    return stateRef.child('infectionTrack').once('value').then(snapshot => {
-      const infectionTrack = snapshot.val()
-      const nextRate = infectionTrack.shift()
-
-      const updatedData = {
-        '/infectionRate': nextRate,
-        '/infectionTrack': infectionTrack
-      }
-
-      return stateRef.update(updatedData)
-    })
-  })
-
 // listen for a player's actions to run out (i.e. the end of their turn)
 exports.handleTurnChange = functions.database.ref('/rooms/{name}/players/{player}/numActions')
   .onUpdate(event => {
