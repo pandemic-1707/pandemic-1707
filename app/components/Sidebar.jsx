@@ -44,11 +44,17 @@ export default class Sidebar extends Component {
               <div className="player-box">
                 <div className={'player-name'}
                   style={player ? {backgroundColor: hexVal} : ''}>
-                  <img height="32" width="32" src={`/images/${role}.png`} />
-                  <div>
-                    {name}
-                  <br />
-                    {role}
+                  <div className='player-role'>
+                    <img className='avatar' height="32" width="32" src={`/images/${role}.png`} />
+                      <div className='titles'>
+                        <div className='user'>
+                          {name}
+                        </div>
+                        <br />
+                        <div className='role'>
+                          {role}
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <div className="player-hand">
