@@ -37,51 +37,6 @@ export default class NavBar extends Component {
         players: players,
         researchCenter: researchCenter
       })
-      if (players && currPlayer) {
-        let hand = []
-        if (players[currPlayer].hand) hand = players[currPlayer].hand
-        if (players[currPlayer].numActions === 0) {
-          // change numActions back to 4
-          return db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-            numActions: 4
-          })
-          // push those 2 onto player's hand
-          .then(() => {
-            db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-              hand: [...hand, snapshot.val().playerDeck.shift()]
-            })
-          })
-          // // check if they have more than 7 cards
-          // .then(() => {
-          //   db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).once('value').then(snapshot => {
-          //     const handArr = snapshot.val().hand
-          //     if (handArr.length >= 7) {
-          //       alert('Please discard')
-          //     }
-          //   })
-          // })
-          // pull those 2 out of player deck
-          .then(() => {
-            console.log('are we getting in deck?')
-            const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
-            db.ref(`/rooms/${this.props.roomName}`).update({
-              playerDeck: updatedPlayerDeck
-            })
-          })
-          // update to the next currPlayer
-          .then(() => {
-            const currPlayersArr = snapshot.val().state.currPlayersArr
-            const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-            db.ref(`/rooms/${this.props.roomName}/state`).update({
-              currPlayer: currPlayersArr[i]
-            })
-            this.setState({
-              currPlayer: currPlayersArr[i]
-            })
-            console.log('currPlayer', currPlayer)
-          })
-        }
-      }
     })
     setTimeout(() => {
       this.setState({loading: false})
