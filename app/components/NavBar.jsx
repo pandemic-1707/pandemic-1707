@@ -18,6 +18,7 @@ export default class NavBar extends Component {
     }
   }
   componentDidMount() {
+    // component listens for changes in the game state (tiles, infection rate, outbreaks, etc.)
     fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
       const gameState = snapshot.val()
       if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })
@@ -30,40 +31,6 @@ export default class NavBar extends Component {
         currPlayer: snapshot.val().state.currPlayer,
         players: snapshot.val().players
       })
-      if (players && currPlayer) {
-        let hand = []
-        if (players[currPlayer].hand) hand = players[currPlayer].hand
-        if (players[currPlayer].numActions === 0) {
-          // change numActions back to 4
-          return fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-            numActions: 4
-          })
-          // push those 2 onto player's hand
-          .then(() => {
-            fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-              hand: [...hand, snapshot.val().playerDeck.shift()]
-            })
-          })
-          // pull those 2 out of player deck
-          .then(() => {
-            const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
-            fire.database().ref(`/rooms/${this.props.roomName}`).update({
-              playerDeck: updatedPlayerDeck
-            })
-          })
-          // update to the next currPlayer
-          .then(() => {
-            const currPlayersArr = snapshot.val().state.currPlayersArr
-            const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-            fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-              currPlayer: currPlayersArr[i]
-            })
-            this.setState({
-              currPlayer: currPlayersArr[i]
-            })
-          })
-        }
-      }
     })
     setTimeout(() => {
       this.setState({loading: false})
