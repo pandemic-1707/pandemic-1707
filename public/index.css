@@ -187,3 +187,10 @@ form button {
   height: calc(100% - 120px) !important;
   width: calc(100% - 150px);
 }
+.cityoptions {
+  color: black;
+}
+
+select {
+  color: black;
+}
