@@ -4,6 +4,7 @@ import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
 import Alerts from './DealingHandsAlert'
+import EpiAlerts from './EpidemicAlerts'
 import { Menu, Button, Transition } from 'semantic-ui-react'
 const db = fire.database()
 // Get the auth API from Firebase.
@@ -140,6 +141,7 @@ export default class NavBar extends Component {
           onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
         <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
+        <EpiAlerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
       </Menu>
       )
     }
