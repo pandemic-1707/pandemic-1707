@@ -135,18 +135,6 @@ export default class PlayerActions extends Component {
           <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
         </Menu.Item>
         <Menu.Item>
-          <Button
-            onClick={this.buildResearch}
-          >
-            Build
-        </Button>
-          <Button
-            onClick={this.treatDisease}
-          >
-            Cure
-        </Button>
-        </Menu.Item>
-        <Menu.Item>
           <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName}/>
         </Menu.Item>
         <Menu.Item>

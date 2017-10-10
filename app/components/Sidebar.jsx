@@ -52,7 +52,7 @@ export default class Sidebar extends Component {
                     const color = obj.props ? obj.props.color : 'grey'
                     let title = obj.city || Object.keys(obj)[0]
                     title = title.split('-').join(' ')
-                    return <div>
+                    return <div key={i}>
                       <div key={`color-box-${i}`} className='color-box' style={{backgroundColor: color}}></div>
                       <li key={`card-${i}`}>{title}</li>
                     </div>
