@@ -6,7 +6,8 @@ export default class PlayerActionsShare extends Component {
   state = {
     modalOpen: false,
     cardToTake: '',
-    traderToReceive: {}
+    traderToReceive: {},
+    give: true
   }
 
   handleOpen = () => this.setState({ modalOpen: true })
@@ -28,20 +29,12 @@ export default class PlayerActionsShare extends Component {
     this.setState({ traderToReceive: trader })
   }
 
-  displayCardsForTrade = () => {
-    const traders = this.props.traders
-    const activePlayer = this.props.activePlayer
-    if (traders.length) {
-      let colPortion = ''
-      if (traders.length === 1) colPortion = 'sixteen'
-      if (traders.length === 2) colPortion = 'eight'
-      if (traders.length === 3) colPortion = 'five'
-
-      return (
-        <div className="ui grid">
-          <Header color="grey">Cards you can give away</Header>
-          {/* current player cards displayed to give away */}
-          <div className={`eight wide column`} key=''>
+  // //////// give cards ////////
+  displayCardsToGive = (traders, activePlayer) => {
+    return (
+      <div className="ui grid">
+        <div>
+          <div className={`four wide column`} key='ptogive'>
             <Header color="grey">{activePlayer.name}</Header>
             {
               activePlayer.hand.length && activePlayer.hand.map((card) => {
@@ -57,10 +50,11 @@ export default class PlayerActionsShare extends Component {
               })
             }
           </div>
-          <div className={`eight wide column`} key=''>
+          <div className={`four wide column`} key='ptoreceive'>
             <Header color="grey">Give to ...</Header>
             {
               traders.length && traders.map((trader) => {
+                console.log("TRADER to take", trader)
                 return (
                   <div>
                     <Button size="small" onClick={(e) => this.setTraderToReceive(e, trader)} >{trader.name}</Button>
@@ -69,7 +63,22 @@ export default class PlayerActionsShare extends Component {
               })
             }
           </div>
-          <Header color="grey">Cards you take</Header>
+        </div>
+      </div>
+    )
+  }
+
+  // //////// take cards ////////
+  displayCardsToTake = (traders) => {
+    if (traders.length) {
+      let colPortion = ''
+      if (traders.length === 1) colPortion = 'sixteen'
+      if (traders.length === 2) colPortion = 'eight'
+      if (traders.length === 3) colPortion = 'five'
+      return (
+        <div className="ui grid">
+          <Header color={this.state.color} content={`Which card are you taking?`} />
+          {this.state.cardToTake.city && <Header color={this.state.cardToTake.props.color} content={`${this.state.cardToTake.city}`} />}
           {
             traders.map((player) => {
               return (
@@ -97,6 +106,26 @@ export default class PlayerActionsShare extends Component {
     }
   }
 
+  toggleGive = () => {
+    this.setState({
+      give: !this.state.give
+    })
+  }
+
+  displayCardsForTrade = () => {
+    const traders = this.props.traders
+    const activePlayer = this.props.activePlayer
+    if (activePlayer.hand && activePlayer.hand.length) {
+      return (
+        <div>
+          {
+            this.state.give ? this.displayCardsToGive(traders, activePlayer) : this.displayCardsToTake(traders)
+          }
+        </div >
+      )
+    }
+  }
+
   render() {
     return (
       <Modal
@@ -106,9 +135,15 @@ export default class PlayerActionsShare extends Component {
         basic
         size='small'
       >
-        <Header color={this.state.color} content={`Which card are we sharing?`} />
-        {this.state.cardToTake.city && <Header color={this.state.cardToTake.props.color} content={`${this.state.cardToTake.city}`} />}
         <Modal.Content>
+          <span>
+            <Header color='grey' content={`Sharing Knowledge`} />
+            <Button.Group>
+              <Button onClick={this.toggleGive}>Give</Button>
+              <Button.Or />
+              <Button positive onClick={this.toggleGive}>Take</Button>
+            </Button.Group>
+          </span>
           {this.displayCardsForTrade()}
         </Modal.Content>
         <Modal.Actions>
