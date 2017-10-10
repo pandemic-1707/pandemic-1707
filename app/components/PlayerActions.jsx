@@ -3,6 +3,7 @@ import fire from '../../fire'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 import axios from 'axios'
 import {Button, Menu} from 'semantic-ui-react'
+import CureCelebration from './CureCelebration'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: have buttons activate when available
@@ -99,11 +100,7 @@ export default class PlayerActions extends Component {
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <Button
-        onClick={this.treatDisease}
-        >
-          Cure
-        </Button>
+          <CureCelebration roomName={this.props.roomName} currPlayer={this.props.currPlayer} />
         </Menu.Item>
         <Menu.Item>
         <Button
