@@ -1,0 +1,223 @@
+{
+  "players": {
+    "i'm not in a research city => return false": {
+      "color": {
+        "hexVal": "#74DE00",
+        "name": "green"
+      },
+      "hand": [
+        {
+          "Flexible-Aid-Package": {
+            "description": "Discard 1-3 City cards from your hand. The current player takes 1 additional action for every card you discard."
+          }
+        },
+        {
+          "Airlift": {
+            "description": "Move any 1 pawn to any city. (This can include rioting, collapsing, and fallen cities) Get permission before moving another player's pawn."
+          }
+        },
+        {
+          "city": "Chicago",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Riyadh",
+          "props": {
+            "color": "black"
+          }
+        }
+      ],
+      "name": "aw@a.com",
+      "numActions": 4,
+      "offset": [
+        -1,
+        -1
+      ],
+      "position": {
+        "city": "Algiers",
+        "location": [
+          33.748995,
+          -84.387982
+        ]
+      },
+      "role": "Researcher"
+    },
+    "i'm in a research city but don't have 5 cure cards of same color": {
+      "color": {
+        "hexVal": "#74DE00",
+        "name": "green"
+      },
+      "hand": [
+        {
+          "Flexible-Aid-Package": {
+            "description": "Discard 1-3 City cards from your hand. The current player takes 1 additional action for every card you discard."
+          }
+        },
+        {
+          "Airlift": {
+            "description": "Move any 1 pawn to any city. (This can include rioting, collapsing, and fallen cities) Get permission before moving another player's pawn."
+          }
+        },
+        {
+          "city": "Chicago",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Riyadh",
+          "props": {
+            "color": "black"
+          }
+        }
+      ],
+      "name": "aw@a.com",
+      "numActions": 4,
+      "offset": [
+        -1,
+        -1
+      ],
+      "position": {
+        "city": "Atlanta",
+        "location": [
+          33.748995,
+          -84.387982
+        ]
+      },
+      "role": "Researcher"
+    },
+    "i'm in research city & have 5 cure cards => return obj": {
+      "color": {
+        "hexVal": "#74DE00",
+        "name": "green"
+      },
+      "hand": [
+        {
+          "city": "Atlanta",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Chicago",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Essen",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Madrid",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Milan",
+          "props": {
+            "color": "blue"
+          }
+        }
+      ],
+      "name": "aw@a.com",
+      "numActions": 4,
+      "offset": [
+        -1,
+        -1
+      ],
+      "position": {
+        "city": "Atlanta",
+        "location": [
+          33.748995,
+          -84.387982
+        ]
+      },
+      "role": "Researcher"
+    },
+    "qPHI0utFdCOJht598ANfXj8yomG3": {
+      "color": {
+        "hexVal": "#DEEA00",
+        "name": "yellow"
+      },
+      "hand": [
+        {
+          "city": "Milan",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Paris",
+          "props": {
+            "color": "blue"
+          }
+        },
+        {
+          "city": "Cairo",
+          "props": {
+            "color": "black"
+          }
+        },
+        {
+          "city": "Bogota",
+          "props": {
+            "color": "yellow"
+          }
+        }
+      ],
+      "name": "test@test.com",
+      "numActions": 4,
+      "offset": [
+        -1,
+        1
+      ],
+      "position": {
+        "city": "Atlanta",
+        "location": [
+          33.748995,
+          -84.387982
+        ]
+      },
+      "role": "Scientist"
+    }
+  },
+  "shuffledColors": [
+    {
+      "hexVal": "#74DE00",
+      "name": "green"
+    },
+    {
+      "hexVal": "#DEEA00",
+      "name": "yellow"
+    },
+    {
+      "hexVal": "#EB0069",
+      "name": "pink"
+    },
+    {
+      "hexVal": "#00BDD8",
+      "name": "blue"
+    }
+  ],
+  "shuffledRoles": [
+    "Researcher",
+    "Scientist",
+    "Medic",
+    "Generalist",
+    "Dispatcher"
+  ],
+  "state": {
+    "currPlayer": "qPHI0utFdCOJht598ANfXj8yomG3",
+    "currPlayersArr": [
+      "qPHI0utFdCOJht598ANfXj8yomG3",
+      "CKj0e8Eqere53GkmP9U46y22eDM2"
+    ],
+    "disabledStart": false
+  }
+}
