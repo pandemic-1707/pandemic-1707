@@ -28,7 +28,7 @@ export default class PlayerActionsCure extends Component {
     console.log(curableColors, sameColors)
     return (
       <div>
-        <form id="select-cards-for-cure" onSubmit={() => (this.cureDisease())}>
+        <form id="select-cards-for-cure">
           {
             curableColors.map((color) => {
               return (
@@ -46,13 +46,14 @@ export default class PlayerActionsCure extends Component {
             })
           }
         </form>
-        <Button size="small" onClick={this.handleSubmit} color='white'>Confirm</Button>
+        <Button size="small" onClick={this.cureDisease} color='white'>Confirm</Button>
       </div>
     )
   }
 
   // let player use first 5 cards of that color for cure
-  setFirstFive = () => {
+  setFirstFive = (e) => {
+    e.preventDefault()
     const color = 'blue'
     const firstFiveCureCards = this.props.curables.sameColors[color].slice(0, 5)
     this.setState({
@@ -67,7 +68,8 @@ export default class PlayerActionsCure extends Component {
   }
 
   // cureCards is array of cards to be discarded for cure
-  cureDisease = () => {
+  cureDisease = (e) => {
+    e.preventDefault()
     const activePlayer = this.props.activePlayer
     const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
     const color = this.state.color
