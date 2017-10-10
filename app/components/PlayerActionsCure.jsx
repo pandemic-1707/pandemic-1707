@@ -96,7 +96,6 @@ export default class PlayerActionsCure extends Component {
   }
 
   render() {
-    console.log("rendering cure", this.props.curables)
     if (this.props.curables) {
       return (
         <Modal
