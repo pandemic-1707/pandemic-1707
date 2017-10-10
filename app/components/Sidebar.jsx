@@ -35,8 +35,7 @@ export default class Sidebar extends Component {
         </div>
       )
     } else {
-    // filter out numPlayers on players object
-      const playersItemsArr = Object.values(this.state.players).filter(x => typeof x === 'object')
+      const playersItemsArr = Object.values(this.state.players)
       const players = playersItemsArr.map((playerItems, idx) => {
         const player = playersItemsArr[idx]
         const hexVal = player.color.hexVal

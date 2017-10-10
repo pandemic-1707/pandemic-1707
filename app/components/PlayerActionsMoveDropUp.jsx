@@ -159,7 +159,6 @@ export default class PlayerActionMoveDropUp extends Component {
                 nearbyCities && nearbyCities.map((cityName) => {
                   return <option key={cityName} value={cityName + ':nearby'}>{cityName}</option>
                 })
-              })
               }
             </optgroup>
             <optgroup label="Player Hand (direct flight)">

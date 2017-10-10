@@ -3,7 +3,9 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import { Menu, Button } from 'semantic-ui-react'
+import Alerts from './Alerts'
+import { Menu, Button, Transition } from 'semantic-ui-react'
+const db = fire.database()
 // Get the auth API from Firebase.
 const auth = fire.auth()
 
@@ -19,35 +21,50 @@ export default class NavBar extends Component {
     this.handleLogout = this.handleLogout.bind(this)
   }
   componentDidMount() {
-    fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
+    db.ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
       const gameState = snapshot.val()
       if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })
     })
 
-    fire.database().ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
+    db.ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
       const currPlayer = snapshot.val().state.currPlayer
       const players = snapshot.val().players
       this.setState({
-        currPlayer: snapshot.val().state.currPlayer,
-        players: snapshot.val().players
+        currPlayer: currPlayer,
+        players: players
       })
       if (players && currPlayer) {
         const hand = players[currPlayer].hand
+        // if currPlayer has no more actions left
         if (players[currPlayer].numActions === 0) {
           // change numActions back to 4
-          return fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
+          return db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
             numActions: 4
           })
           // push those 2 onto player's hand
           .then(() => {
-            fire.database().ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
+            db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
               hand: [...hand, snapshot.val().playerDeck.shift()]
             })
           })
+          // add Alerts
+          .then(() => {
+            console.log('did we get in alerts?')
+            <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
+          })
+          // // check if they have more than 7 cards
+          // .then(() => {
+          //   db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).once('value').then(snapshot => {
+          //     const handArr = snapshot.val().hand
+          //     if (handArr.length >= 7) {
+          //       alert('Please discard')
+          //     }
+          //   })
+          // })
           // pull those 2 out of player deck
           .then(() => {
             const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
-            fire.database().ref(`/rooms/${this.props.roomName}`).update({
+            db.ref(`/rooms/${this.props.roomName}`).update({
               playerDeck: updatedPlayerDeck
             })
           })
@@ -55,13 +72,13 @@ export default class NavBar extends Component {
           .then(() => {
             const currPlayersArr = snapshot.val().state.currPlayersArr
             const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-            console.log('i', i)
-            fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
+            db.ref(`/rooms/${this.props.roomName}/state`).update({
               currPlayer: currPlayersArr[i]
             })
             this.setState({
               currPlayer: currPlayersArr[i]
             })
+            console.log('currPlayer', currPlayer)
           })
         }
       }
@@ -107,9 +124,15 @@ export default class NavBar extends Component {
           <img src={'/images/researchCenter.png'} />
           {this.state.gameState.researchCenters}
         </Menu.Item>
+         <Transition
+            animation='flash'
+            duration='1000'
+            transitionOnMount={true}>
         <Menu.Item>
           Current Turn: {currPlayerName}
+          <Alerts />
         </Menu.Item>
+        </Transition>
         <Menu.Item>
          <Rules />
         </Menu.Item>
@@ -117,7 +140,7 @@ export default class NavBar extends Component {
           {`Welcome, ${auth.currentUser.displayName}! `}
         </Menu.Item>
         <Menu.Item>
-          <Button size="mini" color="violet" 
+          <Button size="mini" color="violet"
           onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
       </Menu>
