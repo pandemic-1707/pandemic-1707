@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
 import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
-import {Button, Menu} from 'semantic-ui-react'
+import { Button, Menu } from 'semantic-ui-react'
 import PlayerActionsCure from './PlayerActionsCure'
 import cureUtils from '../utils/cure-utils.js'
 
@@ -114,45 +114,10 @@ export default class PlayerActions extends Component {
 
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
-    const allCities = this.state.cities
-    // const canCure = cureUtils.canCureDisease(activePlayer, allCities)
-
-    const canCure = {
-      curableColors: ['blue'],
-      sameColors: {
-        blue: [
-          {
-            'city': 'Atlanta',
-            'props': {
-              'color': 'blue'
-            }
-          },
-          {
-            'city': 'Chicago',
-            'props': {
-              'color': 'blue'
-            }
-          },
-          {
-            'city': 'Essen',
-            'props': {
-              'color': 'blue'
-            }
-          },
-          {
-            'city': 'Madrid',
-            'props': {
-              'color': 'blue'
-            }
-          },
-          {
-            'city': 'Milan',
-            'props': {
-              'color': 'blue'
-            }
-          }
-        ]
-      }
+    const allCities = this.state.cities && this.state.cities
+    let canCure = false
+    if (activePlayer && allCities) {
+      canCure = cureUtils.canCureDisease(activePlayer, allCities)
     }
 
     return (
@@ -161,33 +126,33 @@ export default class PlayerActions extends Component {
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-        <Button
-          onClick={this.treatDisease}>Treat
+          <Button
+            onClick={this.treatDisease}>Treat
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer}/>
+          <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
         </Menu.Item>
         <Menu.Item>
-        <Button
-        onClick={this.buildResearch}
-        >
-          Build
+          <Button
+            onClick={this.buildResearch}
+          >
+            Build
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <Button>
-          Share
+          <Button>
+            Share
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <Button>
-          Event
+          <Button>
+            Event
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <Button
-          onClick={this.handleClick}>Epidemic
+          <Button
+            onClick={this.handleClick}>Epidemic
         </Button>
         </Menu.Item>
         <Menu.Item>

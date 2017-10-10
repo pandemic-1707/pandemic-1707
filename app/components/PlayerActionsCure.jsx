@@ -25,29 +25,30 @@ export default class PlayerActionsCure extends Component {
   displayCardsForCure = () => {
     const curableColors = this.props.curables.curableColors
     const sameColors = this.props.curables.sameColors
-    return (
-      <div>
-        <form id="select-cards-for-cure">
-          {
-            curableColors.map((color) => {
-              return (
-                <div>
-                  <button onClick={this.setFirstFive}>blue</button>
-                  {/* <Button size="small" onClick={() => (this.setFirstFive(color))} color={color}>{color}</Button> */}
-                  {
-                    sameColors[color].map((card) => {
-                      const cityName = card.city
-                      return <div key={cityName} value={cityName}>{cityName}</div>
-                    })
-                  }
-                </div>
-              )
-            })
-          }
-        </form>
-        <Button size="small" onClick={this.cureDisease} color='white'>Confirm</Button>
-      </div>
-    )
+    if (curableColors && sameColors) {
+      return (
+        <div>
+          <form id="select-cards-for-cure">
+            {
+              curableColors.map((color) => {
+                return (
+                  <div>
+                    <Button size="small" onClick={this.setFirstFive} color={color} >{color}</Button>
+                    {/* <button onClick={this.setFirstFive}>blue</button> */}
+                    {
+                      sameColors[color].map((card) => {
+                        const cityName = card.city
+                        return <div key={cityName} value={cityName}>{cityName}</div>
+                      })
+                    }
+                  </div>
+                )
+              })
+            }
+          </form>
+        </div>
+      )
+    }
   }
 
   // let player use first 5 cards of that color for cure
@@ -90,30 +91,35 @@ export default class PlayerActionsCure extends Component {
           curedDiseases: newCuredDiseases
         })
       })
-
+    this.handleClose()
     // TODO: ... have treat disease clear all 3 infection rate for the color 
   }
 
   render() {
-    return (
-      <Modal
-        trigger={<Button size="small" onClick={this.handleOpen} color="olive">Cure</Button>}
-        open={this.state.modalOpen}
-        onClose={this.handleClose}
-        basic
-        size='small'
-      >
-        <Header icon='browser' content='cureCards' />
-        <Modal.Content>
-          <h3>You can cure a disease</h3>
-          {this.displayCardsForCure()}
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color='green' onClick={this.handleClose} inverted>
-            <Icon name='checkmark' /> Got it
-          </Button>
-        </Modal.Actions>
-      </Modal>
-    )
+    console.log("rendering cure", this.props.curables)
+    if (this.props.curables) {
+      return (
+        <Modal
+          trigger={<Button size="small" onClick={this.handleOpen} color="olive">Cure</Button>}
+          open={this.state.modalOpen}
+          onClose={this.handleClose}
+          basic
+          size='small'
+        >
+          <Header icon='browser' content='cureCards' />
+          <Modal.Content>
+            <h3>You can cure a disease</h3>
+            {this.displayCardsForCure()}
+          </Modal.Content>
+          <Modal.Actions>
+            <Button size="small" onClick={this.cureDisease} color='olive'>Confirm</Button>
+          </Modal.Actions>
+        </Modal>
+      )
+    } else {
+      return (
+        <Button size="small" onClick={this.handleOpen} disabled={true} >Cure</Button>
+      )
+    }
   }
 }
