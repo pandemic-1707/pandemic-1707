@@ -166,7 +166,7 @@ export default class PlayerActions extends Component {
         </Button>
         </Menu.Item>
         <Menu.Item>
-        <PlayerActionsCure curables={canCure} activePlayer={activePlayer}/>
+        <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer}/>
         </Menu.Item>
         <Menu.Item>
         <Button

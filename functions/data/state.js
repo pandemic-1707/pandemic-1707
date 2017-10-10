@@ -7,5 +7,10 @@ module.exports = {
   researchCenters: 5,
   infectionRate: 2,
   infectionTrack: [2, 2, 3, 3, 4, 4],
-  curedDiseases: []
+  curedDiseases: {
+    blue: false,
+    red: false,
+    black: false,
+    yellow: false
+  }
 }

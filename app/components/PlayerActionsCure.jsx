@@ -25,7 +25,6 @@ export default class PlayerActionsCure extends Component {
   displayCardsForCure = () => {
     const curableColors = this.props.curables.curableColors
     const sameColors = this.props.curables.sameColors
-    console.log(curableColors, sameColors)
     return (
       <div>
         <form id="select-cards-for-cure">
@@ -62,11 +61,6 @@ export default class PlayerActionsCure extends Component {
     })
   }
 
-  handleSubmit(e) {
-    e.preventDefault()
-    this.cureDisease()
-  }
-
   // cureCards is array of cards to be discarded for cure
   cureDisease = (e) => {
     e.preventDefault()
@@ -74,7 +68,6 @@ export default class PlayerActionsCure extends Component {
     const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
     const color = this.state.color
     const cureCards = this.state.cureCards
-        console.log('COLOR AND CURE', color, cureCards)
     // look for cure cards to discard and create newHand without the cure cards
     const newHand = activePlayer.hand.filter(function (card) {
       // newHand can't have any cards we want to discard
@@ -82,17 +75,15 @@ export default class PlayerActionsCure extends Component {
         return card.city !== cureCards.city
       })
     })
-    console.log('NEW HAND', newHand)
     fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
       numActions: activePlayer.numActions - 1,
       hand: newHand
     })
     // add to curedDiseases
-    let newCuredDiseases = []
+    let newCuredDiseases = {}
     fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).once('value', snapshot => {
       newCuredDiseases = snapshot.val()
-      newCuredDiseases.push(color)
-      console.log("NEW CURES", newCuredDiseases)
+      newCuredDiseases[color] = true
     })
       .then(() => {
         fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
