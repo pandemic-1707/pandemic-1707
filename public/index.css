@@ -54,6 +54,8 @@ body {
 .yellow {
 	background: yellow;
 	box-shadow: 0 0 5px 5px #f2f000;
+  color: black;
+  text-shadow: 0 1px 0 white;
 }
 
 .black {
