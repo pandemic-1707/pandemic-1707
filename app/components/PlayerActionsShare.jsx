@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Button, Header, Icon, Modal } from 'semantic-ui-react'
+import { Button, Header, Icon, Modal, Label } from 'semantic-ui-react'
 import fire from '../../fire'
 
 export default class PlayerActionsShare extends Component {
   state = {
     modalOpen: false,
-    cardToTrade: {}
+    cardToTrade: ''
   }
 
   handleOpen = () => this.setState({ modalOpen: true })
@@ -16,6 +16,11 @@ export default class PlayerActionsShare extends Component {
   // take a card
   // remove or add to other player 
   // confirm
+
+  setCard = (e, card) => {
+    e.preventDefault()
+    this.setState({cardToTrade: card})
+  }
 
   displayCardsForTrade = () => {
     const traders = this.props.traders
@@ -32,11 +37,18 @@ export default class PlayerActionsShare extends Component {
             traders.map((player) => {
               return (
                 <div className={`${colPortion} wide column`} key={player}>
-                  <Header>{player.name}</Header>
+                  <Header color="grey">{player.name}</Header>
                   {
                     player.hand.length && player.hand.map((card) => {
-                      const cityName = card.city
-                      return <div key={cityName} value={cityName}>{cityName}</div>
+                      if (card.city) {
+                        const cityName = card.city
+                        return (
+                          <div>
+                           <Button size="small" onClick={ (e) => this.setCard(e, card) } color={card.props.color} ></Button> 
+                          <span>{cityName}</span>
+                          </div>
+                        )
+                      }
                     })
                   }
                 </div>
@@ -57,7 +69,8 @@ export default class PlayerActionsShare extends Component {
         basic
         size='small'
       >
-        <Header color={this.state.color} content={`Which card are we moving?`} />
+        <Header color={this.state.color} content={`Which card are we sharing?`} />
+         {this.state.cardToTrade.city && <Header color={this.state.cardToTrade.props.color} content={`${this.state.cardToTrade.city}`} />}
         <Modal.Content>
           {this.displayCardsForTrade()}
         </Modal.Content>
