@@ -65,6 +65,7 @@ export default class PlayerActionsBuild extends Component {
     return (
       <div>
         <Button
+          color="purple"
           onClick={this.buildResearch}
         >Build
         </Button>
