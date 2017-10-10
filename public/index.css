@@ -1,5 +1,6 @@
 body {
   height: 100%;
+  overflow: hidden;
 }
 .welcome {
   background: url("/images/background.jpg") no-repeat center center fixed; 
@@ -39,36 +40,71 @@ body {
   text-shadow: 0 1px 0 black;
   color: white;
 }
+header {
+  overflow: hidden;
+}
 
 .blue {
 	background: steelblue;
-	box-shadow: 0 0 5px 5px #26cceb;
+}
+
+.blue-shadow {
+  box-shadow: 0 0 5px 5px #26cceb;
 }
 
 .red {
 	background: red;
-	box-shadow: 0 0 5px 5px #f97174;
+}
+
+.red-shadow {
+  box-shadow: 0 0 5px 5px #f97174;
 }
 
 .yellow {
 	background: yellow;
-	box-shadow: 0 0 5px 5px #f2f000;
+}
+
+.yellow-shadow {
+  box-shadow: 0 0 5px 5px #f2f000;
 }
 
 .black {
 	background: black;
-	box-shadow: 0 0 5px 5px #b4b4b4;
+}
+
+.black-shadow {
+  box-shadow: 0 0 5px 5px #b4b4b4;
 }
 
 .research-station-marker {
-	width: 25px;
-	height: 25px;
-	border: 1px solid rgba(0, 0, 0, .2);
-	background: #ffffff;
+	width: 20px !important;
+  height: 20px !important;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 50%;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 0 1px 0 black;
+  background: white;
+  color: black;
+}
+
+.color-box {
+  float: left;
+  width: 12px;
+  height: 12px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
 }
 
 .whoami-user-name {
   color: grey;
+}
+
+li {
+  list-style: none;
+  margin-bottom: 3px;
+  font-size: 12px;
+  padding-top: 1px;
 }
 
 .player-box {
@@ -109,6 +145,7 @@ body {
 }
 .footer {
   height: 70px;
+  overflow: hidden;
 }
 form input.error {
   border-color: red;

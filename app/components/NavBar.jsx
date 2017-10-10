@@ -3,7 +3,7 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import Alerts from './Alerts'
+import Alerts from './DealingHandsAlert'
 import { Menu, Button, Transition } from 'semantic-ui-react'
 const db = fire.database()
 // Get the auth API from Firebase.
@@ -47,11 +47,6 @@ export default class NavBar extends Component {
               hand: [...hand, snapshot.val().playerDeck.shift()]
             })
           })
-          // add Alerts
-          .then(() => {
-            console.log('did we get in alerts?')
-            <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
-          })
           // // check if they have more than 7 cards
           // .then(() => {
           //   db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).once('value').then(snapshot => {
@@ -63,6 +58,7 @@ export default class NavBar extends Component {
           // })
           // pull those 2 out of player deck
           .then(() => {
+            console.log('are we getting in deck?')
             const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
             db.ref(`/rooms/${this.props.roomName}`).update({
               playerDeck: updatedPlayerDeck
@@ -143,6 +139,7 @@ export default class NavBar extends Component {
           <Button size="mini" color="violet"
           onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
+        <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
       </Menu>
       )
     }

@@ -58,16 +58,18 @@ export default class Sidebar extends Component {
                 <div className="player-hand">
                 {
                   hand && hand.map((obj, i) => {
+                    const color = obj.props ? obj.props.color : 'grey'
+                    let title = obj.city || Object.keys(obj)[0]
+                    title = title.split('-').join(' ')
                     return (
-                      <Transition
-                      animation='flash'
-                      duration='1000'
-                      transitionOnMount={true}
-                      key={i}>
+                    <Transition animation="flash" duration="1000" transitionOnMount={true} key={`color-box-${i}`}>
                       <List>
-                        <List.Item icon='marker' content={obj.city || Object.keys(obj)[0]} />
+                        <List.Item>
+                          <List.Icon className='color-box' style={{backgroundColor: color}}></List.Icon>
+                          <List.Content key={`card-${i}`}>{title}</List.Content>
+                        </List.Item>
                       </List>
-                      </Transition>
+                    </Transition>
                     )
                   })
                 }
