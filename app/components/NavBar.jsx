@@ -109,19 +109,19 @@ export default class NavBar extends Component {
       return (
         <Menu inverted>
         <Menu.Item>
-          <img src={'/images/redIcon.png'} />
+          <img className='navbar-icon' src={'/images/redIcon.png'} />
           {this.state.gameState.redTiles}
-          <img src={'/images/blackIcon.png'} />
+          <img className='navbar-icon' src={'/images/blackIcon.png'} />
           {this.state.gameState.blackTiles}
-          <img src={'/images/blueIcon.png'} />
+          <img className='navbar-icon' src={'/images/blueIcon.png'} />
           {this.state.gameState.blueTiles}
-          <img src={'/images/yellowIcon.png'} />
+          <img className='navbar-icon' src={'/images/yellowIcon.png'} />
           {this.state.gameState.yellowTiles}
-          <img src={'/images/infectionMarker.jpg'} />
+          <img className='navbar-icon' src={'/images/infectionMarker.jpg'} />
           {this.state.gameState.infectionRate}
-          <img src={'/images/OutbreakMarker.png'} />
+          <img className='navbar-icon' src={'/images/OutbreakMarker.png'} />
           {this.state.gameState.outbreaks}
-          <img src={'/images/researchCenter.png'} />
+          <img className='navbar-icon' src={'/images/researchCenter.png'} />
           {this.state.gameState.researchCenters}
         </Menu.Item>
          <Transition

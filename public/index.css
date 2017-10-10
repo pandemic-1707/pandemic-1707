@@ -88,10 +88,15 @@ header {
   color: black;
 }
 
+.navbar-icon {
+  margin-right: 7px !important;
+  margin-left: 7px !important;
+}
+
 .color-box {
   float: left;
-  width: 12px;
-  height: 12px;
+  width: 12px !important;
+  height: 12px !important;
   margin: 5px;
   border: 1px solid rgba(0, 0, 0, .2);
 }
@@ -106,30 +111,45 @@ li {
   font-size: 12px;
   padding-top: 1px;
 }
-
+.avatar {
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  margin-right: 5px;
+  margin-top: 3px;
+}
+.player-role {
+  display: inline-flex;
+}
 .player-box {
   width: 150px;
 }
 .player-name {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-flex-direction: row;
-  flex-direction: row;
-  height: 32px;
-  font-size: 12px;
+  padding: 5px;
 }
 .player-hand {
   background-color: grey;
   font-size: 10px;
+  padding: 5px;
 }
 .site {
   height: 100vh;
+}
+.role {
+  font-size: 12px;
+  display: inline;
+}
+.titles {
+  display: block;
+}
+.user {
+  display: inline;
 }
 .sidebar {
     width: 150px;
     position: absolute;
     right: 0px;
-    top: 50px;
+    top: 52px;
     height: 100%;
   }
 .footer {
