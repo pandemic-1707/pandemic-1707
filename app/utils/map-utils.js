@@ -11,7 +11,7 @@ export function mapDataToMarkers(cities) {
     // assign a city marker or research station marker accordingly
     const cityMarker = divIcon({className: `city-marker ${city.color} ${city.color}-shadow`, html: html})
     const researchStationMarker = divIcon({className: `research-station-marker ${city.color}-shadow`, html: html})
-    const marker = city.hasResearchStation ? researchStationMarker : cityMarker
+    const marker = city.research ? researchStationMarker : cityMarker
     // return a marker with position and custom icon
     return <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>
       <Tooltip direction='top' offset={[-8, -2]} opacity={1}>
