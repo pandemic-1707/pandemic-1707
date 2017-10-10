@@ -120,7 +120,7 @@ export default class PlayerActions extends Component {
           <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName}/>
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsShare traders={traders} />
+          <PlayerActionsShare activePlayer={activePlayer} traders={traders} />
         </Menu.Item>
         <Menu.Item>
           <Button>

@@ -5,7 +5,8 @@ import fire from '../../fire'
 export default class PlayerActionsShare extends Component {
   state = {
     modalOpen: false,
-    cardToTrade: ''
+    cardToTake: '',
+    traderToReceive: {}
   }
 
   handleOpen = () => this.setState({ modalOpen: true })
@@ -17,22 +18,58 @@ export default class PlayerActionsShare extends Component {
   // remove or add to other player 
   // confirm
 
-  setCard = (e, card) => {
+  setCardToTake = (e, card) => {
     e.preventDefault()
-    this.setState({cardToTrade: card})
+    this.setState({ cardToTake: card })
+  }
+
+  setCardToTake = (e, trader) => {
+    e.preventDefault()
+    this.setState({ traderToReceive: trader })
   }
 
   displayCardsForTrade = () => {
     const traders = this.props.traders
+    const activePlayer = this.props.activePlayer
     if (traders.length) {
       let colPortion = ''
       if (traders.length === 1) colPortion = 'sixteen'
       if (traders.length === 2) colPortion = 'eight'
       if (traders.length === 3) colPortion = 'five'
-      if (traders.length === 4) colPortion = 'four'
 
       return (
         <div className="ui grid">
+          <Header color="grey">Cards you can give away</Header>
+          {/* current player cards displayed to give away */}
+          <div className={`eight wide column`} key=''>
+            <Header color="grey">{activePlayer.name}</Header>
+            {
+              activePlayer.hand.length && activePlayer.hand.map((card) => {
+                if (card.city) {
+                  const cityName = card.city
+                  return (
+                    <div>
+                      <Button size="small" onClick={(e) => this.setCardToTake(e, card)} color={card.props.color} ></Button>
+                      <span>{cityName}</span>
+                    </div>
+                  )
+                }
+              })
+            }
+          </div>
+          <div className={`eight wide column`} key=''>
+            <Header color="grey">Give to ...</Header>
+            {
+              traders.length && traders.map((trader) => {
+                return (
+                  <div>
+                    <Button size="small" onClick={(e) => this.setTraderToReceive(e, trader)} >{trader.name}</Button>
+                  </div>
+                )
+              })
+            }
+          </div>
+          <Header color="grey">Cards you take</Header>
           {
             traders.map((player) => {
               return (
@@ -44,8 +81,8 @@ export default class PlayerActionsShare extends Component {
                         const cityName = card.city
                         return (
                           <div>
-                           <Button size="small" onClick={ (e) => this.setCard(e, card) } color={card.props.color} ></Button> 
-                          <span>{cityName}</span>
+                            <Button size="small" onClick={(e) => this.setCardToTake(e, card)} color={card.props.color} ></Button>
+                            <span>{cityName}</span>
                           </div>
                         )
                       }
@@ -70,12 +107,12 @@ export default class PlayerActionsShare extends Component {
         size='small'
       >
         <Header color={this.state.color} content={`Which card are we sharing?`} />
-         {this.state.cardToTrade.city && <Header color={this.state.cardToTrade.props.color} content={`${this.state.cardToTrade.city}`} />}
+        {this.state.cardToTake.city && <Header color={this.state.cardToTake.props.color} content={`${this.state.cardToTake.city}`} />}
         <Modal.Content>
           {this.displayCardsForTrade()}
         </Modal.Content>
         <Modal.Actions>
-          <Button size="small" onClick={this.cureDisease} disabled={!this.state.cardToTrade.city} >Confirm</Button>
+          <Button size="small" onClick={this.tradeKnowledge} disabled={!this.state.cardToTake.city} >Confirm</Button>
           <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
         </Modal.Actions>
       </Modal>
