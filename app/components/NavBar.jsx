@@ -36,7 +36,6 @@ export default class NavBar extends Component {
       this.setState({loading: false})
     }, 1000)
   }
-
   render() {
     const { players, currPlayer } = this.state
     let currPlayerName = ''
