@@ -1,16 +1,19 @@
-module.exports = function(addend, room) {
+module.exports = function(roomRef, addend) {
+  // easier to handle this here than in asynchronous if-elses
+  if (addend === 0) return
+
   // fetch number of outbreaks
   // increment it
-  return room.child('state').child('outbreaks').once('value').then(snapshot => {
+  return roomRef.child('state').child('outbreaks').once('value').then(snapshot => {
     const prevVal = snapshot.val()
-    const nextVal = prevVal + 1
+    const nextVal = prevVal + addend
 
     // check for loss condition: players must cure diseases before
     // outbreakLevel reaches 8
     if (nextVal >= 8) {
       // then you lose!
     } else {
-      return room.update({ '/state/outbreaks': nextVal })
+      return roomRef.update({ '/state/outbreaks': nextVal })
     }
   })
 }

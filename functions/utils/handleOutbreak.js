@@ -3,13 +3,12 @@ module.exports = function(outbreakSite, cities) {
   // if the infection rate was 0 before, that's all you need to do
   const updatedData = {}
   updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
-  let nOutbreaks
+  let nOutbreaks = 0
 
   // TO-DO: MOVE THIS IF STATEMENT
   // if epidemic site had infection rate > 0 (i.e. adding three to it would push you over the edge)
   // then you have an outbreak! handle it
   if (cities[outbreakSite].infectionRate > 0) {
-    let nOutbreaks = 0
     const outbreakQueue = [outbreakSite]
     const seen = new Set()
 

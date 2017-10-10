@@ -1,7 +1,7 @@
 const handleOutbreak = require('./handleOutbreak')
 const shuffle = require('./shuffle')
 const increaseInfectionRate = require('./increaseInfectionRate')
-
+const incrementOutbreaks = require('./incrementOutbreaks')
 module.exports = function(refs) {
   const { player, playerRef, roomRef } = refs
 
@@ -30,11 +30,10 @@ module.exports = function(refs) {
           } else {
             infectionDiscard.push(outbreakCard)
           }
-          console.log(infectionDiscard)
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
           const outbreakSite = outbreakCard.split(' ').join('-')
-          const updatedData = handleOutbreak(outbreakSite, cities)
+          const { updatedData, nOutbreaks } = handleOutbreak(outbreakSite, cities)
 
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
@@ -43,7 +42,7 @@ module.exports = function(refs) {
           updatedDecks['/infectionDiscard'] = []
 
           const all = Object.assign({}, updatedDecks, updatedData)
-          return roomRef.update(all)
+          return incrementOutbreaks(roomRef, nOutbreaks).then(() => roomRef.update(all))
         })
       }
     }

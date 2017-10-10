@@ -1,4 +1,5 @@
 const handleOutbreak = require('./handleOutbreak')
+const incrementOutbreaks = require('./incrementOutbreaks')
 
 module.exports = function(refs) {
   const { player, playerRef, roomRef } = refs
@@ -15,6 +16,8 @@ module.exports = function(refs) {
     let infectionDiscard = data[2]
     const infectionRate = data[3]
     let updatedData = {}
+    let outbreakData = {}
+    let nOutbreaks = 0
 
     // need to infect as many cities as the current infection rate
     for (let i = 0; i < infectionRate; i++) {
@@ -32,13 +35,15 @@ module.exports = function(refs) {
         updatedData[path] = infectionRate + 1
         // do normal stuff
       } else {
-        const outbreakData = handleOutbreak(city, cities)
+        const returned = handleOutbreak(city, cities)
+        outbreakData = returned.updatedData
+        nOutbreaks = returned.nOutbreaks
         updatedData = Object.assign({}, updatedData, outbreakData)
       }
     }
 
     updatedData['/infectionDeck'] = infectionDeck
     updatedData['/infectionDiscard'] = infectionDiscard
-    return roomRef.update(updatedData)
+    return incrementOutbreaks(roomRef, nOutbreaks).then(() => roomRef.update(updatedData))
   })
 }
