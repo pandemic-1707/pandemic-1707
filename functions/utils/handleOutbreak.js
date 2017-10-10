@@ -1,21 +1,29 @@
-// TO-DO: REFACTOR INTO TWO FUNCTIONS: 1) INFECT/DETECT OUTBREAKS AND 2) HANDLE OUTBREAK
 module.exports = function(outbreakSite, cities) {
+<<<<<<< HEAD
   // outbreak site must get an infectionRate of 3
   // if the infection rate was 0 before, that's all you need to do
+=======
+  // TO-DO: MOVE THIS INTO HANDLE EPIDEMIC
+>>>>>>> master
   const updatedData = {}
   updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
+  let nOutbreaks
 
+  // TO-DO: MOVE THIS IF STATEMTN
+  // if epidemic site had infection rate > 0 (i.e. adding three to it would push you over the edge)
+  // then you have an outbreak! handle it
   if (cities[outbreakSite].infectionRate > 0) {
+    let nOutbreaks = 0
     const outbreakQueue = [outbreakSite]
     const seen = new Set()
 
     while (outbreakQueue.length) {
+      nOutbreaks++
       const nextOutbreakSite = outbreakQueue.shift()
       const connections = cities[nextOutbreakSite].connections
 
       connections.forEach(connection => {
         const path = 'cities/' + connection + '/infectionRate'
-
         // outbreaks can compound infections in affected cities
         // so if you've already affected that city, you need to use its
         // updatedValue the next time (until it outbreaks and then its safe)
@@ -39,6 +47,5 @@ module.exports = function(outbreakSite, cities) {
       })
     }
   }
-
-  return updatedData
+  return { updatedData, nOutbreaks }
 }
