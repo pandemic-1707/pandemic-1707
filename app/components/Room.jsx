@@ -28,13 +28,13 @@ export default class Room extends Component {
           LoggedIn: true,
           userId: user.uid
         })
-      }
-      fire.database().ref(`/rooms/${this.props.match.params.roomName}/state`).on('value', snapshot => {
-        const currPlayer = snapshot.val().currPlayer
-        this.setState({
-          isCurrentPlayer: currPlayer === user.uid
+        fire.database().ref(`/rooms/${this.props.match.params.roomName}/state`).on('value', snapshot => {
+          const currPlayer = snapshot.val().currPlayer
+          this.setState({
+            isCurrentPlayer: currPlayer === user.uid
+          })
         })
-      })
+      }
     })
   }
   componentWillUnmount() {
@@ -52,7 +52,7 @@ export default class Room extends Component {
               <div><Chat auth={auth} fireRef={db.ref(`/rooms/${this.props.match.params.roomName}/chat`)} /></div>
             </div>
             <div className="main-content">
-              <header><NavBar roomName={this.props.match.params.roomName} /></header>
+              <header><NavBar roomName={this.props.match.params.roomName} history={this.props.history}/></header>
               <Map roomName={this.props.match.params.roomName} />
               <footer className="footer">
                 {

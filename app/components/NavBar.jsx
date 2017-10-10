@@ -16,6 +16,7 @@ export default class NavBar extends Component {
       players: {},
       loading: true
     }
+    this.handleLogout = this.handleLogout.bind(this)
   }
   componentDidMount() {
     fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
@@ -70,6 +71,11 @@ export default class NavBar extends Component {
     }, 1000)
   }
 
+  handleLogout(e) {
+    auth.signOut()
+    this.props.history.push('/')
+  }
+
   render() {
     const { players, currPlayer } = this.state
     let currPlayerName = ''
@@ -101,18 +107,18 @@ export default class NavBar extends Component {
           <img src={'/images/researchCenter.png'} />
           {this.state.gameState.researchCenters}
         </Menu.Item>
-
         <Menu.Item>
           Current Turn: {currPlayerName}
         </Menu.Item>
-
         <Menu.Item>
          <Rules />
         </Menu.Item>
-
         <Menu.Item>
           {`Welcome, ${auth.currentUser.displayName}! `}
-          <Button size="mini" color="violet" onClick={() => auth.signOut()}>Logout</Button>
+        </Menu.Item>
+        <Menu.Item>
+          <Button size="mini" color="violet" 
+          onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
       </Menu>
       )

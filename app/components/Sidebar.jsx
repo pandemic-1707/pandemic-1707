@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
+import { Form, List, Transition } from 'semantic-ui-react'
 
 const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
+const transitions = ['jiggle', 'flash', 'shake', 'pulse', 'tada', 'bounce']
 
 export default class Sidebar extends Component {
   constructor(props) {
     super(props)
     this.state = {
       players: {},
-      loading: true
+      loading: true,
+      animation: transitions[2],
+      duration: 500,
+      visible: true
     }
   }
   componentDidMount() {
@@ -33,24 +38,37 @@ export default class Sidebar extends Component {
     // filter out numPlayers on players object
       const playersItemsArr = Object.values(this.state.players).filter(x => typeof x === 'object')
       const players = playersItemsArr.map((playerItems, idx) => {
+        const player = playersItemsArr[idx]
+        const hexVal = player.color.hexVal
+        const role = player.role
+        const name = player.name
+        const hand = player.hand
         return (
           <div key={idx}>
             <div>
               <div className="player-box">
                 <div className={'player-name'}
-                  style={{backgroundColor: playersItemsArr[idx].color.hexVal}}>
-                  <img height="32" width="32" src={`/images/${playersItemsArr[idx].role}.png`} />
+                  style={player ? {backgroundColor: hexVal} : ''}>
+                  <img height="32" width="32" src={`/images/${role}.png`} />
                   <div>
-                    {playersItemsArr[idx].name}
+                    {name}
                   <br />
-                    {playersItemsArr[idx].role}
+                    {role}
                   </div>
                 </div>
                 <div className="player-hand">
                 {
-                  playersItemsArr[idx].hand && playersItemsArr[idx].hand.map((obj, i) => {
+                  hand && hand.map((obj, i) => {
                     return (
-                      <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
+                      <Transition
+                      animation='flash'
+                      duration='1000'
+                      transitionOnMount={true}
+                      key={i}>
+                      <List>
+                        <List.Item icon='marker' content={obj.city || Object.keys(obj)[0]} />
+                      </List>
+                      </Transition>
                     )
                   })
                 }
