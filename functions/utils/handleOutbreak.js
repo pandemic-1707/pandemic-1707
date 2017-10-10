@@ -6,13 +6,11 @@ module.exports = function(outbreakSite, cities) {
   updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
 
   if (cities[outbreakSite].infectionRate > 0) {
-    console.log('it caused an outbreak!')
     const outbreakQueue = [outbreakSite]
     const seen = new Set()
 
     while (outbreakQueue.length) {
       const nextOutbreakSite = outbreakQueue.shift()
-      console.log('theres an outbreak in ', nextOutbreakSite)
       const connections = cities[nextOutbreakSite].connections
 
       connections.forEach(connection => {
@@ -41,8 +39,6 @@ module.exports = function(outbreakSite, cities) {
       })
     }
   }
-  console.log('it affected ')
-  console.log(updatedData)
 
   return updatedData
 }

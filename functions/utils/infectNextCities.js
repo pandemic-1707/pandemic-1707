@@ -16,17 +16,10 @@ module.exports = function(refs) {
     const infectionRate = data[3]
     let updatedData = {}
 
-    console.log('when i go to infect the next cities ')
-    console.log('the infection deck is ')
-    console.log(infectionDeck)
-    console.log('and the infection discard is')
-    console.log(infectionDiscard)
-
     // need to infect as many cities as the current infection rate
     for (let i = 0; i < infectionRate; i++) {
       // N.B. need to find and replace spaces
       const city = infectionDeck.pop().split(' ').join('-')
-      console.log('increasing the infection rate in ' + city)
       if (!infectionDiscard) {
         infectionDiscard = [city]
       } else {
@@ -36,7 +29,6 @@ module.exports = function(refs) {
       const infectionRate = cities[city].infectionRate
       if (infectionRate < 3) {
         const path = 'cities/' + city + '/infectionRate'
-        console.log('its new infection rate is ' + (infectionRate + 1))
         updatedData[path] = infectionRate + 1
         // do normal stuff
       } else {

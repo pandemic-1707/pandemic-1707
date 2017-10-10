@@ -10,7 +10,6 @@ module.exports = function(refs) {
 
     for (const card in hand) {
       if (hand[card].hasOwnProperty('Epidemic')) {
-        console.log('there was an epidemic!')
         const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
@@ -31,8 +30,6 @@ module.exports = function(refs) {
           } else {
             infectionDiscard.push(outbreakCard)
           }
-          console.log('we will randomly infect ' + outbreakCard)
-          console.log('the new infectionDiscardPile (before shuffling) is')
           console.log(infectionDiscard)
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
@@ -42,16 +39,15 @@ module.exports = function(refs) {
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
           updatedDecks['/infectionDeck'] = newInfectionDeck
-          console.log('the new infection deck is replaced')
           console.log(newInfectionDeck)
           updatedDecks['/infectionDiscard'] = []
-          console.log('the infection discard pile is being set back to nothing')
 
           const all = Object.assign({}, updatedDecks, updatedData)
           return roomRef.update(all)
         })
       }
     }
-    return
+    // necessary for Firebase speed
+    return undefined
   })
 }

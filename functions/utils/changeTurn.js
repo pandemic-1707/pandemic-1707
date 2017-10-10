@@ -5,7 +5,9 @@ module.exports = function(refs) {
     const currPlayersArr = snapshot.val()
     const currPlayerIdx = currPlayersArr.indexOf(player)
     const nextPlayerIdx = (currPlayerIdx + 1) % currPlayersArr.length
+    const updatedData = {'/state/currPlayer': currPlayersArr[nextPlayerIdx]}
+    updatedData[`/players/${player}/numActions`] = 4
 
-    return roomRef.update({'/state/currPlayer': currPlayersArr[nextPlayerIdx]})
+    return roomRef.update(updatedData)
   })
 }
