@@ -1,6 +1,5 @@
 body {
   height: 100%;
-  overflow: hidden;
 }
 .welcome {
   background: url("/images/background.jpg") no-repeat center center fixed; 
@@ -41,7 +40,8 @@ body {
   color: white;
 }
 header {
-  overflow: hidden;
+  position: absolute;
+  width: 100%;
 }
 
 .blue {
@@ -122,30 +122,22 @@ li {
   background-color: grey;
   font-size: 10px;
 }
-.main {
-  display: flex;
-  flex-direction: column;
+.site {
+  height: 100vh;
 }
-@media screen and (min-width: 600px) {
-  .main {
-    flex-direction: row-reverse;
-  }
-
-  .main-content {
-    flex: 1;
-  }
-
-  .sidebar {
+.sidebar {
     width: 150px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
+    position: absolute;
+    right: 0px;
+    top: 50px;
+    height: 100%;
   }
-}
 .footer {
+  width: calc(100% - 150px);
   height: 70px;
-  overflow: hidden;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
 form input.error {
   border-color: red;
@@ -169,5 +161,9 @@ form button {
   text-align: center;
 }
 #map {
-  height: 70%;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  height: calc(100% - 120px) !important;
+  width: calc(100% - 150px);
 }

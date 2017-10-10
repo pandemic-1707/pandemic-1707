@@ -45,7 +45,7 @@ export default class Room extends Component {
     if (this.state.LoggedIn) {
       room =
         <div>
-          <div className="main">
+          <div className="site">
             <div className="sidebar">
               <div><Sidebar roomName={this.props.match.params.roomName}/></div>
               <div><Chat auth={auth} fireRef={db.ref(`/rooms/${this.props.match.params.roomName}/chat`)} /></div>
@@ -53,14 +53,14 @@ export default class Room extends Component {
             <div className="main-content">
               <header><NavBar roomName={this.props.match.params.roomName} history={this.props.history}/></header>
               <Map roomName={this.props.match.params.roomName} />
-              <footer className="footer">
+            </div>
+            <footer className="footer">
                 {
                   this.state.isCurrentPlayer ?
                   (<div><PlayerActions roomName={this.props.match.params.roomName}/></div>) :
                   (<div>Waiting for your turn</div>)
                 }
-              </footer>
-            </div>
+            </footer>
           </div>
         </div>
     } else {
