@@ -5,8 +5,8 @@ const admin = require('firebase-admin')
 const cors = require('cors')({origin: true})
 admin.initializeApp(functions.config().firebase)
 
-const { state, cities, infectionDeck, events } = require('./data')
-const { shuffle, finalizePlayerDeck, handleOutbreak } = require('./utils')
+const { cities, infectionDeck, events } = require('./data')
+const { shuffle, finalizePlayerDeck, handleOutbreak, incrementOutbreaks } = require('./utils')
 
 const NUM_EPIDEMICS = 4
 
@@ -72,7 +72,8 @@ exports.initializeInfection = functions.database.ref('/rooms/{name}/infectionDec
 // update the tiles any time an infection rate changes
 exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infectionRate')
   .onUpdate(event => {
-    const stateRef = event.data.ref.parent.parent.parent.child('state')
+    const 
+    Ref = event.data.ref.parent.parent.parent.child('state')
     const difference = event.data.val() - event.data.previous.val()
     const color = cities[event.params.city].color + 'Tiles'
 
@@ -133,14 +134,15 @@ exports.handleEpidemic = functions.database.ref('/rooms/{name}/players/{playerId
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
           const outbreakSite = outbreakCard.split(' ').join('-')
-          const updatedOutbreakData = handleOutbreak(outbreakSite, cities)
+          const { updatedData, nOutbreaks } = handleOutbreak(outbreakSite, cities)
+          incrementOutbreaks(nOutbreaks, room)
 
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
           updatedDecks['/infectionDeck'] = newInfectionDeck
           updatedDecks['/infectionDiscard'] = []
 
-          const all = Object.assign({}, updatedDecks, updatedOutbreakData)
+          const all = Object.assign({}, updatedDecks, updatedData)
           return room.update(all)
         })
       }

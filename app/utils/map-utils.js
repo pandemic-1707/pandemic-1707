@@ -8,10 +8,12 @@ export function mapDataToMarkers(cities) {
     const city = cities[key]
     // only render a number of the infection rate is non-zero
     const html = city.infectionRate ? city.infectionRate : ''
-    // assign the color stored on city object as a class name
-    const cityMarker = divIcon({className: `city-marker ${city.color}`, html: html})
+    // assign a city marker or research station marker accordingly
+    const cityMarker = divIcon({className: `city-marker ${city.color} ${city.color}-shadow`, html: html})
+    const researchStationMarker = divIcon({className: `research-station-marker ${city.color}-shadow`, html: html})
+    const marker = city.research ? researchStationMarker : cityMarker
     // return a marker with position and custom icon
-    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={cityMarker}>
+    return <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>
       <Tooltip direction='top' offset={[-8, -2]} opacity={1}>
         <span>{key.split('-').join(' ')}</span>
       </Tooltip>

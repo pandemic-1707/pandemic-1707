@@ -49,9 +49,13 @@ export default class Sidebar extends Component {
                 <div className="player-hand">
                 {
                   playersItemsArr[idx].hand && playersItemsArr[idx].hand.map((obj, i) => {
-                    return (
-                      <li key={i}>{obj.city || Object.keys(obj)[0]}</li>
-                    )
+                    const color = obj.props ? obj.props.color : 'grey'
+                    let title = obj.city || Object.keys(obj)[0]
+                    title = title.split('-').join(' ')
+                    return <div>
+                      <div key={`color-box-${i}`} className='color-box' style={{backgroundColor: color}}></div>
+                      <li key={`card-${i}`}>{title}</li>
+                    </div>
                   })
                 }
                 </div>

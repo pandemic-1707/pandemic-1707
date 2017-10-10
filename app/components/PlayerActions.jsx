@@ -4,6 +4,8 @@ import PlayerActionsMoveDropUp from './PlayerActionsMoveDropUp'
 import { Button, Menu } from 'semantic-ui-react'
 import PlayerActionsCure from './PlayerActionsCure'
 import cureUtils from '../utils/cure-utils.js'
+import axios from 'axios'
+import PlayerActionsBuild from './PlayerActionsBuild'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: most efficient to check for conditions after movement confirmed () =>
@@ -77,7 +79,7 @@ export default class PlayerActions extends Component {
   buildResearch = () => {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const activePlayerCity = activePlayer.position.city
-    const buildInCity = activePlayer.hand.find(function (card) {
+    const buildInCity = activePlayer.hand.find(function(card) {
       return card.city === activePlayerCity
     })
     if (buildInCity) {
@@ -93,7 +95,7 @@ export default class PlayerActions extends Component {
           })
             .then(() => {
               // discard used city card by creating newHand without it
-              const newHand = activePlayer.hand.filter(function (card) {
+              const newHand = activePlayer.hand.filter(function(card) {
                 return card.city !== buildInCity.city
               })
               fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
@@ -119,7 +121,6 @@ export default class PlayerActions extends Component {
     if (activePlayer && allCities) {
       canCure = cureUtils.canCureDisease(activePlayer, allCities)
     }
-
     return (
       <Menu inverted>
         <Menu.Item>
@@ -139,6 +140,14 @@ export default class PlayerActions extends Component {
           >
             Build
         </Button>
+          <Button
+            onClick={this.treatDisease}
+          >
+            Cure
+        </Button>
+        </Menu.Item>
+        <Menu.Item>
+          <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName}/>
         </Menu.Item>
         <Menu.Item>
           <Button>
