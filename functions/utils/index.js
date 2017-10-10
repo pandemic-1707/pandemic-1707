@@ -6,5 +6,6 @@ module.exports = {
   handleEpidemics: require('./handleEpidemics'),
   infectNextCities: require('./infectNextCities'),
   changeTurn: require('./changeTurn'),
-  handleOutreak: require('./handleOutbreak')
+  handleOutreak: require('./handleOutbreak'),
+  initializeInfection: require('./initializeInfection')
 }

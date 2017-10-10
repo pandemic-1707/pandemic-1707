@@ -26,7 +26,7 @@ module.exports = function(refs) {
           // step 2: infect -- draw the bottom card from the infection deck & add to discard
           // TO-DO: UNLESS IT'S BEEN ERADICATED
           const outbreakCard = infectionDeck.shift()
-          if (infectionDiscard) {
+          if (!infectionDiscard) {
             infectionDiscard = [outbreakCard]
           } else {
             infectionDiscard.push(outbreakCard)
@@ -52,5 +52,6 @@ module.exports = function(refs) {
         })
       }
     }
+    return
   })
 }

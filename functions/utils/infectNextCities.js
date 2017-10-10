@@ -27,7 +27,7 @@ module.exports = function(refs) {
       // N.B. need to find and replace spaces
       const city = infectionDeck.pop().split(' ').join('-')
       console.log('increasing the infection rate in ' + city)
-      if (infectionDiscard) {
+      if (!infectionDiscard) {
         infectionDiscard = [city]
       } else {
         infectionDiscard.push(city)
