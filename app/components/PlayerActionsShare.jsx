@@ -251,9 +251,9 @@ export default class PlayerActionsShare extends Component {
             </Grid.Column>
             <Grid.Column>
               <Button.Group>
-                <Button onClick={this.toggleGive}>Give</Button>
+                <Button onClick={this.toggleGive} color={this.state.give ? 'green' : 'grey'}>Give</Button>
                 <Button.Or />
-                <Button positive onClick={this.toggleGive}>Take</Button>
+                <Button onClick={this.toggleGive} color={!this.state.give ? 'green' : 'grey'}>Take</Button>
               </Button.Group>
             </Grid.Column>
           </Grid>
