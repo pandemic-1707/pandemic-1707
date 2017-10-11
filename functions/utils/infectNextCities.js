@@ -1,7 +1,9 @@
 const handleOutbreak = require('./handleOutbreak')
+const arrayToSentence = require('array-to-sentence')
 
 module.exports = function(refs) {
   const { player, playerRef, roomRef } = refs
+  console.log('infecting cities')
 
   const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
   const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
@@ -15,11 +17,14 @@ module.exports = function(refs) {
     let infectionDiscard = data[2]
     const infectionRate = data[3]
     let updatedData = {}
+    const infectionsToBroadcast = []
 
     // need to infect as many cities as the current infection rate
     for (let i = 0; i < infectionRate; i++) {
       // N.B. need to find and replace spaces
-      const city = infectionDeck.pop().split(' ').join('-')
+      let city = infectionDeck.pop()
+      infectionsToBroadcast.push(city)
+      city = city.split(' ').join('-')
       if (!infectionDiscard) {
         infectionDiscard = [city]
       } else {
@@ -37,8 +42,11 @@ module.exports = function(refs) {
       }
     }
 
+    const infectionMessage = arrayToSentence(infectionsToBroadcast) + ' were infected next!'
+    console.log('infectionMessage: ', infectionMessage)
     updatedData['/infectionDeck'] = infectionDeck
     updatedData['/infectionDiscard'] = infectionDiscard
+    updatedData['/infectionMessage'] = infectionMessage
     return roomRef.update(updatedData)
   })
 }

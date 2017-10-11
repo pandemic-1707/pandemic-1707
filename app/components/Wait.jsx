@@ -70,9 +70,9 @@ export default class Wait extends Component {
       // guarantees that markers won't render on top of each other
       const offsets = (function(nPlayers) {
         switch (nPlayers) {
-        case 2: return [[0, -2], [0, 2]]
-        case 3: return [[0, -2], [2, 0], [0, 2]]
-        case 4: return [[0, -2], [2, -2], [2, 2], [0, 2]]
+        case 2: return [[0, -2], [0, 3]]
+        case 3: return [[0, -2], [2, 0], [0, 3]]
+        case 4: return [[0, -2], [2, -2], [2, 3], [0, 3]]
         }
       })(snapshot.val().numPlayers)
       console.log('offsets to use')
