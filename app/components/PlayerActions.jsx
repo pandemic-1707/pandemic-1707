@@ -7,6 +7,7 @@ import PlayerActionsCure from './PlayerActionsCure'
 import cureUtils from '../utils/cure-utils.js'
 import axios from 'axios'
 import PlayerActionsBuild from './PlayerActionsBuild'
+import PlayerActionsShare from './PlayerActionsShare'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: most efficient to check for conditions after movement confirmed () =>
@@ -77,50 +78,31 @@ export default class PlayerActions extends Component {
     }
   }
 
-  buildResearch = () => {
-    const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
-    const activePlayerCity = activePlayer.position.city
-    const buildInCity = activePlayer.hand.find(function(card) {
-      return card.city === activePlayerCity
+  // check what other players in same city
+  canShareKnowledge = (activePlayer, players) => {
+    const activePlayerCity = activePlayer.position.city.replace('.', '') // st. petersburg i stg
+    const playerKeys = Object.keys(players)
+    let traders = []
+    playerKeys.map((playerKey) => {
+      if (playerKey !== activePlayer.playerKey && players[playerKey].position.city.replace('.', '') === activePlayerCity){
+        traders.push(Object.assign({ playerKey: playerKey }, players[playerKey]))
+      }
     })
-    if (buildInCity) {
-      // check num research stations, over 6 means we have to reallocate stations
-      let numResearchCenters = 0
-      return fire.database().ref(`/rooms/${this.props.roomName}/state/researchCenter`).once('value', snapshot => {
-        numResearchCenters = snapshot.val()
-      })
-        .then(() => {
-          // set city to have research station
-          return fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
-            research: true
-          })
-            .then(() => {
-              // discard used city card by creating newHand without it
-              const newHand = activePlayer.hand.filter(function(card) {
-                return card.city !== buildInCity.city
-              })
-              fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-                numActions: activePlayer.numActions - 1,
-                hand: newHand
-              })
-              // add num research stations to game state
-              fire.database().ref(`/rooms/${this.props.roomName}/state`).update({
-                researchCenter: numResearchCenters + 1
-              })
-              // TODO: max num research stations is 6, take away from other cities when over
-            })
-        })
-    } else {
-      // TODO: let player they don't have city card, maybe fade button
-    }
+    return traders
   }
 
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const allCities = this.state.cities && this.state.cities
+    const allPlayers = this.state.players && this.state.players
     let canCure = false
     if (activePlayer && allCities) {
       canCure = cureUtils.canCureDisease(activePlayer, allCities)
+    }
+    let traders = []
+    if (activePlayer && activePlayer.position && activePlayer.position.city) {
+      traders = this.canShareKnowledge(activePlayer, this.state.players)
+      console.log("TRADERS", traders)
     }
     return (
       <Menu inverted>
@@ -129,7 +111,8 @@ export default class PlayerActions extends Component {
         </Menu.Item>
         <Menu.Item>
           <Button color="blue"
-            onClick={this.treatDisease}>Treat
+            onClick={this.treatDisease}>
+            Treat
         </Button>
         </Menu.Item>
         <Menu.Item>
@@ -139,9 +122,7 @@ export default class PlayerActions extends Component {
           <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName}/>
         </Menu.Item>
         <Menu.Item>
-          <Button color="yellow">
-            Share
-        </Button>
+          <PlayerActionsShare roomName={this.props.roomName} activePlayer={activePlayer} traders={traders} />
         </Menu.Item>
         <Menu.Item>
           <Button color="teal">
