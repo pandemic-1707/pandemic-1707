@@ -94,51 +94,48 @@ export default class PlayerActionsCure extends Component {
         })
       })
     this.handleClose()
-    // TODO: ... have treat disease clear all 3 infection rate for the color 
   }
 
   render() {
-    if (this.props.curables) {
-      return (
-        <Modal
-          trigger={<Button size="small" onClick={this.handleOpen} color="olive">Cure</Button>}
-          open={this.state.modalOpen}
-          onClose={this.handleClose}
-          basic
-          size='small'
-        >
-          <Header color={this.state.color} content={`Which disease are we curing?   ${this.state.color}`} />
-          <Modal.Content>
-            {this.displayCardsForCure()}
-          </Modal.Content>
-          <Modal.Actions>
-             <Modal
-                trigger={<Button size="small"
-                onClick={this.cureDisease} color='olive'
-                disabled={!this.state.cureCards.length} >
-                Confirm</Button>}
-                onClose={this.handleClose}
-                basic
-                size='small'
-              >
-                <Header icon='fire extinguisher' content="Yay you've cured the disease!" />
-                <Modal.Content>
-                  <h3>Woot!</h3>
-                </Modal.Content>
-                <Modal.Actions>
-                  <Button color='green' onClick={this.handleClose} inverted>
-                    <Icon name='checkmark' /> Awesome
+    return (
+      <Modal
+        trigger={<Button size="small" onClick={this.handleOpen} color="olive" disabled={!this.props.curables} >Cure</Button>}
+        open={this.state.modalOpen}
+        onClose={this.handleClose}
+        basic
+        size='small'
+      >
+        <Header color={this.state.color} content={`Which disease are we curing?   ${this.state.color}`} />
+        <Modal.Content>
+          {this.displayCardsForCure()}
+        </Modal.Content>
+        <Modal.Actions>
+          <Button size="small"
+            onClick={this.cureDisease} color='olive'
+            disabled={!this.state.cureCards.length} >
+            Confirm</Button>
+          {/* <Modal
+            trigger={<Button size="small"
+              onClick={this.cureDisease} color='olive'
+              disabled={!this.state.cureCards.length} >
+              Confirm</Button>}
+            onClose={this.handleClose}
+            basic
+            size='small'
+          >
+            <Header icon='fire extinguisher' content="Yay you've cured the disease!" />
+            <Modal.Content>
+              <h3>Woot!</h3>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button color='green' onClick={this.handleClose} inverted>
+                <Icon name='checkmark' /> Awesome
                   </Button>
-                </Modal.Actions>
-              </Modal>
-             <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
-          </Modal.Actions>
-        </Modal>
-      )
-    } else {
-      return (
-        <Button size="small" onClick={this.handleOpen} disabled={true} >Cure</Button>
-      )
-    }
+            </Modal.Actions>
+          </Modal> */}
+          <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
+        </Modal.Actions>
+      </Modal>
+    )
   }
 }

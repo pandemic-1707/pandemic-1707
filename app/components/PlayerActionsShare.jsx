@@ -250,7 +250,7 @@ export default class PlayerActionsShare extends Component {
   render() {
     return (
       <Modal
-        trigger={<Button size="small" onClick={this.handleOpen} color="olive" disabled={this.props.traders.length < 1}>Share</Button>}
+        trigger={<Button size="small" onClick={this.handleOpen} color="orange" disabled={this.props.traders.length < 1}>Share</Button>}
         open={this.state.modalOpen}
         onClose={this.handleClose}
         basic
