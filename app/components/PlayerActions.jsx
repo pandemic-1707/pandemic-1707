@@ -42,11 +42,6 @@ export default class PlayerActions extends Component {
         currPlayer: snapshot.val(),
       })
     })
-    fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).on('value', snapshot => {
-      this.setState({
-        curedDiseases: snapshot.val(),
-      })
-    })
   }
 
   // returns active player uid key
@@ -113,7 +108,7 @@ export default class PlayerActions extends Component {
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities} curedDiseases={this.state.curedDiseases} />
+          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities} />
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
