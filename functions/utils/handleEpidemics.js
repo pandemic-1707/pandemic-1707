@@ -10,6 +10,9 @@ module.exports = function(refs) {
 
     for (const card in hand) {
       if (hand[card].hasOwnProperty('Epidemic')) {
+        console.log('coping with an epidemic!')
+        console.log('deleting the card')
+        delete hand[card]
         const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
@@ -30,18 +33,20 @@ module.exports = function(refs) {
           } else {
             infectionDiscard.push(outbreakCard)
           }
-          console.log(infectionDiscard)
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
           const outbreakSite = outbreakCard.split(' ').join('-')
           const { updatedData, nOutbreaks } = handleOutbreak(outbreakSite, cities)
+          console.log('the epidemic affected')
+          console.log(updatedData)
 
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
+          updatedDecks[`/players/${player}/hand`] = hand
           updatedDecks['/infectionDeck'] = newInfectionDeck
-          console.log(newInfectionDeck)
           updatedDecks['/infectionDiscard'] = []
-
+          updatedDecks['/epidemicMessage'] = 'There was an epidemic in ' + outbreakCard
+          console.log('epidemicMessage: There was an epidemic in ' + outbreakCard)
           const all = Object.assign({}, updatedDecks, updatedData)
           console.log('data to update...')
           console.log(all)

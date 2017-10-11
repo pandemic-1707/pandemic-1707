@@ -4,7 +4,7 @@ import ignite, {withAuth, FireInput} from '../utils/ignite'
 import {Button, Form} from 'semantic-ui-react'
 
 const users = firebase.database().ref('users')
-    , nickname = uid => users.child(uid).child('nickname')
+const nickname = uid => users.child(uid).child('nickname')
 
 const Nickname = ignite(
   ({value}) => <span className='chat-message-nick'>{value}</span>
@@ -14,9 +14,10 @@ const ChatMessage = ignite(
   ({value}) => {
     if (!value) return null
     const {from, body} = value
+    const textClass = (from === 'firebase') ? 'chat-message-firebase' : 'chat-message-body'
     return <div className='chat-message'>
       <Nickname fireRef={nickname(from)} />
-      <span className='chat-message-body'>{body}</span>
+      <span className={textClass}>{body}</span>
     </div>
   }
 )
@@ -38,12 +39,33 @@ export default ignite(withAuth(class extends React.Component {
     })
   }
 
+  componentDidMount() {
+    this.props.roomRef.child('infectionMessage').on('value', snapshot => {
+      const message = snapshot.val()
+      if (message && this.props.fireRef) {
+        this.props.fireRef.push({
+          from: 'firebase',
+          body: message
+        })
+      }
+    })
+
+    this.props.roomRef.child('epidemicMessage').on('value', snapshot => {
+      const message = snapshot.val()
+      if (message && this.props.fireRef) {
+        this.props.fireRef.push({
+          from: 'firebase',
+          body: message
+        })
+      }
+    })
+  }
+
   renderSendMsg(user) {
     if (!user) {
       return <span>You must be logged in to send messages.</span>
     }
     return <Form onSubmit={this.sendMessage}>
-      <FireInput fireRef={nickname(user.uid)} placeholder='your name' />
       <Form.Input placeholder='Type your message...' name='body' />
       <Form.Button size="small" color="orange">Submit</Form.Button>
     </Form>
@@ -52,7 +74,7 @@ export default ignite(withAuth(class extends React.Component {
   render() {
     const {user, snapshot, asEntries} = this.props
         , messages = asEntries(snapshot)
-    return <div>
+    return <div className='chat-box'>
       <div className='chat-log'> {
         messages.map(({key, fireRef}) => <ChatMessage key={key} fireRef={fireRef}/>)
       } </div>

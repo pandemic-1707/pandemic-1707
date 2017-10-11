@@ -1,6 +1,30 @@
 body {
   height: 100%;
 }
+.column {
+  overflow: scroll;
+}
+.chat-log {
+  width: 150px;
+  height: 150px;
+  overflow: scroll;
+  border: solid;
+  padding: 3px;
+  border-width: 1px;
+  border-color: gray;
+}
+.chat-box {
+  height: 150px;
+  overflow: scroll;
+}
+.chat-message-firebase {
+  font-size: 12px;
+  color: red;
+}
+.chat-message-body {
+  font-size: 12px;
+  font-weight: bold;
+}
 .welcome {
   background: url("/images/background.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
@@ -152,7 +176,7 @@ li {
     position: absolute;
     right: 0px;
     top: 52px;
-    height: 100%;
+    height: calc(100% - 52px);
   }
 .footer {
   width: calc(100% - 150px);
@@ -176,6 +200,20 @@ form button {
 .player-action {
   text-align: center;
 }
+.player-area {
+  height: calc(0.7 * 100%);
+  position: absolute;
+  top: 0px;
+  overflow: scroll;
+  background: gray;
+}
+.chat-area {
+  height: calc(0.3 * 100%);
+  position: absolute;
+  top: calc(0.7 * 100%);
+  overflow: hidden;
+}
+
 
 .player-actions-panel {
 }

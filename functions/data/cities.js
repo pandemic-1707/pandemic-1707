@@ -1,6 +1,6 @@
 module.exports = {
   'Algiers': { color: 'black', location: [25.275963, -1.520862], realLocation: [36.753768, 3.058756], connections: ['Madrid', 'Paris', 'Istanbul', 'Cairo'], infectionRate: 0 },
-  'Atlanta': { color: 'blue', location: [33.748995, -84.387982], realLocation: [33.748995, -84.387982], connections: ['Chicago', 'Washington', 'Miami'], infectionRate: 0 },
+  'Atlanta': { color: 'blue', location: [33.748995, -84.387982], realLocation: [33.748995, -84.387982], connections: ['Chicago', 'Washington', 'Miami'], infectionRate: 0, research: true},
   'Baghdad': { color: 'black', location: [37.830451, 54.791499], realLocation: [33.312806, 44.361488], connections: ['Istanbul', 'Cairo', 'Tehran', 'Riyadh'], infectionRate: 0 },
   'Bangkok': { color: 'red', location: [13.756331, 100.501765], realLocation: [13.756331, 100.501765], connections: ['Kolkata', 'Hong-Kong', 'Ho-Chi-Minh-City', 'Jakarta', 'Chennai'], infectionRate: 0 },
   'Beijing': { color: 'red', location: [56.346267, 112.623530], realLocation: [39.904200, 116.407396], connections: ['Seoul', 'Shanghai'], infectionRate: 0 },

@@ -2,7 +2,7 @@ module.exports = function(outbreakSite, cities) {
   // outbreak site must get an infectionRate of 3
   // if the infection rate was 0 before, that's all you need to do
   const updatedData = {}
-  const start = '/cities' + outbreakSite + '/infectionRate'
+  const start = '/cities/' + outbreakSite + '/infectionRate'
   updatedData[start] = 3
   let nOutbreaks
 
@@ -10,6 +10,7 @@ module.exports = function(outbreakSite, cities) {
   // if epidemic site had infection rate > 0 (i.e. adding three to it would push you over the edge)
   // then you have an outbreak! handle it
   if (cities[outbreakSite].infectionRate > 0) {
+    console.log('it caused an outbreak!')
     let nOutbreaks = 0
     const outbreakQueue = [outbreakSite]
     const seen = new Set()
@@ -44,5 +45,7 @@ module.exports = function(outbreakSite, cities) {
       })
     }
   }
+  console.log('updated data before i return it from handleOutbreak.js')
+  console.log(updatedData)
   return { updatedData, nOutbreaks }
 }

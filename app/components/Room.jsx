@@ -47,9 +47,15 @@ export default class Room extends Component {
       room =
         <div>
           <div className="site">
-            <div className="sidebar">
-              <div><Sidebar roomName={this.props.match.params.roomName}/></div>
-              <div><Chat auth={auth} fireRef={db.ref(`/rooms/${this.props.match.params.roomName}/chat`)} /></div>
+            <div className="sidebar-container">
+              <div className="sidebar">
+                <div className="player-area">
+                  <Sidebar roomName={this.props.match.params.roomName}/>
+                </div>
+                <div className="chat-area">
+                  <Chat auth={auth} roomRef={db.ref(`/rooms/${this.props.match.params.roomName}`)} fireRef={db.ref(`/rooms/${this.props.match.params.roomName}/chat`)} />
+                </div>
+              </div>
             </div>
             <div className="main-content">
               <header><NavBar roomName={this.props.match.params.roomName} history={this.props.history}/></header>
