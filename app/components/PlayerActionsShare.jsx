@@ -52,7 +52,8 @@ export default class PlayerActionsShare extends Component {
     const receiver = this.state.traderToReceive
     const cardToGive = this.state.cardToGive
     // give card to receiver
-    let receiverNewHand = [...receiver.hand, cardToGive]
+    let receiverNewHand = [cardToGive]
+    if(receiver.hand) receiverNewHand = [...receiver.hand, cardToGive]
     fire.database().ref(`/rooms/${this.props.roomName}/players/${receiver.playerKey}`).update({
       hand: receiverNewHand
     })
