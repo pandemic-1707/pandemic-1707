@@ -88,7 +88,6 @@ export default class NavBar extends Component {
             transitionOnMount={true}>
         <Menu.Item>
           Current Turn: {currPlayerName}
-          <Alerts />
         </Menu.Item>
         </Transition>
         <Menu.Item>
