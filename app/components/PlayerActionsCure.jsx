@@ -67,7 +67,6 @@ export default class PlayerActionsCure extends Component {
   // cureCards is array of cards to be discarded for cure
   cureDisease = (e) => {
     e.preventDefault()
-    debugger
     const activePlayer = this.props.activePlayer
     const activePlayerCity = activePlayer && activePlayer.position && activePlayer.position.city
     const color = this.state.color
@@ -111,7 +110,11 @@ export default class PlayerActionsCure extends Component {
           {this.displayCardsForCure()}
         </Modal.Content>
         <Modal.Actions>
-          <Modal
+          <Button size="small"
+            onClick={this.cureDisease} color='olive'
+            disabled={!this.state.cureCards.length} >
+            Confirm</Button>
+          {/* <Modal
             trigger={<Button size="small"
               onClick={this.cureDisease} color='olive'
               disabled={!this.state.cureCards.length} >
@@ -129,7 +132,7 @@ export default class PlayerActionsCure extends Component {
                 <Icon name='checkmark' /> Awesome
                   </Button>
             </Modal.Actions>
-          </Modal>
+          </Modal> */}
           <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
         </Modal.Actions>
       </Modal>
