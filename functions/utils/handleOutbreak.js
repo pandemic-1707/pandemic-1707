@@ -45,5 +45,7 @@ module.exports = function(outbreakSite, cities) {
       })
     }
   }
+  console.log('updated data before i return it from handleOutbreak.js')
+  console.log(updatedData)
   return { updatedData, nOutbreaks }
 }

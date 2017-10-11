@@ -12,12 +12,12 @@ module.exports = function(refs) {
   const fetchInfectionRate = roomRef.child('state').child('infectionRate').once('value').then(snapshot => snapshot.val())
 
   return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard, fetchInfectionRate])
-  .then(data => {
-    const cities = data[0]
-    const infectionDeck = data[1]
-    let infectionDiscard = data[2]
-    const infectionRate = data[3]
-    let updatedData = {}
+  .then(response => {
+    const cities = response[0]
+    const infectionDeck = response[1]
+    let infectionDiscard = response[2]
+    const infectionRate = response[3]
+    let data = {}
     const infectionsToBroadcast = []
 
     // need to infect as many cities as the current infection rate
@@ -37,22 +37,24 @@ module.exports = function(refs) {
       if (infectionRate < 3) {
         console.log('it didnt cause an outbreak')
         const path = 'cities/' + city + '/infectionRate'
-        updatedData[path] = infectionRate + 1
+        data[path] = infectionRate + 1
         // do normal stuff
       } else {
         console.log('it did cause an outbreak!')
-        const { outbreakData, nOutbreaks } = handleOutbreak(city, cities)
-        updatedData = Object.assign({}, updatedData, outbreakData)
-        console.log('the new data is')
+        const { updatedData, nOutbreaks } = handleOutbreak(city, cities)
+        console.log('outbreak data when i get it back from handleOutbreak')
         console.log(updatedData)
+        data = Object.assign({}, data, updatedData)
+        console.log('the new data after Object.assign is')
+        console.log(data)
       }
     }
 
     const infectionMessage = arrayToSentence(infectionsToBroadcast) + ' were infected next!'
     console.log('infectionMessage: ', infectionMessage)
-    updatedData['/infectionDeck'] = infectionDeck
-    updatedData['/infectionDiscard'] = infectionDiscard
-    updatedData['/infectionMessage'] = infectionMessage
-    return roomRef.update(updatedData)
+    data['/infectionDeck'] = infectionDeck
+    data['/infectionDiscard'] = infectionDiscard
+    data['/infectionMessage'] = infectionMessage
+    return roomRef.update(data)
   })
 }
