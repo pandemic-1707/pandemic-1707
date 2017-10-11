@@ -32,7 +32,7 @@ module.exports = function(refs) {
         updatedData[path] = infectionRate + 1
         // do normal stuff
       } else {
-        const outbreakData = handleOutbreak(city, cities)
+        const { outbreakData, nOutbreaks } = handleOutbreak(city, cities)
         updatedData = Object.assign({}, updatedData, outbreakData)
       }
     }
