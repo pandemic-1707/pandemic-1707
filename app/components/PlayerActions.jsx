@@ -8,6 +8,7 @@ import cureUtils from '../utils/cure-utils.js'
 import axios from 'axios'
 import PlayerActionsBuild from './PlayerActionsBuild'
 import PlayerActionsShare from './PlayerActionsShare'
+import PlayerActionsTreat from './PlayerActionsTreat'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: most efficient to check for conditions after movement confirmed () =>
@@ -61,34 +62,22 @@ export default class PlayerActions extends Component {
     return Object.assign({ playerKey: this.state.currPlayer }, players[this.state.currPlayer])
   }
 
-  treatDisease = () => {
-    const activePlayer = this.getActivePlayer(this.state.players)
-    const activePlayerCity = activePlayer.position.city
-    if (this.state.cities[activePlayerCity].infectionRate > 0) {
-      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
-        infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
-      })
-        .then(() => {
-          fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-            numActions: activePlayer.numActions - 1,
-          })
-        })
-    } else {
-      // TODO: let player know this city isn't treatable, maybe fade button
-    }
-  }
-
   // check what other players in same city
   canShareKnowledge = (activePlayer, players) => {
     const activePlayerCity = activePlayer.position.city.replace('.', '') // st. petersburg i stg
     const playerKeys = Object.keys(players)
     let traders = []
     playerKeys.map((playerKey) => {
-      if (playerKey !== activePlayer.playerKey && players[playerKey].position.city.replace('.', '') === activePlayerCity){
+      if (playerKey !== activePlayer.playerKey && players[playerKey].position.city.replace('.', '') === activePlayerCity) {
         traders.push(Object.assign({ playerKey: playerKey }, players[playerKey]))
       }
     })
     return traders
+  }
+
+  canTreat = (activePlayer) => {
+    const activePlayerCity = activePlayer.position.city
+    return this.state.cities[activePlayerCity].infectionRate > 0
   }
 
   render() {
@@ -96,13 +85,14 @@ export default class PlayerActions extends Component {
     const allCities = this.state.cities && this.state.cities
     const allPlayers = this.state.players && this.state.players
     let canCure = false
+    let canTreat = false
     if (activePlayer && allCities) {
       canCure = cureUtils.canCureDisease(activePlayer, allCities)
+      canTreat = this.canTreat(activePlayer)
     }
     let traders = []
     if (activePlayer && activePlayer.position && activePlayer.position.city) {
       traders = this.canShareKnowledge(activePlayer, this.state.players)
-      console.log("TRADERS", traders)
     }
     return (
       <Menu inverted>
@@ -110,16 +100,13 @@ export default class PlayerActions extends Component {
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-          <Button color="blue"
-            onClick={this.treatDisease}>
-            Treat
-        </Button>
+          <PlayerActionsTreat />
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName}/>
+          <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsShare roomName={this.props.roomName} activePlayer={activePlayer} traders={traders} />
