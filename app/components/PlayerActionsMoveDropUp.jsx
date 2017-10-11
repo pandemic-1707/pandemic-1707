@@ -151,35 +151,31 @@ export default class PlayerActionMoveDropUp extends Component {
     const charter = this.getCharterCityList()
     const researchStationList = this.state.researchStationList
     return (
-      <Menu inverted>
-        <Menu.Item>
-          <select className="ui upward dropdown cityoptions" onChange={this.handleChange} value={this.state.value}>
-            <option color="orange">Move</option>
-            <optgroup label="Nearby (drive/ferry)">
-              {
-                nearbyCities && nearbyCities.map((cityName) => {
-                  return <option key={cityName} value={cityName + ':nearby'}>{cityName}</option>
-                })
-              }
-            </optgroup>
-            <optgroup label="Player Hand (direct flight)">
-              {
-                this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.map((card) => {
-                  if (card.city) {
-                    return <option key={card.city} value={card.city + ':hand'}>{card.city}</option>
-                  }
-                })
-              }
-            </optgroup>
-            {researchStationList}
-            {/* display only if you have a card matching your current city */}
-            {charter}
-          </select>
-        </Menu.Item>
-        <Menu.Item>
-          {confirmButton && <Button size="mini" color="green" onClick={this.handleConfirm} >Confirm</Button>}
-        </Menu.Item>
-      </Menu>
+      <div>
+        <select className="ui upward dropdown cityoptions" onChange={this.handleChange} value={this.state.value}>
+          <option color="orange">Move</option>
+          <optgroup label="Nearby (drive/ferry)">
+            {
+              nearbyCities && nearbyCities.map((cityName) => {
+                return <option key={cityName} value={cityName + ':nearby'}>{cityName}</option>
+              })
+            }
+          </optgroup>
+          <optgroup label="Player Hand (direct flight)">
+            {
+              this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.map((card) => {
+                if (card.city) {
+                  return <option key={card.city} value={card.city + ':hand'}>{card.city}</option>
+                }
+              })
+            }
+          </optgroup>
+          {researchStationList}
+          {/* display only if you have a card matching your current city */}
+          {charter}
+        </select>
+        {confirmButton && <Button color="green" onClick={this.handleConfirm} >Confirm</Button>}
+      </div>
     )
   }
 }
