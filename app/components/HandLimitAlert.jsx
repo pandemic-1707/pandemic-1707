@@ -38,6 +38,7 @@ export default class Alerts extends Component {
       discardedCards: [...discardedCards, e.target.name]
     })
     // TODO: Need to disable button if totalChecked is more than, but enable again if one box is unchecked
+    // right now there will be edge cases when check and uncheck, we will discard more than necessary
     if (totalChecked == this.state.handArr.length - 7) {
       this.setState({disableSubmit: false})
     }
