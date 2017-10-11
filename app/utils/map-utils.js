@@ -6,7 +6,6 @@ import { Marker, Polyline, Tooltip } from 'react-leaflet'
 export function mapDataToMarkers(cities) {
   return Object.keys(cities).map(key => {
     const city = cities[key]
-    console.log('trying to draw for city ', key)
     // only render a number of the infection rate is non-zero
     const html = city.infectionRate ? city.infectionRate : ''
     // assign a city marker or research station marker accordingly
@@ -21,7 +20,7 @@ export function mapDataToMarkers(cities) {
     }
     return <div>
       <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>
-        <Tooltip direction='top' offset={[-8, -2]} opacity={1}>
+        <Tooltip key={`tooltip-${key}`} direction='top' offset={[-8, -2]} opacity={1}>
           <span>{key.split('-').join(' ')}</span>
         </Tooltip>
       </Marker>
