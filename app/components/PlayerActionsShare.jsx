@@ -69,54 +69,62 @@ export default class PlayerActionsShare extends Component {
   }
 
   displayCardsToGive = (traders, activePlayer) => {
-    return (
-      <div>
-        <Grid container columns={2} doubling stackable>
-          <Grid.Column>
-            <Header color="grey">{activePlayer.name} is giving which card?</Header>
-            {this.state.cardToGive && <Header color="grey"> {this.state.cardToGive.city}</Header>}
-            {
-              activePlayer.hand.length && activePlayer.hand.map((card) => {
-                if (card.city) {
-                  const cityName = card.city
+    if (activePlayer.hand) {
+      return (
+        <div>
+          <Grid container columns={2} doubling stackable>
+            <Grid.Column>
+              <Header color="grey">{activePlayer.name} is giving which card?</Header>
+              {this.state.cardToGive && <Header color="grey"> {this.state.cardToGive.city}</Header>}
+              {
+                activePlayer.hand && activePlayer.hand.map((card) => {
+                  if (card.city) {
+                    const cityName = card.city
+                    return (
+                      <div key={cityName}>
+                        <Button size="small" onClick={(e) => this.setCardToGive(e, card)} color={card.props.color} ></Button>
+                        <span>{cityName}</span>
+                      </div>
+                    )
+                  }
+                })
+              }
+            </Grid.Column>
+            <Grid.Column>
+              <Header color="grey">To which player?</Header>
+              {this.state.traderToReceive.name && <Header color="grey">{this.state.traderToReceive.name}</Header>}
+              {
+                traders.length && traders.map((trader) => {
                   return (
-                    <div key={cityName}>
-                      <Button size="small" onClick={(e) => this.setCardToGive(e, card)} color={card.props.color} ></Button>
-                      <span>{cityName}</span>
+                    <div key={trader.name}>
+                      <Button size="small" onClick={(e) => this.setTraderToReceive(e, trader)} key={trader.name} >{trader.name}</Button>
                     </div>
                   )
-                }
-              })
-            }
-          </Grid.Column>
-          <Grid.Column>
-            <Header color="grey">To which player?</Header>
-            {this.state.traderToReceive.name && <Header color="grey">{this.state.traderToReceive.name}</Header>}
-            {
-              traders.length && traders.map((trader) => {
-                return (
-                  <div key={trader.name}>
-                    <Button size="small" onClick={(e) => this.setTraderToReceive(e, trader)} key={trader.name} >{trader.name}</Button>
-                  </div>
-                )
-              })
-            }
-          </Grid.Column>
-        </Grid>
-        <Grid container columns={1} doubling stackable>
-          <Grid.Column>
-            <Button size="small" onClick={this.giveCard} disabled={!this.state.cardToTake.city && !this.state.traderToReceive.name} >Confirm</Button>
-            <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
-          </Grid.Column>
-        </Grid>
-      </div>
-    )
+                })
+              }
+            </Grid.Column>
+          </Grid>
+          <Grid container columns={1} doubling stackable>
+            <Grid.Column>
+              <Button size="small" onClick={this.giveCard} disabled={!this.state.cardToTake.city && !this.state.traderToReceive.name} >Confirm</Button>
+              <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
+            </Grid.Column>
+          </Grid>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <Header color="grey">No cards to give!</Header>
+          <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
+        </div>
+      )
+    }
   }
 
   // //////// take cards ////////
 
   setCardToTake = (e, card, giver) => {
-    console.log("setCard", card)
     e.preventDefault()
     this.setState({
       color: card.props.color,
@@ -147,6 +155,29 @@ export default class PlayerActionsShare extends Component {
     this.handleClose()
   }
 
+  displayTraderHands = (player) => {
+    if (player.hand) {
+      return player.hand.map((card) => {
+        if (card.city) {
+          const cityName = card.city
+          console.log("player city", card)
+          return (
+            <div key={card.city}>
+              <Button size="small" onClick={(e) => this.setCardToTake(e, card, player)} color={card.props.color} ></Button>
+              <span>{cityName}</span>
+            </div>
+          )
+        }
+      })
+    } else {
+      return (
+        <div>
+          <Header color='grey' content={"Has nothing to offer in life."} />
+        </div>
+      )
+    }
+  }
+
   displayCardsToTake = (traders) => {
     if (traders.length) {
       return (
@@ -164,17 +195,7 @@ export default class PlayerActionsShare extends Component {
                   <Grid.Column key={player.name}>
                     <Header color="grey">{player.name}</Header>
                     {
-                      player.hand.length && player.hand.map((card) => {
-                        if (card.city) {
-                          const cityName = card.city
-                          return (
-                            <div key={card.city}>
-                              <Button size="small" onClick={(e) => this.setCardToTake(e, card, player)} color={card.props.color} ></Button>
-                              <span>{cityName}</span>
-                            </div>
-                          )
-                        }
-                      })
+                      this.displayTraderHands(player)
                     }
                   </Grid.Column>
                 )
