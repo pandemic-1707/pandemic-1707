@@ -34,7 +34,6 @@ export default class Alerts extends Component {
         })
       }
     })
-    console.log('handArr', this.state.handArr)
   }
   handleClick = (e) => {
     let {totalChecked, discardedCards} = this.state
@@ -53,15 +52,9 @@ export default class Alerts extends Component {
   handleSubmit(e) {
     e.preventDefault()
     let {handArr, discardedCards} = this.state
-    const CardNameArr = []
-    handArr.forEach(card => {
-      if (Object.keys(card)[0] === 'city') CardNameArr.push(card.city)
-      else CardNameArr.push(Object.keys(card)[0])
-    })
     const newHandArr = handArr.filter(card => {
       // get city name or card name out to filer
-      const city = card[city] || Object.keys(card)[0]
-      console.log('city', city)
+      const city = card.city || Object.keys(card)[0]
       return discardedCards.indexOf(city) === -1
     })
     console.log('newHandArr', newHandArr)
