@@ -3,28 +3,28 @@ import { Dropdown } from 'semantic-ui-react'
 import fire from '../../fire'
 import { Button } from 'semantic-ui-react'
 
-const NORMAL_DEC_RATE = 1
-const CURED_DEC_RATE = 3
-
 export default class PlayerActionsTreat extends Component {
   constructor(props) {
     super(props)
+    const cured = this.props.curedDiseases
     this.state = {
-      black: 1,
-      blue: 1,
-      red: 1,
-      yellow: 1
+      treatRate: {
+        black: cured['black'],
+        blue: cured['blue'],
+        red: cured['red'],
+        yellow: cured['yellow'],
+      }
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const cured = this.props.curedDiseases
     this.setState({
       treatRate: {
-        black: cured['black'] ? CURED_DEC_RATE : NORMAL_DEC_RATE,
-        blue: cured['blue'] ? CURED_DEC_RATE : NORMAL_DEC_RATE,
-        red: cured['red'] ? CURED_DEC_RATE : NORMAL_DEC_RATE,
-        yellow: cured['yellow'] ? CURED_DEC_RATE : NORMAL_DEC_RATE,
+        black: cured['black'],
+        blue: cured['blue'],
+        red: cured['red'],
+        yellow: cured['yellow'],
       }
     })
   }
@@ -33,14 +33,19 @@ export default class PlayerActionsTreat extends Component {
     const activePlayer = this.props.activePlayer && this.props.activePlayer
     const activePlayerCity = activePlayer.position.city && activePlayer.position.city
     const allCities = this.props.allCities && this.props.allCities
-    fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
-      infectionRate: allCities[activePlayerCity].infectionRate - this.state.treatRate[allCities[activePlayerCity].color]
-    })
-      .then(() => {
-        fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-          numActions: activePlayer.numActions - 1,
-        })
+    if (this.state.treatRate[allCities[activePlayerCity].color]) {
+      // cured
+      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+        infectionRate: 0
       })
+    } else {
+      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+        infectionRate: allCities[activePlayerCity].infectionRate - 1
+      })
+    }
+    fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+      numActions: activePlayer.numActions - 1,
+    })
   }
 
   render() {
