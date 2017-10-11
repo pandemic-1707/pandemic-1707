@@ -3,7 +3,6 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import Alerts from './DealingHandsAlert'
 import EpiAlerts from './EpidemicAlerts'
 import HandLimit from './HandLimitAlert'
 import { Menu, Button, Transition } from 'semantic-ui-react'
@@ -107,7 +106,6 @@ export default class NavBar extends Component {
           <HandLimit roomName={this.props.roomName} currPlayer={this.state.currPlayer}/> :
           ''
         }
-        <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
         <EpiAlerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
       </Menu>
       )
