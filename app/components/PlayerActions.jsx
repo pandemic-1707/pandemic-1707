@@ -73,15 +73,35 @@ export default class PlayerActions extends Component {
     return this.state.cities[activePlayerCity].infectionRate > 0
   }
 
+  canBuild = (activePlayer, allCities) => {
+    const activePlayerCity = activePlayer.position.city
+    // does this city already have a research station?
+    const isResearchCity = allCities[activePlayerCity].research === true
+    if (isResearchCity) {
+      return false
+    }
+    // do we have the city card to use?
+    const buildInCity = activePlayer.hand.find(function (card) {
+      if (card.city) {
+        return card.city.replace('.', '') === activePlayerCity
+      }
+    })
+    if (buildInCity) { return buildInCity } else { return false }
+  }
+
   render() {
     const activePlayer = this.state.players && this.getActivePlayer(this.state.players)
     const allCities = this.state.cities && this.state.cities
     const allPlayers = this.state.players && this.state.players
     let canCure = false
     let canTreat = false
+    let canBuild = false
     if (activePlayer && activePlayer.position && allCities) {
-      canCure = cureUtils.canCureDisease(activePlayer, allCities)
       canTreat = this.canTreat(activePlayer)
+      if (activePlayer.hand) {
+        canCure = cureUtils.canCureDisease(activePlayer, allCities)
+        canBuild = this.canBuild(activePlayer, allCities)
+      }
     }
     let traders = []
     if (activePlayer && activePlayer.position && activePlayer.position.city) {
@@ -93,21 +113,16 @@ export default class PlayerActions extends Component {
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities} curedDiseases={this.state.curedDiseases}/>
+          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities} curedDiseases={this.state.curedDiseases} />
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName} />
+          <PlayerActionsBuild buildInCity={canBuild} allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsShare roomName={this.props.roomName} activePlayer={activePlayer} traders={traders} />
-        </Menu.Item>
-        <Menu.Item>
-          <Button color="teal">
-            Event
-        </Button>
         </Menu.Item>
         <Menu.Item>
           Actions Left: {activePlayer.numActions && activePlayer.numActions}
