@@ -169,7 +169,6 @@ class EnterRoom extends Component {
             <option>4</option>
           </select>
           </Form.Field>
-          <Form.Field> {inputFields} </Form.Field>
             <Modal trigger={<Button color='green' onClick={this.handleSubmit} inverted>
             <Icon name='checkmark' /> Submit</Button>}
             >

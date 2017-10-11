@@ -43,6 +43,8 @@ module.exports = function(refs) {
           updatedDecks['/infectionDiscard'] = []
 
           const all = Object.assign({}, updatedDecks, updatedData)
+          console.log('data to update...')
+          console.log(all)
           return roomRef.update(all)
         })
       }

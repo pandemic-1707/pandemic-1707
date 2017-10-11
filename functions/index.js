@@ -60,7 +60,7 @@ exports.updateTiles = functions.database.ref('/rooms/{name}/cities/{city}/infect
   })
 
 // listen for a player's actions to run out (i.e. the end of their turn)
-exports.handleTurnChange = functions.database.ref('/rooms/{name}/players/{player}/numActions')
+exports.endTurn = functions.database.ref('/rooms/{name}/players/{player}/numActions')
   .onUpdate(event => {
     const turnsRemaining = event.data.val()
     const refs = {
@@ -68,14 +68,29 @@ exports.handleTurnChange = functions.database.ref('/rooms/{name}/players/{player
       playerRef: event.data.ref.parent,
       roomRef: event.data.ref.parent.parent.parent
     }
-
+    
     // when a player's turn is over, draw their next two cards,
     // handle any epidemics and then infect the appropriate number of cities (based on infection rate)
     // then update the current player!
     if (turnsRemaining === 0) {
+      console.log('detected end of turn')
       return drawNextCards(refs)
       .then(() => handleEpidemics(refs))
       .then(() => infectNextCities(refs))
-      .then(() => changeTurn(refs))
+    }
+  })
+
+exports.changeTurn = functions.database.ref('/rooms/{name}/players/{player}/resolved')
+  .onUpdate(event => {
+    const resolved = event.data.val()
+    console.log('i think its resolved ', resolved)
+    const refs = {
+      player: event.params.player,
+      playerRef: event.data.ref.parent,
+      roomRef: event.data.ref.parent.parent.parent
+    }
+
+    if (resolved) {
+      return changeTurn(refs)
     }
   })

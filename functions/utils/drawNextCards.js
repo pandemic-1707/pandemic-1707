@@ -1,4 +1,5 @@
 module.exports = function(refs) {
+  console.log('draw next card')
   const { player, playerRef, roomRef } = refs
   const fetchPlayerDeck = roomRef.child('playerDeck').once('value').then(snapshot => snapshot.val())
   const fetchPlayerHand = playerRef.child('hand').once('value').then(snapshot => snapshot.val())
@@ -16,6 +17,7 @@ module.exports = function(refs) {
 
     updatedData['/playerDeck'] = playerDeck
     updatedData[`/players/${player}/hand`] = playerHand
+    updatedData[`/players/${player}/resolved`] = false
 
     return roomRef.update(updatedData)
   })
