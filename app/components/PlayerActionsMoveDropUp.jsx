@@ -173,7 +173,7 @@ export default class PlayerActionMoveDropUp extends Component {
           {/* display only if you have a card matching your current city */}
           {charter}
         </select>
-        {confirmButton && <Button size="mini" color="green" onClick={this.handleConfirm} >Confirm</Button>}
+        {confirmButton && <Button color="green" onClick={this.handleConfirm} >Confirm</Button>}
       </div>
     )
   }
