@@ -20,8 +20,14 @@ export default class Alerts extends Component {
     // listen to changes in hand
     db.ref(`/rooms/${this.props.roomName}/players/${this.props.currPlayer}/hand`).on('value', dataSnap => {
       const handArr = dataSnap.val()
+      // if hand is ok => set resolved to true
+      if (handArr && handArr.length <= 7) {
+        db.ref(`/rooms/${this.props.roomName}/players/${this.props.currPlayer}`).update({
+          resolved: true
+        })
+      }
       // if hand has more than 7 cards, display alerts
-      if (handArr && handArr.length > 7) {
+      if (handArr && handArr.length > 7 ) {
         this.setState({
           alertOpen: true,
           handArr: handArr
@@ -39,6 +45,7 @@ export default class Alerts extends Component {
     })
     // TODO: Need to disable button if totalChecked is more than, but enable again if one box is unchecked
     // right now there will be edge cases when check and uncheck, we will discard more than necessary
+    // if stmt for state
     if (totalChecked == this.state.handArr.length - 7) {
       this.setState({disableSubmit: false})
     }
@@ -60,7 +67,8 @@ export default class Alerts extends Component {
     console.log('newHandArr', newHandArr)
     // delete chosen card from hand on firebase
     db.ref(`/rooms/${this.props.roomName}/players/${this.props.currPlayer}`).update({
-      hand: newHandArr
+      hand: newHandArr,
+      resolved: true
     })
     .then(() => {
       this.setState({alertOpen: false})

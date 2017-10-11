@@ -34,7 +34,9 @@ module.exports = function(refs) {
 
           // step 2.5: check infection rate & handle the outbreak there (if necessary)
           const outbreakSite = outbreakCard.split(' ').join('-')
-          const updatedData = handleOutbreak(outbreakSite, cities)
+          const { updatedData, nOutbreaks } = handleOutbreak(outbreakSite, cities)
+          console.log('updatedData')
+          console.log(updatedData)
 
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
@@ -43,6 +45,8 @@ module.exports = function(refs) {
           updatedDecks['/infectionDiscard'] = []
 
           const all = Object.assign({}, updatedDecks, updatedData)
+          console.log('data to update...')
+          console.log(all)
           return roomRef.update(all)
         })
       }

@@ -1,6 +1,7 @@
 const handleOutbreak = require('./handleOutbreak')
 
 module.exports = function(refs) {
+  console.log('infect next city')
   const { player, playerRef, roomRef } = refs
 
   const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
@@ -32,7 +33,7 @@ module.exports = function(refs) {
         updatedData[path] = infectionRate + 1
         // do normal stuff
       } else {
-        const outbreakData = handleOutbreak(city, cities)
+        const { outbreakData, nOutbreaks } = handleOutbreak(city, cities)
         updatedData = Object.assign({}, updatedData, outbreakData)
       }
     }
