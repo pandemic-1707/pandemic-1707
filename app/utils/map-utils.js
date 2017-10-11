@@ -16,12 +16,8 @@ export function mapDataToMarkers(cities) {
     // draw a line between location and real location with the color of the city if they're different
     let locationIndicator = ''
     if (city.location[0] !== city.realLocation[0] || city.location[1] !== city.realLocation[1]) {
-      console.log('need to draw a marker')
-      console.log('location')
-      console.log(city.location)
-      console.log('real location')
-      console.log(city.realLocation)
-      locationIndicator = <Polyline key={`${key}-indicator`} positions={[city.location, city.realLocation]} color={city.color} weight="1"/>
+      const color = (city.color === 'blue') ? 'steelblue' : city.color
+      locationIndicator = <Polyline key={`${key}-indicator`} positions={[city.location, city.realLocation]} color={color} weight="1"/>
     }
     return <div>
       <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>

@@ -32,7 +32,7 @@ module.exports = {
   'Montreal': { color: 'blue', location: [53.099838, -80.911625], realLocation: [45.501689, -73.567256], connections: ['Chicago', 'New-York', 'Washington'], infectionRate: 0 },
   'Moscow': { color: 'black', location: [55.259595, 44.420405], realLocation: [55.755826, 37.617300], connections: ['St-Petersburg', 'Istanbul', 'Tehran'], infectionRate: 0 },
   'Mumbai': { color: 'black', location: [13.377664, 63.580561], realLocation: [19.075984, 72.877656], connections: ['Karachi', 'Delhi', 'Chennai'], infectionRate: 0 },
-  'New-York': { color: 'blue', location: [53.935920, -60.169437], realLocation: [32.307800, -64.750500], connections: ['Montreal', 'Washington', 'Madrid', 'London'], infectionRate: 0 },
+  'New-York': { color: 'blue', location: [53.935920, -60.169437], realLocation: [40.712775, -74.005973], connections: ['Montreal', 'Washington', 'Madrid', 'London'], infectionRate: 0 },
   'Osaka': { color: 'red', location: [36.287513, 151.471187], realLocation: [34.693738, 135.502165], connections: ['Tokyo', 'Taipei'], infectionRate: 0 },
   'Paris': { color: 'blue', location: [48.856614, 2.352222], realLocation: [48.856614, 2.352222], connections: ['London', 'Essen', 'Milan', 'Algiers', 'Madrid'], infectionRate: 0 },
   'Riyadh': { color: 'black', location: [24.713552, 46.675296], realLocation: [24.713552, 46.675296], connections: ['Cairo', 'Baghdad', 'Karachi'], infectionRate: 0 },
