@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Map from './GameMap'
 import Sidebar from './Sidebar'
 import PlayerActions from './PlayerActions'
+import PlayerActionsInactive from './PlayerActionsInactive'
 import Chat from './Chat'
 import NavBar from './NavBar'
 import fire from '../../fire/index'
@@ -58,7 +59,7 @@ export default class Room extends Component {
                 {
                   this.state.isCurrentPlayer ?
                   (<div><PlayerActions roomName={this.props.match.params.roomName}/></div>) :
-                  (<div>Waiting for your turn</div>)
+                  (<div><PlayerActionsInactive roomName={this.props.match.params.roomName} /></div>)
                 }
             </footer>
           </div>

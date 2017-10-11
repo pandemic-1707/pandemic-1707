@@ -1,6 +1,7 @@
 const handleOutbreak = require('./handleOutbreak')
 
 module.exports = function(refs) {
+  console.log('infect next city')
   const { player, playerRef, roomRef } = refs
 
   const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())

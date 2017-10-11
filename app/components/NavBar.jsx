@@ -4,6 +4,7 @@ import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
 import EpiAlerts from './EpidemicAlerts'
+import HandLimit from './HandLimitAlert'
 import { Menu, Button, Transition } from 'semantic-ui-react'
 const db = fire.database()
 // Get the auth API from Firebase.
@@ -16,7 +17,8 @@ export default class NavBar extends Component {
       gameState: {},
       currPlayer: '',
       players: {},
-      loading: true
+      loading: true, 
+      isCurrPlayer: false
     }
     this.handleLogout = this.handleLogout.bind(this)
   }
@@ -34,9 +36,11 @@ export default class NavBar extends Component {
       this.setState({
         currPlayer: currPlayer,
         players: players,
-        researchCenter: researchCenter
+        researchCenter: researchCenter,
+        isCurrPlayer: currPlayer === auth.currentUser.uid
       })
     })
+
     setTimeout(() => {
       this.setState({loading: false})
     }, 1000)
@@ -48,7 +52,7 @@ export default class NavBar extends Component {
   }
 
   render() {
-    const { players, currPlayer } = this.state
+    const { players, currPlayer, isCurrPlayer } = this.state
     let currPlayerName = ''
     if (currPlayer) {
       currPlayerName = players[currPlayer].name
@@ -96,6 +100,11 @@ export default class NavBar extends Component {
           <Button size="mini" color="violet"
           onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
+        {
+          isCurrPlayer ?
+          <HandLimit roomName={this.props.roomName} currPlayer={this.state.currPlayer}/> :
+          ''
+        }
         <EpiAlerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
       </Menu>
       )
