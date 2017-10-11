@@ -27,8 +27,7 @@ export default class PlayerActionsInactive extends Component {
     })
   }
   render() {
-    const activePlayer = this.state.currPlayer
-    console.log('activePlayer', this.props.roomName)
+    const {currPlayer, players} = this.state
     return (
       <Menu inverted>
         <Menu.Item>
@@ -55,7 +54,7 @@ export default class PlayerActionsInactive extends Component {
         </Button>
         </Menu.Item>
         <Menu.Item>
-          Actions Left: {}
+          Actions Left: {players && currPlayer && players[currPlayer].numActions}
         </Menu.Item>
       </Menu>
     )
