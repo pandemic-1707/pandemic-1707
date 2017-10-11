@@ -11,6 +11,8 @@ module.exports = function(refs) {
     for (const card in hand) {
       if (hand[card].hasOwnProperty('Epidemic')) {
         console.log('coping with an epidemic!')
+        console.log('deleting the card')
+        delete hand[card]
         const fetchCities = roomRef.child('cities').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
         const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
@@ -40,6 +42,7 @@ module.exports = function(refs) {
 
           // step 3: intensify -- reshuffle infection discard and add it to pile
           const newInfectionDeck = infectionDeck.concat(shuffle(infectionDiscard))
+          updatedDecks[`/players/${player}/hand`] = hand
           updatedDecks['/infectionDeck'] = newInfectionDeck
           updatedDecks['/infectionDiscard'] = []
           updatedDecks['/epidemicMessage'] = 'There was an epidemic in ' + outbreakCard
