@@ -8,12 +8,16 @@ module.exports = function(refs) {
   .then(data => {
     const updatedData = {}
     const playerDeck = data[0]
-    const playerHand = data[1]
+    let playerHand = data[1]
 
     // pop two cards off the playerDeck
     const firstCard = playerDeck.pop()
     const secondCard = playerDeck.pop()
-    playerHand.push(firstCard, secondCard)
+    if (playerHand) {
+      playerHand.push(firstCard, secondCard)
+    } else {
+      playerHand = [firstCard, secondCard]
+    }
 
     updatedData['/playerDeck'] = playerDeck
     updatedData[`/players/${player}/hand`] = playerHand
