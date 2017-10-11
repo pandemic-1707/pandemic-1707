@@ -2,7 +2,8 @@ module.exports = function(outbreakSite, cities) {
   // outbreak site must get an infectionRate of 3
   // if the infection rate was 0 before, that's all you need to do
   const updatedData = {}
-  updatedData['cities/' + outbreakSite + '/infectionRate'] = 3
+  const start = '/cities' + outbreakSite + '/infectionRate'
+  updatedData[start] = 3
   let nOutbreaks
 
   // TO-DO: MOVE THIS IF STATEMENT

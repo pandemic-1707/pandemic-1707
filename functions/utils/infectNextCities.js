@@ -2,6 +2,7 @@ const handleOutbreak = require('./handleOutbreak')
 const arrayToSentence = require('array-to-sentence')
 
 module.exports = function(refs) {
+  console.log('infect next city')
   const { player, playerRef, roomRef } = refs
   console.log('infecting cities')
 
