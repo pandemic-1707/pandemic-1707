@@ -53,9 +53,6 @@ export default class PlayerActionsInactive extends Component {
             Event
         </Button>
         </Menu.Item>
-        <Menu.Item>
-          Actions Left: {players && currPlayer && players[currPlayer].numActions}
-        </Menu.Item>
       </Menu>
     )
   }
