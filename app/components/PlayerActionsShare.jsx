@@ -28,19 +28,59 @@ export default class PlayerActionsShare extends Component {
   // confirm
 
   // //////// give cards ////////
+
+  setCardToGive = (e, card) => {
+    e.preventDefault()
+    this.setState({
+      color: card.props.color,
+      cardToGive: card
+    })
+  }
+
+  setTraderToReceive = (e, trader) => {
+    e.preventDefault()
+    this.setState({
+      traderToReceive: trader
+    })
+  }
+
+  giveCard = (e) => {
+    e.preventDefault()
+    const receiver = this.state.traderToReceive
+    const cardToGive = this.state.cardToGive
+    // give card to receiver
+    let receiverNewHand = [...receiver.hand, cardToGive]
+    fire.database().ref(`/rooms/${this.props.roomName}/players/${receiver.playerKey}`).update({
+      hand: receiverNewHand
+    })
+    // remove card from current player hand
+    const activePlayerNewHand = this.props.activePlayer.hand.filter((card) => {
+      return card.city !== cardToGive.city
+    })
+    const currNumActions = this.props.activePlayer.numActions
+    fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerKey}`).update({
+      hand: activePlayerNewHand,
+      numActions: currNumActions - 1
+    })
+    // reset states
+    this.resetState()
+    this.handleClose()
+  }
+
   displayCardsToGive = (traders, activePlayer) => {
     return (
       <div>
         <Grid container columns={2} doubling stackable>
           <Grid.Column>
-            <Header color="grey">{activePlayer.name} is giving cards to ...</Header>
+            <Header color="grey">{activePlayer.name} is giving which card?</Header>
+            {this.state.cardToGive && <Header color="grey"> {this.state.cardToGive.city}</Header>}
             {
               activePlayer.hand.length && activePlayer.hand.map((card) => {
                 if (card.city) {
                   const cityName = card.city
                   return (
                     <div key={cityName}>
-                      <Button size="small" onClick={(e) => this.setCardToTake(e, card)} color={card.props.color} ></Button>
+                      <Button size="small" onClick={(e) => this.setCardToGive(e, card)} color={card.props.color} ></Button>
                       <span>{cityName}</span>
                     </div>
                   )
@@ -49,7 +89,8 @@ export default class PlayerActionsShare extends Component {
             }
           </Grid.Column>
           <Grid.Column>
-            <Header color="grey">Traders</Header>
+            <Header color="grey">To which player?</Header>
+            {this.state.traderToReceive.name && <Header color="grey">{this.state.traderToReceive.name}</Header>}
             {
               traders.length && traders.map((trader) => {
                 return (
@@ -63,7 +104,7 @@ export default class PlayerActionsShare extends Component {
         </Grid>
         <Grid container columns={1} doubling stackable>
           <Grid.Column>
-            <Button size="small" onClick={this.tradeKnowledge} disabled={!this.state.cardToTake.city} >Confirm</Button>
+            <Button size="small" onClick={this.giveCard} disabled={!this.state.cardToTake.city && !this.state.traderToReceive.name} >Confirm</Button>
             <Button size="small" onClick={this.handleClose} color='grey' >Cancel</Button>
           </Grid.Column>
         </Grid>
