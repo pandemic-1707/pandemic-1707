@@ -3,7 +3,6 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import Alerts from './DealingHandsAlert'
 import EpiAlerts from './EpidemicAlerts'
 import { Menu, Button, Transition } from 'semantic-ui-react'
 const db = fire.database()
@@ -37,51 +36,6 @@ export default class NavBar extends Component {
         players: players,
         researchCenter: researchCenter
       })
-      if (players && currPlayer) {
-        let hand = []
-        if (players[currPlayer].hand) hand = players[currPlayer].hand
-        if (players[currPlayer].numActions === 0) {
-          // change numActions back to 4
-          return db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-            numActions: 4
-          })
-          // push those 2 onto player's hand
-          .then(() => {
-            db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).update({
-              hand: [...hand, snapshot.val().playerDeck.shift()]
-            })
-          })
-          // // check if they have more than 7 cards
-          // .then(() => {
-          //   db.ref(`/rooms/${this.props.roomName}/players/${currPlayer}`).once('value').then(snapshot => {
-          //     const handArr = snapshot.val().hand
-          //     if (handArr.length >= 7) {
-          //       alert('Please discard')
-          //     }
-          //   })
-          // })
-          // pull those 2 out of player deck
-          .then(() => {
-            console.log('are we getting in deck?')
-            const updatedPlayerDeck = snapshot.val().playerDeck.slice(1)
-            db.ref(`/rooms/${this.props.roomName}`).update({
-              playerDeck: updatedPlayerDeck
-            })
-          })
-          // update to the next currPlayer
-          .then(() => {
-            const currPlayersArr = snapshot.val().state.currPlayersArr
-            const i = ((currPlayersArr.indexOf(currPlayer) + 1) % currPlayersArr.length)
-            db.ref(`/rooms/${this.props.roomName}/state`).update({
-              currPlayer: currPlayersArr[i]
-            })
-            this.setState({
-              currPlayer: currPlayersArr[i]
-            })
-            console.log('currPlayer', currPlayer)
-          })
-        }
-      }
     })
     setTimeout(() => {
       this.setState({loading: false})
@@ -109,19 +63,19 @@ export default class NavBar extends Component {
       return (
         <Menu inverted>
         <Menu.Item>
-          <img src={'/images/redIcon.png'} />
+          <img className='navbar-icon' src={'/images/redIcon.png'} />
           {this.state.gameState.redTiles}
-          <img src={'/images/blackIcon.png'} />
+          <img className='navbar-icon' src={'/images/blackIcon.png'} />
           {this.state.gameState.blackTiles}
-          <img src={'/images/blueIcon.png'} />
+          <img className='navbar-icon' src={'/images/blueIcon.png'} />
           {this.state.gameState.blueTiles}
-          <img src={'/images/yellowIcon.png'} />
+          <img className='navbar-icon' src={'/images/yellowIcon.png'} />
           {this.state.gameState.yellowTiles}
-          <img src={'/images/infectionMarker.jpg'} />
+          <img className='navbar-icon' src={'/images/infectionMarker.jpg'} />
           {this.state.gameState.infectionRate}
-          <img src={'/images/OutbreakMarker.png'} />
+          <img className='navbar-icon' src={'/images/OutbreakMarker.png'} />
           {this.state.gameState.outbreaks}
-          <img src={'/images/researchCenter.png'} />
+          <img className='navbar-icon' src={'/images/researchCenter.png'} />
           {this.state.gameState.researchCenters}
         </Menu.Item>
          <Transition
@@ -130,7 +84,6 @@ export default class NavBar extends Component {
             transitionOnMount={true}>
         <Menu.Item>
           Current Turn: {currPlayerName}
-          <Alerts />
         </Menu.Item>
         </Transition>
         <Menu.Item>
@@ -143,7 +96,6 @@ export default class NavBar extends Component {
           <Button size="mini" color="violet"
           onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
-        <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
         <EpiAlerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
       </Menu>
       )
