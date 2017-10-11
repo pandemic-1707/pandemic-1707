@@ -3,7 +3,6 @@ import fire from '../../fire'
 import shuffle from 'shuffle-array'
 import WhoAmI from './WhoAmI'
 import Rules from './Rules'
-import Alerts from './DealingHandsAlert'
 import EpiAlerts from './EpidemicAlerts'
 import { Menu, Button, Transition } from 'semantic-ui-react'
 const db = fire.database()
@@ -85,7 +84,6 @@ export default class NavBar extends Component {
             transitionOnMount={true}>
         <Menu.Item>
           Current Turn: {currPlayerName}
-          <Alerts />
         </Menu.Item>
         </Transition>
         <Menu.Item>
@@ -98,7 +96,6 @@ export default class NavBar extends Component {
           <Button size="mini" color="violet"
           onClick={this.handleLogout}>Logout</Button>
         </Menu.Item>
-        <Alerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
         <EpiAlerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
       </Menu>
       )
