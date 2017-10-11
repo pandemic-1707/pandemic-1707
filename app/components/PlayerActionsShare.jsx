@@ -18,7 +18,10 @@ export default class PlayerActionsShare extends Component {
 
   handleOpen = () => this.setState({ modalOpen: true })
 
-  handleClose = () => this.setState({ modalOpen: false })
+  handleClose = () => {
+    this.resetState()
+    this.setState({ modalOpen: false })
+  }
 
   resetState = () => this.setState(initialState)
 
@@ -62,8 +65,6 @@ export default class PlayerActionsShare extends Component {
       hand: activePlayerNewHand,
       numActions: currNumActions - 1
     })
-    // reset states
-    this.resetState()
     this.handleClose()
   }
 
@@ -143,8 +144,6 @@ export default class PlayerActionsShare extends Component {
       hand: activePlayerNewHand,
       numActions: currNumActions - 1
     })
-    // reset states
-    this.resetState()
     this.handleClose()
   }
 
