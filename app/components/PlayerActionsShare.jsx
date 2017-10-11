@@ -157,7 +157,12 @@ export default class PlayerActionsShare extends Component {
       hand: giverNewHand
     })
     // add card to current player hand
-    let activePlayerNewHand = [...this.props.activePlayer.hand, cardToTake]
+    let activePlayerNewHand = []
+    if (this.props.activePlayer.hand) {
+      activePlayerNewHand = [...this.props.activePlayer.hand, cardToTake]
+    } else {
+      activePlayerNewHand = [cardToTake]
+    }
     const currNumActions = this.props.activePlayer.numActions
     fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerKey}`).update({
       hand: activePlayerNewHand,
