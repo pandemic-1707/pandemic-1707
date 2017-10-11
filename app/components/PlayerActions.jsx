@@ -11,8 +11,6 @@ import PlayerActionsShare from './PlayerActionsShare'
 import PlayerActionsTreat from './PlayerActionsTreat'
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
-// TODO: most efficient to check for conditions after movement confirmed () =>
-//  make a backend cloud func that listens for player loc change and sets state as needed
 // TODO: modularize actions
 // TODO: have buttons activate when available
 
@@ -45,16 +43,10 @@ export default class PlayerActions extends Component {
       })
     })
     fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).on('value', snapshot => {
-      console.log("SNAPSHOT", snapshot.val())
       this.setState({
         curedDiseases: snapshot.val(),
       })
     })
-  }
-
-  handleMoveAction = () => {
-    // create popup
-
   }
 
   // returns active player uid key
@@ -95,7 +87,6 @@ export default class PlayerActions extends Component {
     if (activePlayer && activePlayer.position && activePlayer.position.city) {
       traders = this.canShareKnowledge(activePlayer, this.state.players)
     }
-    console.log("RENDER", this.state)
     return (
       <Menu inverted>
         <Menu.Item>

@@ -19,7 +19,6 @@ export default class PlayerActionsTreat extends Component {
 
   componentDidMount() {
     const cured = this.props.curedDiseases
-    console.log("CONSTR TREAT", this.props.curedDiseases)
     this.setState({
       treatRate: {
         black: cured['black'] ? CURED_DEC_RATE : NORMAL_DEC_RATE,
@@ -34,7 +33,6 @@ export default class PlayerActionsTreat extends Component {
     const activePlayer = this.props.activePlayer && this.props.activePlayer
     const activePlayerCity = activePlayer.position.city && activePlayer.position.city
     const allCities = this.props.allCities && this.props.allCities
-    console.log("HOW IS THIS WORKING", this.state)
     fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
       infectionRate: allCities[activePlayerCity].infectionRate - this.state.treatRate[allCities[activePlayerCity].color]
     })
