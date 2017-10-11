@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Dropdown, Button } from 'semantic-ui-react'
+import { Dropdown, Button, Menu } from 'semantic-ui-react'
 import fire from '../../fire'
 
 // TODO: remove - hyphens from city names display
@@ -111,7 +111,7 @@ export default class PlayerActionMoveDropUp extends Component {
         }
       })
     } else {
-      newHand = this.props.activePlayer.hand
+      if (this.props.activePlayer.hand) { newHand = this.props.activePlayer.hand }
     }
     // update position and num actions left
     fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerKey}`).update({
@@ -150,16 +150,15 @@ export default class PlayerActionMoveDropUp extends Component {
     const charter = this.getCharterCityList()
     const researchStationList = this.state.researchStationList
     return (
-      <div className="ui form">
-        <div className="field">
-          <select className="ui upward dropdown" onChange={this.handleChange} value={this.state.value}>
-            <option value="" disabled selected hidden>Move</option>
+      <Menu inverted>
+        <Menu.Item>
+          <select className="ui upward dropdown cityoptions" onChange={this.handleChange} value={this.state.value}>
+            <option color="orange">Move</option>
             <optgroup label="Nearby (drive/ferry)">
               {
                 nearbyCities && nearbyCities.map((cityName) => {
                   return <option key={cityName} value={cityName + ':nearby'}>{cityName}</option>
                 })
-              })
               }
             </optgroup>
             <optgroup label="Player Hand (direct flight)">
@@ -175,9 +174,11 @@ export default class PlayerActionMoveDropUp extends Component {
             {/* display only if you have a card matching your current city */}
             {charter}
           </select>
-          {confirmButton && <Button size="mini" onClick={this.handleConfirm} >Confirm</Button>}
-        </div>
-      </div>
+        </Menu.Item>
+        <Menu.Item>
+          {confirmButton && <Button size="mini" color="green" onClick={this.handleConfirm} >Confirm</Button>}
+        </Menu.Item>
+      </Menu>
     )
   }
 }

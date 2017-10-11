@@ -1,0 +1,674 @@
+{
+  "cities": {
+    "Algiers": {
+      "color": "black",
+      "connections": [
+        "Madrid",
+        "Paris",
+        "Istanbul",
+        "Cairo"
+      ],
+      "infectionRate": 0,
+      "location": [
+        32.887209,
+        13.191338
+      ]
+    },
+    "Atlanta": {
+      "color": "blue",
+      "connections": [
+        "Chicago",
+        "Washington",
+        "Miami"
+      ],
+      "infectionRate": 0,
+      "location": [
+        33.748995,
+        -84.387982
+      ],
+      "research": true
+    },
+    "Baghdad": {
+      "color": "black",
+      "connections": [
+        "Istanbul",
+        "Cairo",
+        "Tehran",
+        "Riyadh"
+      ],
+      "infectionRate": 3,
+      "location": [
+        33.312806,
+        44.361488
+      ]
+    },
+    "Bangkok": {
+      "color": "red",
+      "connections": [
+        "Kolkata",
+        "Hong-Kong",
+        "Ho-Chi-Minh-City",
+        "Jakarta",
+        "Chennai"
+      ],
+      "infectionRate": 3,
+      "location": [
+        13.756331,
+        100.501765
+      ]
+    },
+    "Beijing": {
+      "color": "red",
+      "connections": [
+        "Seoul",
+        "Shanghai"
+      ],
+      "infectionRate": 0,
+      "location": [
+        39.9042,
+        116.407396
+      ]
+    },
+    "Bogota": {
+      "color": "yellow",
+      "connections": [
+        "Miami",
+        "Mexico-City",
+        "Lima",
+        "Buenos-Aires",
+        "Sao-Paulo"
+      ],
+      "infectionRate": 0,
+      "location": [
+        4.710989,
+        -74.072092
+      ]
+    },
+    "Buenos-Aires": {
+      "color": "yellow",
+      "connections": [
+        "Bogota",
+        "Sao-Paulo",
+        "Santiago",
+        "Johannesburg"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -34.603684,
+        -58.381559
+      ]
+    },
+    "Cairo": {
+      "color": "black",
+      "connections": [
+        "Algiers",
+        "Istanbul",
+        "Riyadh",
+        "Khartoum"
+      ],
+      "infectionRate": 0,
+      "location": [
+        30.04442,
+        31.235712
+      ]
+    },
+    "Chennai": {
+      "color": "black",
+      "connections": [
+        "Mumbai",
+        "Delhi",
+        "Kolkata",
+        "Jakarta"
+      ],
+      "infectionRate": 0,
+      "location": [
+        13.08268,
+        80.270718
+      ]
+    },
+    "Chicago": {
+      "color": "blue",
+      "connections": [
+        "Montreal",
+        "Atlanta",
+        "Mexico-City",
+        "Los-Angeles",
+        "San-Francisco"
+      ],
+      "infectionRate": 0,
+      "location": [
+        46.877186,
+        -96.789803
+      ]
+    },
+    "Delhi": {
+      "color": "black",
+      "connections": [
+        "Kolkata",
+        "Chennai",
+        "Mumbai",
+        "Karachi",
+        "Tehran"
+      ],
+      "infectionRate": 0,
+      "location": [
+        28.704059,
+        77.10249
+      ]
+    },
+    "Essen": {
+      "color": "blue",
+      "connections": [
+        "St-Petersburg",
+        "Milan",
+        "Paris",
+        "London"
+      ],
+      "infectionRate": 0,
+      "location": [
+        52.229676,
+        21.012229
+      ]
+    },
+    "Ho-Chi-Minh-City": {
+      "color": "red",
+      "connections": [
+        "Bangkok",
+        "Hong-Kong",
+        "Manila",
+        "Sydney",
+        "Jakarta"
+      ],
+      "infectionRate": 0,
+      "location": [
+        10.823099,
+        106.629664
+      ]
+    },
+    "Hong-Kong": {
+      "color": "red",
+      "connections": [
+        "Shanghai",
+        "Taipei",
+        "Manila",
+        "Ho-Chi-Minh-City",
+        "Bangkok",
+        "Kolkata"
+      ],
+      "infectionRate": 0,
+      "location": [
+        30.572815,
+        104.066801
+      ]
+    },
+    "Istanbul": {
+      "color": "black",
+      "connections": [
+        "Milan",
+        "St-Petersburg",
+        "Moscow",
+        "Baghdad",
+        "Cairo",
+        "Algiers"
+      ],
+      "infectionRate": 0,
+      "location": [
+        41.008238,
+        28.978359
+      ]
+    },
+    "Jakarta": {
+      "color": "red",
+      "connections": [
+        "Chennai",
+        "Bangkok",
+        "Ho-Chi-Minh-City",
+        "Sydney"
+      ],
+      "infectionRate": 2,
+      "location": [
+        -6.17511,
+        106.865039
+      ]
+    },
+    "Johannesburg": {
+      "color": "yellow",
+      "connections": [
+        "Buenos-Aires",
+        "Kinshasa",
+        "Khartoum"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -26.204103,
+        28.047305
+      ]
+    },
+    "Karachi": {
+      "color": "black",
+      "connections": [
+        "Tehran",
+        "Delhi",
+        "Mumbai",
+        "Riyadh"
+      ],
+      "infectionRate": 0,
+      "location": [
+        24.861462,
+        67.009939
+      ]
+    },
+    "Khartoum": {
+      "color": "yellow",
+      "connections": [
+        "Cairo",
+        "Lagos",
+        "Kinshasa",
+        "Johannesburg"
+      ],
+      "infectionRate": 0,
+      "location": [
+        15.500654,
+        32.559899
+      ]
+    },
+    "Kinshasa": {
+      "color": "yellow",
+      "connections": [
+        "Lagos",
+        "Khartoum",
+        "Johannesburg"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -4.441931,
+        15.266293
+      ]
+    },
+    "Kolkata": {
+      "color": "black",
+      "connections": [
+        "Delhi",
+        "Chennai",
+        "Bangkok",
+        "Hong-Kong"
+      ],
+      "infectionRate": 0,
+      "location": [
+        22.572646,
+        88.363895
+      ]
+    },
+    "Lagos": {
+      "color": "yellow",
+      "connections": [
+        "Sao-Paulo",
+        "Khartoum",
+        "Kinshasa"
+      ],
+      "infectionRate": 0,
+      "location": [
+        6.524379,
+        3.379206
+      ]
+    },
+    "Lima": {
+      "color": "yellow",
+      "connections": [
+        "Los-Angeles",
+        "Mexico-City",
+        "Bogota",
+        "Santiago"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -12.046373,
+        -77.042754
+      ]
+    },
+    "London": {
+      "color": "blue",
+      "connections": [
+        "New-York",
+        "Madrid",
+        "Paris",
+        "Essen"
+      ],
+      "infectionRate": 0,
+      "location": [
+        55.953252,
+        -3.188267
+      ]
+    },
+    "Los-Angeles": {
+      "color": "yellow",
+      "connections": [
+        "Sydney",
+        "Lima",
+        "Mexico-City",
+        "Chicago",
+        "San-Francisco"
+      ],
+      "infectionRate": 0,
+      "location": [
+        34.052234,
+        -118.243685
+      ]
+    },
+    "Madrid": {
+      "color": "blue",
+      "connections": [
+        "New-York",
+        "London",
+        "Paris",
+        "Algiers",
+        "Sao-Paulo"
+      ],
+      "infectionRate": 0,
+      "location": [
+        40.416775,
+        -3.70379
+      ]
+    },
+    "Manila": {
+      "color": "red",
+      "connections": [
+        "Taipei",
+        "San-Francisco",
+        "Los-Angeles",
+        "Ho-Chi-Minh-City",
+        "Hong-Kong"
+      ],
+      "infectionRate": 0,
+      "location": [
+        14.599512,
+        120.984219
+      ]
+    },
+    "Mexico-City": {
+      "color": "yellow",
+      "connections": [
+        "Chicago",
+        "Miami",
+        "Bogota",
+        "Lima",
+        "Los-Angeles"
+      ],
+      "infectionRate": 0,
+      "location": [
+        19.432608,
+        -99.133208
+      ]
+    },
+    "Miami": {
+      "color": "yellow",
+      "connections": [
+        "Atlanta",
+        "Washington",
+        "Bogota",
+        "Mexico-City"
+      ],
+      "infectionRate": 0,
+      "location": [
+        25.76168,
+        -80.19179
+      ]
+    },
+    "Milan": {
+      "color": "blue",
+      "connections": [
+        "Paris",
+        "Essen",
+        "Istanbul"
+      ],
+      "infectionRate": 1,
+      "location": [
+        45.464204,
+        9.189982
+      ]
+    },
+    "Montreal": {
+      "color": "blue",
+      "connections": [
+        "Chicago",
+        "New-York",
+        "Washington"
+      ],
+      "infectionRate": 2,
+      "location": [
+        45.501689,
+        -73.567256
+      ]
+    },
+    "Moscow": {
+      "color": "black",
+      "connections": [
+        "St-Petersburg",
+        "Istanbul",
+        "Tehran"
+      ],
+      "infectionRate": 0,
+      "location": [
+        55.755826,
+        37.6173
+      ]
+    },
+    "Mumbai": {
+      "color": "black",
+      "connections": [
+        "Karachi",
+        "Delhi",
+        "Chennai"
+      ],
+      "infectionRate": 0,
+      "location": [
+        19.075984,
+        72.877656
+      ]
+    },
+    "New-York": {
+      "color": "blue",
+      "connections": [
+        "Montreal",
+        "Washington",
+        "Madrid",
+        "London"
+      ],
+      "infectionRate": 0,
+      "location": [
+        32.3078,
+        -64.7505
+      ]
+    },
+    "Osaka": {
+      "color": "red",
+      "connections": [
+        "Tokyo",
+        "Taipei"
+      ],
+      "infectionRate": 0,
+      "location": [
+        34.693738,
+        135.502165
+      ]
+    },
+    "Paris": {
+      "color": "blue",
+      "connections": [
+        "London",
+        "Essen",
+        "Milan",
+        "Algiers",
+        "Madrid"
+      ],
+      "infectionRate": 0,
+      "location": [
+        48.856614,
+        2.352222
+      ]
+    },
+    "Riyadh": {
+      "color": "black",
+      "connections": [
+        "Cairo",
+        "Baghdad",
+        "Karachi"
+      ],
+      "infectionRate": 1,
+      "location": [
+        24.713552,
+        46.675296
+      ]
+    },
+    "San-Francisco": {
+      "color": "blue",
+      "connections": [
+        "Tokyo",
+        "Manila",
+        "Los-Angeles",
+        "Chicago"
+      ],
+      "infectionRate": 0,
+      "location": [
+        47.606209,
+        -122.332071
+      ]
+    },
+    "Santiago": {
+      "color": "yellow",
+      "connections": [
+        "Lima",
+        "Buenos-Aires"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -33.44889,
+        -70.669265
+      ]
+    },
+    "Sao-Paulo": {
+      "color": "yellow",
+      "connections": [
+        "Buenos-Aires",
+        "Bogota",
+        "Madrid",
+        "Lagos"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -23.55052,
+        -46.633309
+      ]
+    },
+    "Seoul": {
+      "color": "red",
+      "connections": [
+        "Beijing",
+        "Shanghai",
+        "Tokyo"
+      ],
+      "infectionRate": 0,
+      "location": [
+        37.566535,
+        126.977969
+      ]
+    },
+    "Shanghai": {
+      "color": "red",
+      "connections": [
+        "Beijing",
+        "Seoul",
+        "Tokyo",
+        "Taipei",
+        "Hong-Kong"
+      ],
+      "infectionRate": 3,
+      "location": [
+        31.23039,
+        121.473702
+      ]
+    },
+    "St-Petersburg": {
+      "color": "blue",
+      "connections": [
+        "Essen",
+        "Istanbul",
+        "Moscow"
+      ],
+      "infectionRate": 0,
+      "location": [
+        59.93428,
+        30.335099
+      ]
+    },
+    "Sydney": {
+      "color": "red",
+      "connections": [
+        "Jakarta",
+        "Manila",
+        "Los-Angeles"
+      ],
+      "infectionRate": 0,
+      "location": [
+        -33.86882,
+        151.209296
+      ]
+    },
+    "Taipei": {
+      "color": "red",
+      "connections": [
+        "Shanghai",
+        "Osaka",
+        "Hong-Kong",
+        "Manila"
+      ],
+      "infectionRate": 0,
+      "location": [
+        25.032969,
+        121.565418
+      ]
+    },
+    "Tehran": {
+      "color": "black",
+      "connections": [
+        "Moscow",
+        "Baghdad",
+        "Karachi",
+        "Delhi"
+      ],
+      "infectionRate": 0,
+      "location": [
+        35.689197,
+        51.388974
+      ]
+    },
+    "Tokyo": {
+      "color": "red",
+      "connections": [
+        "Seoul",
+        "Shanghai",
+        "Osaka",
+        "San-Francisco"
+      ],
+      "infectionRate": 2,
+      "location": [
+        43.062096,
+        141.354376
+      ]
+    },
+    "Washington": {
+      "color": "blue",
+      "connections": [
+        "Atlanta",
+        "Montreal",
+        "New-York",
+        "Miami"
+      ],
+      "infectionRate": 1,
+      "location": [
+        38.907192,
+        -77.036871
+      ]
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import fire from '../../fire'
+import { Form, List, Transition } from 'semantic-ui-react'
 
 const playerOrder = {'player1': '#FF339F', 'player2': '#30CA8D', 'player3': '#FFA913', 'player4': '#A213FF'}
 
@@ -30,32 +31,48 @@ export default class Sidebar extends Component {
         </div>
       )
     } else {
-    // filter out numPlayers on players object
-      const playersItemsArr = Object.values(this.state.players).filter(x => typeof x === 'object')
+      const playersItemsArr = Object.values(this.state.players)
       const players = playersItemsArr.map((playerItems, idx) => {
+        const player = playersItemsArr[idx]
+        const hexVal = player.color.hexVal
+        const role = player.role
+        const name = player.name
+        const hand = player.hand
         return (
           <div key={idx}>
             <div>
               <div className="player-box">
                 <div className={'player-name'}
-                  style={{backgroundColor: playersItemsArr[idx].color.hexVal}}>
-                  <img height="32" width="32" src={`/images/${playersItemsArr[idx].role}.png`} />
-                  <div>
-                    {playersItemsArr[idx].name}
-                  <br />
-                    {playersItemsArr[idx].role}
+                  style={player ? {backgroundColor: hexVal} : ''}>
+                  <div className='player-role'>
+                    <img className='avatar' height="32" width="32" src={`/images/${role}.png`} />
+                      <div className='titles'>
+                        <div className='user'>
+                          {name}
+                        </div>
+                        <br />
+                        <div className='role'>
+                          {role}
+                        </div>
+                      </div>
                   </div>
                 </div>
                 <div className="player-hand">
                 {
-                  playersItemsArr[idx].hand && playersItemsArr[idx].hand.map((obj, i) => {
+                  hand && hand.map((obj, i) => {
                     const color = obj.props ? obj.props.color : 'grey'
                     let title = obj.city || Object.keys(obj)[0]
                     title = title.split('-').join(' ')
-                    return <div>
-                      <div key={`color-box-${i}`} className='color-box' style={{backgroundColor: color}}></div>
-                      <li key={`card-${i}`}>{title}</li>
-                    </div>
+                    return (
+                    <Transition animation="flash" duration="1000" transitionOnMount={true} key={`color-box-${i}`}>
+                      <List>
+                        <List.Item>
+                          <List.Icon className='color-box' style={{backgroundColor: color}}></List.Icon>
+                          <List.Content key={`card-${i}`}>{title}</List.Content>
+                        </List.Item>
+                      </List>
+                    </Transition>
+                    )
                   })
                 }
                 </div>
