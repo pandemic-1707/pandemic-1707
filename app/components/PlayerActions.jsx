@@ -85,7 +85,7 @@ export default class PlayerActions extends Component {
     let traders = []
     playerKeys.map((playerKey) => {
       if (playerKey !== activePlayer.playerKey && players[playerKey].position.city.replace('.', '') === activePlayerCity){
-        traders.push(players[playerKey])
+        traders.push(Object.assign({ playerKey: playerKey }, players[playerKey]))
       }
     })
     return traders
@@ -111,7 +111,8 @@ export default class PlayerActions extends Component {
         </Menu.Item>
         <Menu.Item>
           <Button color="blue"
-            onClick={this.treatDisease}>Treat
+            onClick={this.treatDisease}>
+            Treat
         </Button>
         </Menu.Item>
         <Menu.Item>
@@ -121,7 +122,7 @@ export default class PlayerActions extends Component {
           <PlayerActionsBuild allCities={allCities} activePlayer={activePlayer} roomName={this.props.roomName}/>
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsShare activePlayer={activePlayer} traders={traders} />
+          <PlayerActionsShare roomName={this.props.roomName} activePlayer={activePlayer} traders={traders} />
         </Menu.Item>
         <Menu.Item>
           <Button color="teal">
