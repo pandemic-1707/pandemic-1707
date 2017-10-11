@@ -14,29 +14,25 @@ export default class PlayerActionsTreat extends Component {
 
   }
   treatDisease = () => {
-    const activePlayer = this.getActivePlayer(this.state.players)
-    const activePlayerCity = activePlayer.position.city
-    if (this.state.cities[activePlayerCity].infectionRate > 0) {
-      fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
-        infectionRate: this.state.cities[activePlayerCity].infectionRate - 1
-      })
-        .then(() => {
-          fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
-            numActions: activePlayer.numActions - 1,
-          })
+    const activePlayer = this.props.activePlayer
+    const activePlayerCity = activePlayer.position.city && activePlayer.position.city
+    fire.database().ref(`/rooms/${this.props.roomName}/cities/${activePlayerCity}`).update({
+      infectionRate: this.props.allCities[activePlayerCity].infectionRate - 1
+    })
+      .then(() => {
+        fire.database().ref(`/rooms/${this.props.roomName}/players/${activePlayer.playerKey}`).update({
+          numActions: activePlayer.numActions - 1,
         })
-    } else {
-      // TODO: let player know this city isn't treatable, maybe fade button
-    }
+      })
   }
 
   render() {
     return (
       <div>
-        <Button
-          color="purple"
-          onClick={this.buildResearch}
-        >Build
+        <Button color="blue"
+          onClick={this.treatDisease}
+          disabled={!this.props.canTreat}>
+          Treat
         </Button>
       </div>
     )

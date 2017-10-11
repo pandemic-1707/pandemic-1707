@@ -86,7 +86,7 @@ export default class PlayerActions extends Component {
     const allPlayers = this.state.players && this.state.players
     let canCure = false
     let canTreat = false
-    if (activePlayer && allCities) {
+    if (activePlayer && activePlayer.position && allCities) {
       canCure = cureUtils.canCureDisease(activePlayer, allCities)
       canTreat = this.canTreat(activePlayer)
     }
@@ -100,7 +100,7 @@ export default class PlayerActions extends Component {
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsTreat />
+          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities}/>
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
