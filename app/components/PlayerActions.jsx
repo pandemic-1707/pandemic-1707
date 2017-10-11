@@ -23,11 +23,11 @@ export default class PlayerActions extends Component {
       players: {},
       cities: {},
       currPlayer: '',
-      cureCards: []
+      curedDiseases: []
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // set local state to firebase state
     fire.database().ref(`/rooms/${this.props.roomName}/players`).on('value', snapshot => {
       this.setState({
@@ -45,8 +45,9 @@ export default class PlayerActions extends Component {
       })
     })
     fire.database().ref(`/rooms/${this.props.roomName}/state/curedDiseases`).on('value', snapshot => {
+      console.log("SNAPSHOT", snapshot.val())
       this.setState({
-        cureCards: snapshot.val(),
+        curedDiseases: snapshot.val(),
       })
     })
   }
@@ -94,13 +95,14 @@ export default class PlayerActions extends Component {
     if (activePlayer && activePlayer.position && activePlayer.position.city) {
       traders = this.canShareKnowledge(activePlayer, this.state.players)
     }
+    console.log("RENDER", this.state)
     return (
       <Menu inverted>
         <Menu.Item>
           <PlayerActionsMoveDropUp numActions={activePlayer.numActions} activePlayer={activePlayer} roomName={this.props.roomName} />
         </Menu.Item>
         <Menu.Item>
-          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities}/>
+          <PlayerActionsTreat roomName={this.props.roomName} canTreat={canTreat} activePlayer={activePlayer} allCities={allCities} curedDiseases={this.state.curedDiseases}/>
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsCure roomName={this.props.roomName} curables={canCure} activePlayer={activePlayer} />
