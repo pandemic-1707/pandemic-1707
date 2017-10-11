@@ -25,6 +25,7 @@ module.exports = function(refs) {
       // N.B. need to find and replace spaces
       let city = infectionDeck.pop()
       infectionsToBroadcast.push(city)
+      console.log(city + 'is infected next')
       city = city.split(' ').join('-')
       if (!infectionDiscard) {
         infectionDiscard = [city]
@@ -34,12 +35,16 @@ module.exports = function(refs) {
 
       const infectionRate = cities[city].infectionRate
       if (infectionRate < 3) {
+        console.log('it didnt cause an outbreak')
         const path = 'cities/' + city + '/infectionRate'
         updatedData[path] = infectionRate + 1
         // do normal stuff
       } else {
+        console.log('it did cause an outbreak!')
         const { outbreakData, nOutbreaks } = handleOutbreak(city, cities)
         updatedData = Object.assign({}, updatedData, outbreakData)
+        console.log('the new data is')
+        console.log(updatedData)
       }
     }
 

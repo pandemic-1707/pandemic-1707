@@ -113,6 +113,7 @@ export default class PlayerActionMoveDropUp extends Component {
     } else {
       if (this.props.activePlayer.hand) { newHand = this.props.activePlayer.hand }
     }
+
     // update position and num actions left
     fire.database().ref(`/rooms/${this.props.roomName}/players/${this.props.activePlayer.playerKey}`).update({
       position: { city: moveToCity, location: this.state.cities[moveToCity].location },

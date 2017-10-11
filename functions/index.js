@@ -68,7 +68,7 @@ exports.endTurn = functions.database.ref('/rooms/{name}/players/{player}/numActi
       playerRef: event.data.ref.parent,
       roomRef: event.data.ref.parent.parent.parent
     }
-    
+
     // when a player's turn is over, draw their next two cards,
     // handle any epidemics and then infect the appropriate number of cities (based on infection rate)
     // then update the current player!
