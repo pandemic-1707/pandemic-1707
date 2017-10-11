@@ -19,7 +19,7 @@ export function mapDataToMarkers(cities) {
       locationIndicator = <Polyline key={`${key}-indicator`} positions={[city.location, city.realLocation]} color={color} weight="1"/>
     }
     return <div>
-      <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker}>
+      <Marker key={key} position={[city.location[0], city.location[1]]} icon={marker} zIndexOffset={1000}>
         <Tooltip key={`tooltip-${key}`} direction='top' offset={[-8, -2]} opacity={1}>
           <span>{key.split('-').join(' ')}</span>
         </Tooltip>
@@ -30,18 +30,18 @@ export function mapDataToMarkers(cities) {
 }
 
 export function mapDataToPieces(players) {
-  const icons = { pinkPawn: L.icon({ iconUrl: '/pinkPawn.png', iconSize: [20, 30], iconAnchor: [10, 0] }),
-    bluePawn: L.icon({ iconUrl: '/bluePawn.png', iconSize: [20, 30], iconAnchor: [10, 0] }),
-    yellowPawn: L.icon({ iconUrl: '/yellowPawn.png', iconSize: [20, 30], iconAnchor: [10, 0] }),
-    greenPawn: L.icon({ iconUrl: '/greenPawn.png', iconSize: [20, 30], iconAnchor: [10, 0] })
+  const icons = { pinkPawn: L.icon({ iconUrl: '/pinkPawn.png', iconSize: [20, 30], iconAnchor: [10, 30] }),
+    bluePawn: L.icon({ iconUrl: '/bluePawn.png', iconSize: [20, 30], iconAnchor: [10, 30] }),
+    yellowPawn: L.icon({ iconUrl: '/yellowPawn.png', iconSize: [20, 30], iconAnchor: [10, 30] }),
+    greenPawn: L.icon({ iconUrl: '/greenPawn.png', iconSize: [20, 30], iconAnchor: [10, 30] })
   }
 
   return Object.keys(players).map(key => {
     const player = players[key]
     const pawn = `${player.color.name}Pawn`
-    const pieceLat = player.position.location[0] - player.offset[0]
-    const pieceLng = player.position.location[1] - player.offset[1]
-    return <Marker key={pawn} position={[pieceLat, pieceLng]} icon={icons[pawn]} zIndexOffset={1000} />
+    const pieceLat = player.position.location[0] + player.offset[0]
+    const pieceLng = player.position.location[1] + player.offset[1]
+    return <Marker key={pawn} position={[pieceLat, pieceLng]} icon={icons[pawn]} />
   })
 }
 

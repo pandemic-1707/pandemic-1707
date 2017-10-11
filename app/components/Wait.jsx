@@ -70,11 +70,13 @@ export default class Wait extends Component {
       // guarantees that markers won't render on top of each other
       const offsets = (function(nPlayers) {
         switch (nPlayers) {
-        case 2: return [[-1, -1], [-1, 1]]
-        case 3: return [[0, -1], [-1, 0], [0, 1]]
-        case 4: return [[0, -1], [-1, -1], [-1, 1], [0, 1]]
+        case 2: return [[0, -2], [0, 2]]
+        case 3: return [[0, -2], [2, 0], [0, 2]]
+        case 4: return [[0, -2], [2, -2], [2, 2], [0, 2]]
         }
       })(snapshot.val().numPlayers)
+      console.log('offsets to use')
+      console.log(offsets)
       promise.then(() => {
         fire.database().ref(`/rooms/${roomName}`).once('value').then(newSnapshot => {
           const val = newSnapshot.val()
