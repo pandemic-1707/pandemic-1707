@@ -234,3 +234,7 @@ form button {
 select {
   color: black;
 }
+.currPlayer {
+  font-size: 1.3em;
+  color: #4286f4;
+}
