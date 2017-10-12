@@ -60,7 +60,7 @@ export default class PlayerActionMoveDropUp extends Component {
       return (
         <optgroup label={`Use ${charterCity.city} to charter flight to ANYWHERE`}>
           {allCities && allCities.length && allCities.map(function(city) {
-            return <option key={city} value={city + ':charter'}>{city}</option>
+            return <option key={city} value={city + ':charter'}>{city.split('-').join(' ')}</option>
           })
           }
         </optgroup>
@@ -135,7 +135,7 @@ export default class PlayerActionMoveDropUp extends Component {
         <optgroup label={`Research Station Shuttle Flight`}>
           {cityNames.map(function(city) {
             if (allCities[city].research) {
-              return <option key={city} value={city + ':research'}>{city}</option>
+              return <option key={city} value={city + ':research'}>{city.split('-').join(' ')}</option>
             }
           })
           }
@@ -157,7 +157,7 @@ export default class PlayerActionMoveDropUp extends Component {
           <optgroup label="Nearby (drive/ferry)">
             {
               nearbyCities && nearbyCities.map((cityName) => {
-                return <option key={cityName} value={cityName + ':nearby'}>{cityName}</option>
+                return <option key={cityName} value={cityName + ':nearby'}>{cityName.split('-').join(' ')}</option>
               })
             }
           </optgroup>
@@ -165,7 +165,7 @@ export default class PlayerActionMoveDropUp extends Component {
             {
               this.props.activePlayer && this.props.activePlayer.hand && this.props.activePlayer.hand.map((card) => {
                 if (card.city) {
-                  return <option key={card.city} value={card.city + ':hand'}>{card.city}</option>
+                  return <option key={card.city} value={card.city + ':hand'}>{card.city.split('-').join(' ')}</option>
                 }
               })
             }

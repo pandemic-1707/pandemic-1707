@@ -76,9 +76,15 @@ export default class PlayerActions extends Component {
       return false
     }
     // do we have the city card to use?
-    const buildInCity = activePlayer.hand.find(function (card) {
-      if (card.city) {
-        return card.city.replace('.', '') === activePlayerCity
+    console.log('activeplayerHand')
+    console.log(activePlayer.hand)
+    const buildInCity = activePlayer.hand.find(function(card) {
+      console.log('card is')
+      console.log(card)
+      if (card) {
+        if (card.city) {
+          return card.city.replace('.', '') === activePlayerCity
+        }
       }
     })
     if (buildInCity) { return buildInCity } else { return false }
