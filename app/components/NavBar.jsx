@@ -18,8 +18,9 @@ export default class NavBar extends Component {
       gameState: {},
       currPlayer: '',
       players: {},
-      loading: true, 
-      isCurrPlayer: false
+      loading: true,
+      isCurrPlayer: false,
+      curedDiseases: []
     }
     this.handleLogout = this.handleLogout.bind(this)
   }
@@ -27,7 +28,10 @@ export default class NavBar extends Component {
     // component listens for changes in the game state (tiles, infection rate, outbreaks, etc.)
     db.ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
       const gameState = snapshot.val()
-      if (gameState && gameState.blueTiles) this.setState({ gameState: gameState })
+      if (gameState && gameState.blueTiles) {
+        console.log("SNAPSHOT", snapshot.val())
+        this.setState({ gameState: gameState })
+      }
     })
 
     db.ref(`/rooms/${this.props.roomName}`).on('value', snapshot => {
@@ -55,6 +59,7 @@ export default class NavBar extends Component {
   render() {
     const { players, currPlayer, isCurrPlayer } = this.state
     let currPlayerName = ''
+    console.log("STATE", this.state.curedDiseases)
     if (currPlayer) {
       currPlayerName = players[currPlayer].name
     }
@@ -76,12 +81,17 @@ export default class NavBar extends Component {
           {this.state.gameState.blueTiles}
           <img className='navbar-icon' src={'/images/yellowIcon.png'} />
           {this.state.gameState.yellowTiles}
-          <img className='navbar-icon' src={'/images/infectionMarker.jpg'} />
+          <img className='navbar-icon' src={'/images/infectionMarker.png'} />
           {this.state.gameState.infectionRate}
           <img className='navbar-icon' src={'/images/OutbreakMarker.png'} />
           {this.state.gameState.outbreaks}
           <img className='navbar-icon' src={'/images/researchCenter.png'} />
           {this.state.gameState.researchCenters}
+          <img className='navbar-icon' src={ this.state.gameState.curedDiseases['black'] ? '/images/cureBottleBlackCured.png' : '/images/cureBottleBlack.png'} />
+          <img className='navbar-icon' src={ this.state.gameState.curedDiseases['blue'] ? '/images/cureBottleBlueCured.png' : '/images/cureBottleBlue.png'} />
+          <img className='navbar-icon' src={ this.state.gameState.curedDiseases['yellow'] ? '/images/cureBottleYellowCured.png' : '/images/cureBottleYellow.png'} />
+          <img className='navbar-icon' src={ this.state.gameState.curedDiseases['red'] ? '/images/cureBottleRedCured.png' : '/images/cureBottleRed.png'} />
+
         </Menu.Item>
          <Transition
             animation='flash'
