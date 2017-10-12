@@ -10,15 +10,20 @@ module.exports = function(refs) {
   const fetchInfectionDeck = roomRef.child('infectionDeck').once('value').then(snapshot => snapshot.val())
   const fetchInfectionDiscard = roomRef.child('infectionDiscard').once('value').then(snapshot => snapshot.val())
   const fetchInfectionRate = roomRef.child('state').child('infectionRate').once('value').then(snapshot => snapshot.val())
+  const getOutbreaks = roomRef.child('state').child('outbreaks').once('value').then(snapshot => snapshot.val())
 
-  return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard, fetchInfectionRate])
+  return Promise.all([fetchCities, fetchInfectionDeck, fetchInfectionDiscard, fetchInfectionRate, getOutbreaks])
   .then(response => {
     const cities = response[0]
     const infectionDeck = response[1]
     let infectionDiscard = response[2]
     const infectionRate = response[3]
+    const oldOutbreaks = response[4]
     let data = {}
     const infectionsToBroadcast = []
+    let nOutbreaks = 0
+    let updatedData = {}
+    console.log('got here')
 
     // need to infect as many cities as the current infection rate
     for (let i = 0; i < infectionRate; i++) {
@@ -40,21 +45,20 @@ module.exports = function(refs) {
         data[path] = infectionRate + 1
         // do normal stuff
       } else {
-        console.log('it did cause an outbreak!')
-        const { updatedData, nOutbreaks } = handleOutbreak(city, cities)
-        console.log('outbreak data when i get it back from handleOutbreak')
-        console.log(updatedData)
+        const result = handleOutbreak(city, cities)
+        updatedData = result.updatedData
+        nOutbreaks = result.nOutbreaks
         data = Object.assign({}, data, updatedData)
-        console.log('the new data after Object.assign is')
-        console.log(data)
       }
     }
 
     const infectionMessage = arrayToSentence(infectionsToBroadcast) + ' were infected next!'
-    console.log('infectionMessage: ', infectionMessage)
+    console.log('n outbreaks here ', nOutbreaks)
+    data['/state/outbreaks'] = oldOutbreaks + nOutbreaks
     data['/infectionDeck'] = infectionDeck
     data['/infectionDiscard'] = infectionDiscard
     data['/infectionMessage'] = infectionMessage
+    console.log('data here', data)
     return roomRef.update(data)
   })
 }
