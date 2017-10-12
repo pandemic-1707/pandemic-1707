@@ -9,6 +9,7 @@ import axios from 'axios'
 import PlayerActionsBuild from './PlayerActionsBuild'
 import PlayerActionsShare from './PlayerActionsShare'
 import PlayerActionsTreat from './PlayerActionsTreat'
+const auth = fire.auth()
 
 // TODO: refactor what's on the state to pass down & to actually be efficient and make sense
 // TODO: modularize actions
@@ -21,8 +22,18 @@ export default class PlayerActions extends Component {
       players: {},
       cities: {},
       currPlayer: '',
-      curedDiseases: []
+      curedDiseases: [],
+      isCurrPlayer: false
     }
+  }
+
+  componentDidMount() {
+    fire.database().ref(`/rooms/${this.props.roomName}/state`).on('value', snapshot => {
+      const currPlayer = snapshot.val().currPlayer
+      this.setState({
+        isCurrPlayer: currPlayer === auth.currentUser.uid
+      })
+    })
   }
 
   componentWillMount() {
@@ -77,6 +88,7 @@ export default class PlayerActions extends Component {
     }
     // do we have the city card to use?
     const buildInCity = activePlayer.hand.find(function (card) {
+      console.log('activePlayer', activePlayer)
       if (card.city) {
         return card.city.replace('.', '') === activePlayerCity
       }
@@ -118,6 +130,11 @@ export default class PlayerActions extends Component {
         </Menu.Item>
         <Menu.Item>
           <PlayerActionsShare roomName={this.props.roomName} activePlayer={activePlayer} traders={traders} />
+        </Menu.Item>
+        <Menu.Item className="currPlayer">
+        {
+          this.state.isCurrPlayer ? "It's your turn!" : ''
+        }
         </Menu.Item>
         <Menu.Item>
           Actions Left: {activePlayer.numActions && activePlayer.numActions}
