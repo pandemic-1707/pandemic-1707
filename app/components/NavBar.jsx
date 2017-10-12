@@ -5,7 +5,8 @@ import WhoAmI from './WhoAmI'
 import Rules from './Rules'
 import EpiAlerts from './EpidemicAlerts'
 import HandLimit from './HandLimitAlert'
-import { Menu, Button, Transition } from 'semantic-ui-react'
+import LostAlert from './LostAlert'
+import { Menu, Button, Transition, Item } from 'semantic-ui-react'
 const db = fire.database()
 // Get the auth API from Firebase.
 const auth = fire.auth()
@@ -86,7 +87,7 @@ export default class NavBar extends Component {
             animation='flash'
             duration='1000'
             transitionOnMount={true}>
-        <Menu.Item>
+        <Menu.Item className="currPlayer">
           Current Turn: {currPlayerName}
         </Menu.Item>
         </Transition>
@@ -106,6 +107,7 @@ export default class NavBar extends Component {
           ''
         }
         <EpiAlerts roomName={this.props.roomName} currPlayer={this.state.currPlayer}/>
+        <LostAlert roomName={this.props.roomName}/>
       </Menu>
       )
     }

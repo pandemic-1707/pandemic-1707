@@ -14,6 +14,7 @@ module.exports = function(roomRef) {
   infectionRate.forEach((rate, idx) => {
     for (let i = 0; i < citiesToInfect; i++) {
       const nextCity = deck.pop()
+      console.log('nextCity', nextCity)
       updatedData['cities/' + nextCity.split(' ').join('-') + '/infectionRate'] = rate
       discardPile.push(nextCity)
     }
