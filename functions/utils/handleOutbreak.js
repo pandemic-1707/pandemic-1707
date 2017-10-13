@@ -20,7 +20,7 @@ module.exports = function(outbreakSite, cities) {
       const connections = cities[nextOutbreakSite].connections
 
       connections.forEach(connection => {
-        const path = 'cities/' + connection + '/infectionRate'
+        const path = '/cities/' + connection + '/infectionRate'
         // outbreaks can compound infections in affected cities
         // so if you've already affected that city, you need to use its
         // updatedValue the next time (until it outbreaks and then its safe)
