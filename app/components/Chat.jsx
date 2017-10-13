@@ -39,24 +39,32 @@ export default ignite(withAuth(class extends React.Component {
     })
   }
 
+  constructor(props) {
+    super(props)
+    this.firebaseMessages = {}
+  }
+
   componentDidMount() {
     this.props.roomRef.child('infectionMessage').on('value', snapshot => {
       const message = snapshot.val()
-      if (message && this.props.fireRef) {
+      if (message && this.props.fireRef && !this.firebaseMessages.hasOwnProperty(message)) {
         this.props.fireRef.push({
           from: 'firebase',
           body: message
         })
+        this.firebaseMessages[message] = true
       }
     })
 
     this.props.roomRef.child('epidemicMessage').on('value', snapshot => {
       const message = snapshot.val()
-      if (message && this.props.fireRef) {
+      if (message && this.props.fireRef && !this.firebaseMessages[message]) {
         this.props.fireRef.push({
           from: 'firebase',
           body: message
         })
+        console.log('giving it the property!')
+        this.firebaseMessages[message] = true
       }
     })
   }
@@ -78,7 +86,9 @@ export default ignite(withAuth(class extends React.Component {
       <div className='chat-log'> {
         messages.map(({key, fireRef}) => <ChatMessage key={key} fireRef={fireRef}/>)
       } </div>
-      {this.renderSendMsg(user)}
+      <div className='chat-form'>
+        {this.renderSendMsg(user)}
+      </div>
     </div>
   }
 }))

@@ -1,21 +1,58 @@
 body {
-  height: 100%;
+  height: 100vh;
+}
+
+.ui .orange .small .button {
+  font-size: 11px;
+  margin: 5px;
+}
+
+.ui .input {
+  font-size: 11px;
+}
+
+.whoami-user-name {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+.green-button {
+  margin-top: 20px;
+}
+.wait-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.whoami {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+#main {
+  background: #1b1c1d;
+  height: 100vh;
 }
 .column {
   overflow: scroll;
 }
 .chat-log {
   width: 150px;
-  height: 150px;
   overflow: scroll;
   border: solid;
   padding: 3px;
   border-width: 1px;
   border-color: gray;
+  background: white;
+  height: calc(100% - 80px);
 }
 .chat-box {
   height: 150px;
   overflow: scroll;
+}
+.chat-form {
+  height: 80px;
 }
 .chat-message-firebase {
   font-size: 12px;
@@ -212,11 +249,9 @@ form button {
   position: absolute;
   top: calc(0.7 * 100%);
   overflow: hidden;
+  background: gray;
 }
 
-
-.player-actions-panel {
-}
 .player-action {
   text-align: center;
 }

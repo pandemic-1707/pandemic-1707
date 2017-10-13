@@ -14,7 +14,7 @@ export default class Alerts extends Component {
   componentDidMount() {
     db.ref(`/rooms/${this.props.roomName}/state/outbreaks`).on('value', dataSnap => {
     // if outbreak level reached 8
-      if (dataSnap.val() && dataSnap.val() === 8) {
+      if (dataSnap.val() && dataSnap.val() >= 8) {
         this.setState({
           alertOpen: true
         })

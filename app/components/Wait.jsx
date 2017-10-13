@@ -116,12 +116,14 @@ export default class Wait extends Component {
   }
   render() {
     return (
-      <div>
+      <div className='wait-box'>
         <WhoAmI auth={auth}/>
-        <Button className={this.state.disabledStart ? 'disabled' : ''}
-        onClick={this.startGame}
-        color="teal"
-        content="Enter Room" />
+        <div className='green-button'>
+          <Button className={this.state.disabledStart ? 'disabled' : ''}
+          onClick={this.startGame}
+          color="teal"
+          content="Enter Room" />
+        </div>
       </div>
     )
   }
